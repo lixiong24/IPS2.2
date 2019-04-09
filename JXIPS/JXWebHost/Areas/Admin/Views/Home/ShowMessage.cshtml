@@ -1,0 +1,16 @@
+﻿@{
+}
+<div style="text-align:center; margin-top:10px;font-size:18px;">
+	<p>@ViewData["Message"]</p>
+	<a href="@ViewData["ReturnUrl"]">@ViewData["ReturnUrlText"]</a>
+	<input type="hidden" name="hidReturnUrl" id="hidReturnUrl" value="@ViewData["ReturnUrl"]" />
+</div>
+@section scripts {
+	<script type="text/javascript">
+		setTimeout("@ViewData["ReturnJS"]", 3000);
+		function GoToUrl()
+		{
+			window.location.href = $("#hidReturnUrl").val();
+		}
+	</script>
+}

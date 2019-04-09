@@ -1,0 +1,50 @@
+.webuploader-container {
+	position: relative;
+}
+.webuploader-element-invisible {
+	position: absolute !important;
+	clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+/*.webuploader-pick {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	background: #00b7ee;
+	padding: 10px 15px;
+	color: #fff;
+	text-align: center;
+	border-radius: 3px;
+	overflow: hidden;
+}*/
+.webuploader-pick-hover {
+	background: #00a2d4;
+}
+
+.webuploader-pick-disable {
+	opacity: 0.6;
+	pointer-events:none;
+}
+
+/*UI CSS*/
+.Uploaded{position:relative;width:100px;height:100px;margin:0 auto;}
+.Uploaded img{width:100px;height:100px;display:block;height:auto;margin-left:auto;margin-right:auto;position:absolute;left:0;top:0;z-index:0;} 
+.progress{position:absolute;left:0;bottom:0;border-radius:0;z-index:50;text-align:center;width:100px;}
+.progress .text{position:absolute;z-index:60;color:#fff;text-align:center;height:100%;left:0;top:0;width:100%;font-size:16px;} 
+.text-view{width:100px;margin:8px 0 10px -1px;height:20px;} 
+.text-view textarea{width:100px;resize:none;border-radius:0;padding:0;margin:0;border:1px solid #dcdcdc;overflow-y:hidden;position:unset;z-index:3;} 
+.error{position:absolute;left:0px;bottom:0px;right:0px;z-index:100;height:28px;line-height:28px;color:#fff;background:#f43838;font-size:12px;overflow:hidden;}
+.success{position:absolute;left:0px;bottom:0px;right:0px;height:40px;z-index:200;background:url(images/success.png) no-repeat right bottom;}
+.view{position:absolute;left:0;top:0;right:0;background:#000;opacity:0.6;height:30px;color:#fff;text-align:center;/*display:none;*/}
+.Uploaded:hover .view{display:block;}
+.view a{display:block;width:15px;height:15px;position:relative;z-index:0;margin:7px 9px 0 9px;float:left;}
+.view a img{display:block;position:absolute;width:100%;}
+.view a .img1{left:0;top:0;z-index:2;display:none;}
+.view a .img2{left:0;top:0;z-index:1;}
+.view a:hover .img1{display:block;}
+.progress{width:100px;height:20px;background:rgba(52,139,202,0.4) none repeat scroll 0% 0%;margin:10px 10px 0 0;overflow:hidden;display:block;}
+.progress .progress-bar{width:100%;background:#348bca;}
+.webUploader{position:relative;width:100px;clear:both;}
+.webUploader .webUploader-pick{font-size:18px;background:#00b7ee;border-radius:3px;line-height:33px;padding:0 14px;color:#fff;margin:0 auto 20px auto;cursor:pointer;}
+.webUploader .ele-visible{display:block;opacity:0;width:100px;height:100%;position:absolute;left:0;top:0;cursor:pointer;}
+.UploadWrap{float:left;margin-right:15px;list-style-type:none;}

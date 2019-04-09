@@ -1,0 +1,46 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="lixiong.Project" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="True" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Assembly Name="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="System.Collections.Specialized" %>
+using <%= NameSpace %>.DTOs;
+using System.Threading.Tasks;
+
+namespace <%= NameSpace %>
+{
+	/// <summary>
+	/// 数据库表：<%= SourceTable.Name %> 的应用层服务接口.
+	/// </summary>
+	public partial interface <%=GetIAppServiceADOClassName(SourceTable) %> : IServiceAppADO<<%=GetDTOClassName(SourceTable) %>>
+	{
+		<%if(SourceTable.HasPrimaryKey){%>
+		/// <summary>
+		/// 通过主键删除
+		/// </summary>
+		/// <returns></returns>
+		bool Delete(<% = GenPrimaryKeyParam(SourceTable) %>);
+		/// <summary>
+		/// 通过主键删除
+		/// </summary>
+		/// <returns></returns>
+		Task<bool> DeleteAsync(<% = GenPrimaryKeyParam(SourceTable) %>);
+		
+		/// <summary>
+		/// 通过主键返回第一条信息的DTO类。
+		/// </summary>
+		/// <returns></returns>
+		<%=GetDTOClassName(SourceTable) %> GetDTO(<% = GenPrimaryKeyParam(SourceTable) %>);
+		/// <summary>
+		/// 通过主键返回第一条信息的DTO类。
+		/// </summary>
+		/// <returns></returns>
+		Task<<%=GetDTOClassName(SourceTable) %>> GetDTOAsync(<% = GenPrimaryKeyParam(SourceTable) %>);
+		<%}%>
+	}
+}

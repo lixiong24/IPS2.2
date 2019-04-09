@@ -1,0 +1,16 @@
+﻿@model IList<JX.Core.Entity.SiteMapEntity>
+<nav class="breadcrumb">
+	<i class="Hui-iconfont">&#xe67f;</i> 首页
+	@{
+		if (Model.Count > 0)
+		{
+			for (int i = Model.Count - 1; i >= 0; i--)
+			{
+				<span class="c-gray en">&gt;</span>@Model[i].Title
+			}
+		}
+	}
+	<a id="btnRefresh" class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" onclick="location.replace(location.href);" title="刷新">
+		<i class="Hui-iconfont">&#xe68f;</i>
+	</a>
+</nav>

@@ -1,0 +1,229 @@
+1、管理员与角色模块
+Roles										角色表
+Admin										管理员表
+AdminRoles									管理员与角色的关系表
+RolesPermissions							角色权限表
+RoleFieldPermissions						角色、模型字段权限表
+RoleNodePermissions							角色、节点权限表
+RoleSpecialPermissions						角色、专题权限表
+
+2、会员与会员组模块
+UserGroups									会员组表
+GroupFieldPermissions						会员组、模型字段权限表
+GroupNodePermissions						会员组、节点权限表
+GroupSpecialCategoryPermissions				会员组、专题类别权限表
+GroupSpecialPermissions						会员组、专题权限表
+Users										会员表
+Friend										会员的好友表
+BankrollLog									会员资金使用明细表
+ExpLog										会员积分使用明细表
+PointLog									会员点券使用明细表
+ValidLog									会员有效期使用明细表
+CreditLinesLog								授信额度记录表
+UserMessage									会员站内信表
+Favorite									会员收藏夹表
+Contacter									联系人表
+U_UserText									联系人扩展表
+Company										公司表（企业会员使用）
+U_CompanyText								公司扩展表
+
+3、附件模块
+Dictionary									字典表
+Region										区域表（国、省、市、区）
+Region_C									区域关联表（国、省、市、区、关联项）
+WordReplaceItem								字符替换与站内链接管理表
+KeywordRelation								关键词与信息的关联表
+Keywords									关键词表
+MailList									邮件发送清单表
+SubscriptionItems							邮件订阅项目表
+MailItem									邮件和邮件订阅的关联表
+Status										信息状态码表
+Log											日志表
+SiteLink									站内链接表（已废弃）
+
+DownServer									下载镜像服务器表
+DownloadErrorLog							下载错误记录表
+
+IncludeFile									内嵌代码表
+
+MentionLog									提现记录表
+SortingLog									（没有用到）
+
+4、CRM模块
+Address										收货人地址表
+Client										客户表
+ClientLog									与客户联系记录表
+ComplainLog									投诉表
+Complaints									投诉表（已废弃）
+ComplaintsType								投诉类别表（已废弃）
+ComplaintsResults							投诉结果表（已废弃）
+RemindItem									客户联系提醒表
+ServiceLog									服务记录
+
+5、内容模型
+ModelTemplates								模型的模板定义表
+Model										模型表
+
+6、广告模块
+AdZone										广告版位表
+Advertisement								广告表
+AdvertisementZone							广告版位和广告的关联表
+
+7、工作流程模块
+WorkFlows									工作流程表
+FlowProcess									工作流程步骤表
+RolesProcess								工作流程、步骤、角色关系表
+ProcessStatusCode							工作流程、步骤、状态码关系表
+WorkNextProcessRoles						审核流程下一进程表
+
+8、自定义表单管理模块
+WorkCategory								自定义表单类别表
+WorkCategorySetting							自定义表单类别与自定义表单模板关系绑定表
+Work										自定义表单数据记录表
+
+9、信息内容管理模块
+Nodes										节点表
+NodesModelTemplate							节点、模型和模板的关联表
+NodesTemplate								节点和模板的关联表
+SpecialCategory								专题类别表
+Specials									专题表
+SpecialInfos								专题类别、专题和内容的关联表
+CommonInfo									公共内容表
+CorrelativeInfo								内容的相关信息表
+ContentPermission							内容权限表
+ContentCharge								内容收费表
+Comment										评论表
+CommentPK									评论PK表
+SigninContent								签收内容表
+SigninLog									签收记录表
+InfoNextProcessRoles						当前管理员角色需要签收审核的信息列表
+Vote										投票表
+Author										文章作者表
+Source										文章来源表
+Files										上传文件表
+FileRelationInfo							上传文件与信息关联表
+U_Article									文章扩展表
+U_FriendSite								友情链接表
+U_GuestBook									留言扩展表
+U_Advice									（没有用到）
+U_Question									问题表
+U_Answer									答案表
+U_Award										抽奖奖品表
+U_AwardLog									中奖信息表
+U_Buy										求购
+U_Provide									供应
+U_Manufacture								产品
+U_IntegralProduct							积分商品扩展表
+U_IntegralProductLog						积分商品兑换记录表
+U_Buying									团购商品
+
+10、商城模块
+CommonProduct								公共商品模型表
+U_Product									商品扩展表
+ProductData									产品多属性扩展数据表（如：颜色、尺码）
+ProductPrice								记录每个商品的详细会员价格表
+HirePurchase								商品的分期设置表
+
+Cards										充值卡表
+ShoppingCarts								购物车表
+
+Coupon										优惠券规则表
+CouponLog									优惠券使用明细表
+
+Bank										银行表
+DeliverType									送货方式表
+Courier										快递公司表
+DeliverCharge								送货费用表
+PaymentType									付款方式表
+PayPlatForm									在线支付平台表
+PaymentLog									在线支付记录表
+
+Stock										库存单据记录表
+StockItem									库存单据记录详细表
+DeliverLog									发退货记录表
+StockOut									缺货记录表
+InvoiceLog									发票记录表
+
+Orders										订单表
+OrderItem									订单详细表
+OrderLog									订单历史记录表
+OrderFeedback								订单反馈表
+TransferLog									订单过户记录表
+U_OrderText									订单扩展表
+
+Producer									生产厂商表
+Trademark									品牌定义表
+Package										包装表
+
+Present										促销礼品表
+PresentProject								促销方案表
+PresentBuyLog								兑换促销礼品记录表
+
+IntegralProduct								积分商品表
+IntegralProductType							积分商品类别表
+
+Repayment									消费分期还款计划表
+
+
+11、采集模块
+CollectionItem							采集项目表
+CollectionExclosion						采集排序项
+CollectionFieldRules					采集字段规则表
+CollectionFilterRules					采集过滤规则表
+CollectionListRules						采集列表规则表
+CollectionPagingRules					采集分页规则表
+CollectionHistory						采集历史记录表
+
+10、问答模块
+
+11、商户模块							
+Merchant									商户表
+Store										门店表
+Clerk										店员表
+
+12、统计模块
+StatAddress									地区统计表
+StatBrowser									浏览器统计表
+StatColor									颜色统计表
+StatInfoList								统计明细表
+StatIp										IP统计表
+StatIpInfo									统计IP详细表
+StatKeyword									关键字统计表
+StatDay										每日统计表
+StatWeek									每周统计表
+StatMonth									每月统计表
+StatYear									每年统计表
+StatMozilla									URL字串统计表
+StatOnline									在线统计表
+StatRefer									引用地址统计表
+StatScreen									分辨率统计表
+StatSystem									操作系统统计表
+StatTimezone								时区统计表
+StatVisit									访问次数统计表
+StatVisitor									访问者信息统计表
+StatWeburl									用户来自何网址统计表
+
+13、问卷调查模块
+Survey										调查问卷定义表
+SurveyVote									调查问卷选项的投票结果表
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
+使用的公共存储过程：CommonPage、Common_GetList、Common_GetListBySortColumn、Statistics_GetList
+
+使用的存储过程：BankrollLog_GetBill、Users_BatchMove、UserMessage_Add、UserMessage_Delete、
+Keywords_SearchKeyword、Client_Merge、RemindItem_GetInfoByTime、Model_Add、
+Product_DeleteModel、Advertisement_Add、Advertisement_Update、Advertisement_IsPassed、
+Advertisement_CancelIsPassed、ADZone_IsActive、ADZone_Pause、ADZone_GetExportList、ADZone_ADD、
+Nodes_UpdateOrderId、Nodes_UpdateNextId、
+
+2017-07-24
+KeywordRelation表添加主键ID字段、FileRelationInfo表添加主键ID字段、DeliverLog(发货日志表)中，添加客户签收时间字段。
+CommonInfo表的Status字段，修改成InfoStatus，避免数据库的关键字错误。
+Orders表的Status字段，修改成OrderStatus，避免数据库的关键字错误。(存储过程：Order_Add、Order_Confirm、Order_Delete、Order_Update)
+
+2017-08-26
+Users表的Status字段，修改成UserStatus（存储过程：Users_Add、Users_BatchLock、Users_BatchUnLock、Users_Update、Users_UpdateUserStatus）
+Company表添加字段（存储过程：Company_Add、Company_Update）
+
+

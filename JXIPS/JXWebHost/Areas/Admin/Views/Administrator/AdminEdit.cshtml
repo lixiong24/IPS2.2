@@ -1,0 +1,89 @@
+﻿@model AdminViewModel
+<form class="form form-horizontal" asp-controller="Administrator" asp-action="AdminEdit" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			@{
+				if (Model.AdminID <= 0)
+				{
+					<input type="text" class="input-text" asp-for="AdminName">
+					<span asp-validation-for="AdminName" style="color:red;"></span>
+				}
+				else
+				{
+					<input type="text" class="input-text" asp-for="AdminName" readonly="readonly">
+					<span asp-validation-for="AdminName" style="color:red;"></span>
+				}
+			}
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			@{
+				if (Model.AdminID <= 0)
+				{
+					<input type="password" class="input-text" asp-for="AdminPassword">
+					<span asp-validation-for="AdminPassword" style="color:red;"></span>
+				}
+				else
+				{
+					<input type="password" class="input-text" id="AdminPassword" name="AdminPassword">
+					<span style="color:red;">不修改请留空</span>
+				}
+			}
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>前台会员名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="UserName" value="">
+			<span asp-validation-for="UserName" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">选项设置：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<label>
+				<input type="checkbox" asp-for="IsMultiLogin">
+				允许多人同时使用此帐号登录
+			</label>
+			<label>
+				<input type="checkbox" asp-for="IsModifyPassword">
+				允许管理员修改密码
+			</label>
+			<label>
+				<input type="checkbox" asp-for="IsLock">
+				是否锁定
+			</label>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">所属角色：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<select id="RoleIDs" class="form-control" style="padding:0px;width:100%;" asp-for="RoleIDs"></select>
+			<span asp-validation-for="RoleIDs" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+			<input type="hidden" asp-for="AdminID" />
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
+@section scripts{ 
+<script type="text/javascript">
+	$(function () {
+		var result = "@Model.result";
+		if (result == "ok") {
+			HuiRefresh();
+		}
+		else
+		{
+			loadRolesAjax("RoleIDs", "@Model.RoleIDs", true);
+		}
+	});
+</script>
+}

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap>
+	<siteMapNode title="管理员管理" url="/Admin/Administrator">
+		<siteMapNode title="管理员列表" url="/Admin/Administrator/Index">
+			<siteMapNode title="管理员编辑" url="/Admin/Administrator/AdminEdit" />
+		</siteMapNode>
+		<siteMapNode title="角色管理" url="/Admin/Administrator/RoleManage">
+			<siteMapNode title="角色编辑" url="/Admin/Administrator/RoleEdit" />
+			<siteMapNode title="成员管理" url="/Admin/Administrator/RoleMember" />
+			<siteMapNode title="常规权限设置" url="/Admin/Administrator/RolePermissions" />
+		</siteMapNode>
+	</siteMapNode>
+</siteMap>

@@ -1,0 +1,470 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="lixiong.Project" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="True" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Assembly Name="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="System.Collections.Specialized" %>
+using AutoMapper;
+using <%= NameSpace %>.DTOs;
+using JX.Core;
+using JX.Core.Entity;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace <%= NameSpace %>
+{
+	/// <summary>
+	/// 数据库表：<%= SourceTable.Name %> 的应用层服务接口实现类.
+	/// </summary>
+	public partial class <%=GetAppServiceADOClassName(SourceTable) %> : <%=GetIAppServiceADOClassName(SourceTable) %>
+	{
+		#region 仓储接口
+		private readonly <%=GetIRepositoriesADOClassName(SourceTable) %> _repository;
+		/// <summary>
+		/// 构造器注入
+		/// </summary>
+		/// <param name="repository"></param>
+		public <%=GetAppServiceADOClassName(SourceTable) %>(<%=GetIRepositoriesADOClassName(SourceTable) %> repository)
+		{
+			_repository = repository;
+		}
+		#endregion
+		
+		#region 得到第一行第一列的值
+		/// <summary>
+		/// 得到第一行第一列的值
+		/// </summary>
+		/// <param name="statistic">要返回的字段（如：count(*) 或者 UserName）</param>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual string GetScalar(string statistic, string strWhere = "", Dictionary<string, object> dict = null)
+		{
+			return _repository.GetScalar(statistic, strWhere, dict);
+		}
+		/// <summary>
+		/// 得到第一行第一列的值（异步方式）
+		/// </summary>
+		/// <param name="statistic">要返回的字段（如：count(*) 或者 UserName）</param>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<string> GetScalarAsync(string statistic, string strWhere = "", Dictionary<string, object> dict = null)
+		{
+			return await _repository.GetScalarAsync(statistic, strWhere, dict);
+		}
+		#endregion
+		
+		#region 得到所有行数
+		/// <summary>
+		/// 得到所有行数
+		/// </summary>
+		/// <returns></returns>
+		public virtual int GetCount()
+		{
+			return _repository.GetCount();
+		}
+		/// <summary>
+		/// 得到所有行数（异步方式）
+		/// </summary>
+		/// <returns></returns>
+		public virtual async Task<int> GetCountAsync()
+		{
+			return await _repository.GetCountAsync();
+		}
+
+		/// <summary>
+		/// 得到所有行数
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual int GetCount(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return _repository.GetCount(strWhere, dict);
+		}
+		/// <summary>
+		/// 得到所有行数（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<int> GetCountAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return await _repository.GetCountAsync(strWhere, dict);
+		}
+		#endregion
+		
+		#region 得到最大ID、最新ID
+		/// <summary>
+		/// 得到数据表中第一个主键的最大数值
+		/// </summary>
+		/// <returns></returns>
+		public virtual int GetMaxID()
+		{
+			return _repository.GetMaxID();
+		}
+		/// <summary>
+		/// 得到数据表中第一个主键的最大数值（异步方式）
+		/// </summary>
+		/// <returns></returns>
+		public virtual async Task<int> GetMaxIDAsync()
+		{
+			return await _repository.GetMaxIDAsync();
+		}
+
+		/// <summary>
+		/// 得到数据表中第一个主键的最大数值加1
+		/// </summary>
+		/// <returns></returns>
+		public virtual int GetNewID()
+		{
+			return _repository.GetNewID();
+		}
+		/// <summary>
+		/// 得到数据表中第一个主键的最大数值加1（异步方式）
+		/// </summary>
+		/// <returns></returns>
+		public virtual async Task<int> GetNewIDAsync()
+		{
+			return await _repository.GetNewIDAsync();
+		}
+		#endregion
+		
+		#region 验证是否存在
+		/// <summary>
+		/// 检查数据是否存在
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual bool IsExist(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return _repository.IsExist(strWhere, dict);
+		}
+
+		/// <summary>
+		/// 检查数据是否存在（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<bool> IsExistAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return await _repository.IsExistAsync(strWhere, dict);
+		}
+		#endregion
+		
+		#region 添加
+		/// <summary>
+		/// 增加一条记录
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual bool Add(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return _repository.Add(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+		/// <summary>
+		/// 增加一条记录（异步方式）
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual async Task<bool> AddAsync(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return await _repository.AddAsync(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+
+		/// <summary>
+		/// 增加一条记录，返回新的ID号。需要有一个单一主键，并且开启有标识符属性
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual int Insert(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return _repository.Insert(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+		/// <summary>
+		/// 增加一条记录，返回新的ID号。需要有一个单一主键，并且开启有标识符属性（异步方式）
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual async Task<int> InsertAsync(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return await _repository.InsertAsync(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+
+		/// <summary>
+		/// 增加或更新一条记录
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <param name="IsSave">是否增加</param>
+		/// <returns></returns>
+		public virtual bool AddOrUpdate(<%=GetDTOClassName(SourceTable) %> dto, bool IsSave)
+		{
+			return IsSave ? Add(dto) : Update(dto);
+		}
+		/// <summary>
+		/// 增加或更新一条记录（异步方式）
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <param name="IsSave">是否增加</param>
+		/// <returns></returns>
+		public virtual async Task<bool> AddOrUpdateAsync(<%=GetDTOClassName(SourceTable) %> dto, bool IsSave)
+		{
+			return IsSave ? await AddAsync(dto) : await UpdateAsync(dto);
+		}
+		#endregion
+		
+		#region 删除
+		<%if(SourceTable.HasPrimaryKey){%>
+		/// <summary>
+		/// 通过主键删除
+		/// </summary>
+		/// <returns></returns>
+		public bool Delete(<% = GenPrimaryKeyParam(SourceTable) %>)
+		{
+			return _repository.Delete(<% for (int i = 0; i < SourceTable.PrimaryKey.MemberColumns.Count; i++) { %><%= GetCamelCaseName(GetSafeName(SourceTable.PrimaryKey.MemberColumns[i])) %><% if (i == SourceTable.PrimaryKey.MemberColumns.Count-1) { %> <% } else {%>,<%} %><% } %>);
+		}
+		/// <summary>
+		/// 通过主键删除
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> DeleteAsync(<% = GenPrimaryKeyParam(SourceTable) %>)
+		{
+			return await _repository.DeleteAsync(<% for (int i = 0; i < SourceTable.PrimaryKey.MemberColumns.Count; i++) { %><%= GetCamelCaseName(GetSafeName(SourceTable.PrimaryKey.MemberColumns[i])) %><% if (i == SourceTable.PrimaryKey.MemberColumns.Count-1) { %> <% } else {%>,<%} %><% } %>);
+		}
+		<%}%>
+		
+		/// <summary>
+		/// 删除一条或多条记录
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual bool Delete(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return _repository.Delete(strWhere, dict);
+		}
+		/// <summary>
+		/// 删除一条或多条记录（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<bool> DeleteAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return await _repository.DeleteAsync(strWhere, dict);
+		}
+		#endregion
+		
+		#region 修改
+		/// <summary>
+		/// 更新一条记录
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual bool Update(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return _repository.Update(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+		/// <summary>
+		/// 更新一条记录（异步方式）
+		/// </summary>
+		/// <param name="dto">dto模型</param>
+		/// <returns></returns>
+		public virtual async Task<bool> UpdateAsync(<%=GetDTOClassName(SourceTable) %> dto)
+		{
+			return await _repository.UpdateAsync(Mapper.Map<<%=GetEntityClassName(SourceTable) %>>(dto));
+		}
+
+		/// <summary>
+		/// 修改一条或多条记录
+		/// </summary>
+		/// <param name="strColumns">参数化要修改的列（如：ID = @ID,Name = @Name）</param>
+		/// <param name="dictColumns">包含要修改的名称和值的集合,对应strColumns参数中要修改列的值</param>
+		/// <param name="strWhere">参数化修改条件(例如: and ID = @ID)</param>
+		/// <param name="dictWhere">包含查询名称和值的集合,对应strWhere参数中的值</param>
+		/// <returns></returns>
+		public virtual bool Update(string strColumns, Dictionary<string, object> dictColumns = null, string strWhere = "", Dictionary<string, object> dictWhere = null)
+		{
+			return _repository.Update(strColumns, dictColumns, strWhere, dictWhere);
+		}
+		/// <summary>
+		/// 修改一条或多条记录（异步方式）
+		/// </summary>
+		/// <param name="strColumns">参数化要修改的列（如：ID = @ID,Name = @Name）</param>
+		/// <param name="dictColumns">包含要修改的名称和值的集合,对应strColumns参数中要修改列的值</param>
+		/// <param name="strWhere">参数化修改条件(例如: and ID = @ID)</param>
+		/// <param name="dictWhere">包含查询名称和值的集合,对应strWhere参数中的值</param>
+		/// <returns></returns>
+		public virtual async Task<bool> UpdateAsync(string strColumns, Dictionary<string, object> dictColumns = null, string strWhere = "", Dictionary<string, object> dictWhere = null)
+		{
+			return await _repository.UpdateAsync(strColumns, dictColumns, strWhere, dictWhere);
+		}
+		#endregion
+		
+		#region 得到DTO
+		<%if(SourceTable.HasPrimaryKey){%>
+		/// <summary>
+		/// 通过主键返回第一条信息的DTO类。
+		/// </summary>
+		/// <returns></returns>
+		public <%=GetDTOClassName(SourceTable) %> GetDTO(<% = GenPrimaryKeyParam(SourceTable) %>)
+		{
+			var entity = _repository.GetEntity(<% for (int i = 0; i < SourceTable.PrimaryKey.MemberColumns.Count; i++) { %><%= GetCamelCaseName(GetSafeName(SourceTable.PrimaryKey.MemberColumns[i])) %><% if (i == SourceTable.PrimaryKey.MemberColumns.Count-1) { %> <% } else {%>,<%} %><% } %>);
+			return Mapper.Map<<%=GetDTOClassName(SourceTable) %>>(entity);
+		}
+		/// <summary>
+		/// 通过主键返回第一条信息的DTO类。
+		/// </summary>
+		/// <returns></returns>
+		public async Task<<%=GetDTOClassName(SourceTable) %>> GetDTOAsync(<% = GenPrimaryKeyParam(SourceTable) %>)
+		{
+			var entity = await _repository.GetEntityAsync(<% for (int i = 0; i < SourceTable.PrimaryKey.MemberColumns.Count; i++) { %><%= GetCamelCaseName(GetSafeName(SourceTable.PrimaryKey.MemberColumns[i])) %><% if (i == SourceTable.PrimaryKey.MemberColumns.Count-1) { %> <% } else {%>,<%} %><% } %>);
+			return Mapper.Map<<%=GetDTOClassName(SourceTable) %>>(entity);
+		}
+		<%}%>
+
+		/// <summary>
+		/// 获取DTO
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual <%=GetDTOClassName(SourceTable) %> GetDTO(string strWhere, Dictionary<string, object> dict = null)
+		{
+			var entity = _repository.GetEntity(strWhere, dict);
+			return Mapper.Map<<%=GetDTOClassName(SourceTable) %>>(entity);
+		}
+		/// <summary>
+		/// 获取DTO（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<<%=GetDTOClassName(SourceTable) %>> GetDTOAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			var entity = await _repository.GetEntityAsync(strWhere, dict);
+			return Mapper.Map<<%=GetDTOClassName(SourceTable) %>>(entity);
+		}
+		#endregion
+		
+		#region 得到DTO列表
+		/// <summary>
+		/// 得到DTO列表
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual IList<<%=GetDTOClassName(SourceTable) %>> GetDTOList(string strWhere = "", Dictionary<string, object> dict = null)
+		{
+			var entity = _repository.GetEntityList(strWhere, dict);
+			return Mapper.Map<List<<%=GetDTOClassName(SourceTable) %>>>(entity);
+		}
+		/// <summary>
+		/// 得到DTO列表（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化查询条件(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<IList<<%=GetDTOClassName(SourceTable) %>>> GetDTOListAsync(string strWhere = "", Dictionary<string, object> dict = null)
+		{
+			var entity = await _repository.GetEntityListAsync(strWhere, dict);
+			return Mapper.Map<List<<%=GetDTOClassName(SourceTable) %>>>(entity);
+		}
+		#endregion
+		
+		#region 分页
+		/// <summary>
+		/// 通过存储过程"Common_GetList"，得到分页后的数据
+		/// </summary>
+		/// <param name="startRowIndexId">开始行索引</param>
+		/// <param name="maxNumberRows">每页最大显示数量</param>
+		/// <param name="Filter">查询条件(例如: Name = 'name' and id=1 )</param>
+		/// <param name="Total">输出参数：查询总数</param>
+		/// <returns></returns>
+		public IList<<%=GetDTOClassName(SourceTable) %>> GetList(int startRowIndexId, int maxNumberRows, string Filter, out int Total)
+		{
+			Total = 0;
+			return GetList(startRowIndexId, maxNumberRows, "", "", "", Filter, "", out Total);
+		}
+		/// <summary>
+		/// 通过存储过程“Common_GetList”，得到分页后的数据
+		/// </summary>
+		/// <param name="startRowIndexId">开始行索引</param>
+		/// <param name="maxNumberRows">每页最大显示数量</param>
+		/// <param name="SortColumn">排序字段名，只能指定一个字段</param>
+		/// <param name="StrColumn">返回列名</param>
+		/// <param name="Sorts">排序方式（DESC,ASC）</param>
+		/// <param name="Filter">查询条件(例如: Name = 'name' and id=1 )</param>
+		/// <param name="TableName">查询表名，可以指定联合查询的SQL语句(例如: Comment LEFT JOIN Users ON Comment.UserName = Users.UserName)</param>
+		/// <param name="Total">输出参数：查询总数</param>
+		/// <returns></returns>
+		public virtual IList<<%=GetDTOClassName(SourceTable) %>> GetList(int startRowIndexId, int maxNumberRows, string SortColumn, string StrColumn, string Sorts, string Filter, string TableName, out int Total)
+		{
+			Total = 0;
+			var entity = _repository.GetList(startRowIndexId, maxNumberRows, SortColumn, StrColumn, Sorts, Filter, TableName,out Total);
+			return Mapper.Map<List<<%=GetDTOClassName(SourceTable) %>>>(entity);
+		}
+
+		/// <summary>
+		/// 通过存储过程"Common_GetListBySortColumn"，得到分页后的数据
+		/// </summary>
+		/// <param name="startRowIndexId">开始行索引</param>
+		/// <param name="maxNumberRows">每页最大显示数量</param>
+		/// <param name="Filter">查询条件(例如: Name = 'name' and id=1 )</param>
+		/// <param name="Total">输出参数：查询总数</param>
+		/// <returns></returns>
+		public IList<<%=GetDTOClassName(SourceTable) %>> GetListBySortColumn(int startRowIndexId, int maxNumberRows, string Filter, out int Total)
+		{
+			Total = 0;
+			return GetListBySortColumn(startRowIndexId, maxNumberRows, "", "", "", "", "", Filter, "", out Total);
+		}
+		/// <summary>
+		/// 通过存储过程"Common_GetListBySortColumn"，得到分页后的数据
+		/// </summary>
+		/// <param name="startRowIndexId">开始行索引</param>
+		/// <param name="maxNumberRows">每页最大显示数量</param>
+		/// <param name="Sorts">排序方式（DESC,ASC）</param>
+		/// <param name="Filter">查询条件(例如: Name = 'name' and id=1 )</param>
+		/// <param name="Total">输出参数：查询总数</param>
+		/// <returns></returns>
+		public IList<<%=GetDTOClassName(SourceTable) %>> GetListBySortColumn(int startRowIndexId, int maxNumberRows, string Sorts, string Filter, out int Total)
+		{
+			Total = 0;
+			return GetListBySortColumn(startRowIndexId, maxNumberRows, "", "", "", "", Sorts, Filter, "", out Total);
+		}
+		/// <summary>
+		/// 通过存储过程“Common_GetListBySortColumn”，得到分页后的数据
+		/// </summary>
+		/// <param name="startRowIndexId">开始行索引</param>
+		/// <param name="maxNumberRows">每页最大显示数量</param>
+		/// <param name="PrimaryColumn">主键字段名</param>
+		/// <param name="SortColumnDbType">排序字段的数据类型(如：int)</param>
+		/// <param name="SortColumn">排序字段名，只能指定一个字段</param>
+		/// <param name="StrColumn">返回列名</param>
+		/// <param name="Sorts">排序方式（DESC,ASC）</param>
+		/// <param name="Filter">查询条件(例如: Name = 'name' and id=1 )</param>
+		/// <param name="TableName">查询表名，可以指定联合查询的SQL语句(例如: Comment LEFT JOIN Users ON Comment.UserName = Users.UserName)</param>
+		/// <param name="Total">输出参数：查询总数</param>
+		/// <returns></returns>
+		public virtual IList<<%=GetDTOClassName(SourceTable) %>> GetListBySortColumn(int startRowIndexId, int maxNumberRows, string PrimaryColumn, string SortColumnDbType, string SortColumn, string StrColumn, string Sorts, string Filter, string TableName, out int Total)
+		{
+			Total = 0;
+			var entity = _repository.GetListBySortColumn(startRowIndexId, maxNumberRows, PrimaryColumn, SortColumnDbType, SortColumn, StrColumn, Sorts, Filter, TableName,out Total);
+			return Mapper.Map<List<<%=GetDTOClassName(SourceTable) %>>>(entity);
+		}
+		#endregion
+		
+	}
+}

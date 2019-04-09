@@ -1,0 +1,122 @@
+﻿@model PermissionsViewModels
+<form class="form form-horizontal" asp-controller="Administrator" asp-action="RolePermissions" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>角色名：</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			@ViewBag.RoleName
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>权限设置：</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			@{
+				if (Model != null && Model.MenuEntityList != null)
+				{
+					@foreach (var menu in Model.MenuEntityList)
+					{
+						<dl class="permission-list">
+							<dt>
+								<label>
+									@if (Model.RolesPermissionsList.Where(item => item.OperateCode == menu.OperateCode).Count() >= 1)
+									{
+										<input type="checkbox" value="@menu.OperateCode" name="ModelPurview" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@menu.OperateCode" name="ModelPurview">
+									}
+									@menu.Title
+								</label>
+							</dt>
+							<dd>
+								@foreach (var mainMenu in menu.MenuItem)
+								{
+									<dl class="cl permission-list2">
+										<dt style="width:120px;">
+											<label class="">
+												@if (Model.RolesPermissionsList.Where(item => item.OperateCode == mainMenu.OperateCode).Count() >= 1)
+												{
+													<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview" checked="checked">
+												}
+												else
+												{
+													<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview">
+												}
+												@mainMenu.Title
+											</label>
+										</dt>
+										<dd style="margin-left: 120px;">
+											@if (mainMenu.OperateCode == "NodesManage")
+											{
+												<a href="javascript:;" style="color:red;" onclick="layer_show('栏目权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Node','800','')"><=【详细设置】</a><br />
+											}
+											else if (mainMenu.OperateCode == "InfoManage")
+											{
+												<a href="javascript:;" style="color:red;" onclick="layer_show('内容权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Content','800','')"><=【详细设置】</a><br />
+											}
+											else if (mainMenu.OperateCode == "ProductManage")
+											{
+												<a href="javascript:;" style="color:red;" onclick="layer_show('商品权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Product','800','')"><=【详细设置】</a><br />
+											}
+											else if (mainMenu.OperateCode == "CommentManage")
+											{
+												<a href="javascript:;" style="color:red;" onclick="layer_show('评论权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Comment','800','')"><=【详细设置】</a><br />
+											}
+											@if (mainMenu.MenuItem != null)
+											{
+												@foreach (var subMenu in mainMenu.MenuItem)
+												{
+													<label class="">
+														@if (Model.RolesPermissionsList.Where(item => item.OperateCode == subMenu.OperateCode).Count() >= 1)
+														{
+															<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview" checked="checked">
+														}
+														else
+														{
+															<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview">
+														}
+														@subMenu.Title
+													</label><br />
+												}
+											}
+										</dd>
+									</dl>
+								}
+							</dd>
+						</dl>
+					}
+				}
+			}
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$(".permission-list dt input:checkbox").click(function () {
+				$(this).closest("dl").find("dd input:checkbox").prop("checked", $(this).prop("checked"));
+			});
+			$(".permission-list2 dd input:checkbox").click(function () {
+				var l = $(this).parent().parent().find("input:checked").length;
+				var l2 = $(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+				if ($(this).prop("checked")) {
+					$(this).closest("dl").find("dt input:checkbox").prop("checked", true);
+					$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked", true);
+				}
+				else {
+					if (l == 0) {
+						$(this).closest("dl").find("dt input:checkbox").prop("checked", false);
+					}
+					if (l2 == 0) {
+						$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked", false);
+					}
+				}
+			});
+		});
+	</script>
+}

@@ -1,0 +1,145 @@
+﻿@model NodePermissionsViewModel
+<table class="table table-border table-bordered table-bg table-hover">
+	<thead>
+		<tr class="text-c">
+			<th width="40">ID</th>
+			<th>节点名</th>
+			@{
+				switch (ViewBag.PermissionsType)
+				{
+					case "Node":
+						<th width="100">设置当前节点</th>
+						<th width="250">子节点管理<br />（可以添加、修改、删除、排序子节点）</th>
+						break;
+					case "Content":
+					case "Product":
+						<th width="100">查看</th>
+						<th width="100">录入</th>
+						<th width="100">审核</th>
+						<th width="100">信息管理</th>
+						break;
+					case "Comment":
+						<th width="100">回复</th>
+						<th width="100">审核</th>
+						<th width="100">管理</th>
+						break;
+				}
+			}
+		</tr>
+	</thead>
+	<tbody id="tableBody">
+		@{
+			if (Model != null && Model.NodeList != null)
+			{
+				@foreach (var node in Model.NodeList)
+				{
+					<tr class="text-c">
+						<td>@node.NodeID</td>
+						<td>@node.NodeName</td>
+						@switch (ViewBag.PermissionsType)
+						{
+							case "Node":
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "CurrentNodesManage").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="CurrentNodesManage" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="CurrentNodesManage">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "ChildNodesManage").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="ChildNodesManage" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="ChildNodesManage">
+									}
+								</td>
+								break;
+							case "Content":
+							case "Product":
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeContentPreview").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentPreview" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentPreview">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeContentInput").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentInput" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentInput">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeContentCheck").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentCheck" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentCheck">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeContentManage").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentManage" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeContentManage">
+									}
+								</td>
+								break;
+							case "Comment":
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeCommentReply").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentReply" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentReply">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeCommentCheck").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentCheck" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentCheck">
+									}
+								</td>
+								<td>
+									@if (Model.RoleNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == "NodeCommentManage").Count() >= 1)
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentManage" checked="checked">
+									}
+									else
+									{
+										<input type="checkbox" value="@node.NodeID" name="NodeCommentManage">
+									}
+								</td>
+								break;
+						}
+					</tr>
+				}
+			}
+		}
+
+	</tbody>
+</table>

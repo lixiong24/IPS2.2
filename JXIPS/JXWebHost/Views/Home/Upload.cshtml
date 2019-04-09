@@ -1,0 +1,92 @@
+﻿
+@{
+	ViewData["Title"] = "Upload";
+}
+
+<h2>这是Upload视图页</h2>
+<div id="divUpload1">
+	文件1： <input type="file" name="file1" />
+	<input type="button" value="上传" onclick="doUpload('divUpload1')" />
+	<input type="hidden" id="hidFile1" value="" />
+</div>
+<div id="divUpload2">
+	文件2： <input type="file" name="file2" />
+	<input type="button" value="上传" onclick="doUpload('divUpload2')" />
+	<input type="hidden" id="hidFile2" value="" />
+</div>
+<div id="divUpload3">
+	图片： <input type="file" name="file3" />
+	<input type="button" value="上传" onclick="doUploadImage('divUpload3')" />
+	<br />
+	<img src="" />
+	<input type="hidden" id="hidFile3" value="" />
+</div>
+<div id="divUpload4">
+	@await Component.InvokeAsync("MorePic",new MorePicViewModel { Prefix="ctl",PhotoPathList= "|201921123056.jpg",FileNumLimit=1 })
+</div>
+<div id="divUpload5">
+	@await Component.InvokeAsync("MorePic", new MorePicViewModel { Prefix = "ctl1" })
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+	function doUpload(containerID) {
+		var objContainer = $("#" + containerID);
+		var fileUpload = $(objContainer).find("input[type='file']").get(0).files[0];
+		if (!fileUpload) {
+			alert("请选择上传文件");
+			return false;
+		}
+		var formData = new FormData();
+		formData.append(fileUpload.name, fileUpload);
+		$.ajax({
+			url: '@Url.Action("UploadHandle","Common")',
+			type: 'POST',
+			data: formData,
+			async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (returnData) {
+				if (returnData.status == "1") {
+					$(objContainer).find("input[type='hidden']").val(returnData.data);
+				}
+				alert(returnData.msg);
+			},
+			error: function () {
+				alert("上传失败");
+			}
+		});
+	}
+	function doUploadImage(containerID) {
+		var objContainer = $("#" + containerID);
+		var fileUpload = $(objContainer).find("input[type='file']").get(0).files[0];
+		if (!fileUpload) {
+			alert("请选择上传文件");
+			return false;
+		}
+		var formData = new FormData();
+		formData.append(fileUpload.name, fileUpload);
+		$.ajax({
+			url: '@Url.Action("UploadImageHandle","Common")',
+			type: 'POST',
+			data: formData,
+			async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (returnData) {
+				if (returnData.status == "1") {
+					$(objContainer).find("input[type='hidden']").val(returnData.data);
+					var imgUrl = "@Utility.GetBasePath()@Utility.UploadDirPath()" + returnData.data;
+					$(objContainer).find("img").attr("src", imgUrl);
+				}
+				alert(returnData.msg);
+			},
+			error: function () {
+				alert("上传失败");
+			}
+		});
+	}
+	</script>
+}

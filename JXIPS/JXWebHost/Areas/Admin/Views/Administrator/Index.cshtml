@@ -1,0 +1,171 @@
+﻿@model IList<RolesEntity>
+@{
+}
+
+<div class="text-c">
+	<span class="select-box inline">
+		<select id="dropRoles" class="select">
+			<option value="">所属角色</option>
+			<option value="0">超级管理员</option>
+			@foreach (var role in Model)
+			{
+				<option value="@role.RoleID">@role.RoleName</option>
+			}
+		</select>
+	</span>
+	<span class="select-box inline">
+		<select id="dropSearchName" class="select">
+			<option value="AdminID">管理员ID</option>
+			<option value="AdminName" selected="selected">管理员名字</option>
+			<option value="UserName">前台用户名字</option>
+		</select>
+	</span>
+	<input type="text" class="input-text" style="width:250px" id="txtSearchKeyword" onkeypress="javascript:return DefaultButton(event, 'btnSearch')">
+	<button id="btnSearch" type="button" class="btn btn-success" onclick="loadTables(0,10);"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<span class="l">
+		<a href="javascript:;" onclick="DeleteMulti('/Admin/Administrator/DelAdminMulti',loadTables)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		<a href="javascript:;" onclick="layer_show('添加管理员','/Admin/Administrator/AdminEdit','800','600')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a>
+	</span>
+	<span class="r">共有数据：<strong id="ctlRecordTotal">0</strong> 条</span>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<div class="tabBar cl">
+		<span onclick="GoToTab(this,0);" class="current">全部</span>
+		<span onclick="GoToTab(this,1);">一个月未修改密码的</span>
+		<span onclick="GoToTab(this,2);">24小时登录的</span>
+		<span onclick="GoToTab(this,3);">锁定的</span>
+		<span onclick="GoToTab(this,4);">允许多人登录的</span>
+	</div>
+	<input type="hidden" id="hidTab" value="0" />
+</div>
+<table class="table table-border table-bordered table-bg table-hover">
+	<thead>
+		<tr class="text-c">
+			<th width="25"><input type="checkbox" name="" value=""></th>
+			<th width="40">ID</th>
+			<th width="150">登录名</th>
+			<th width="150">前台用户名</th>
+			<th>角色</th>
+			<th width="70">多人登录</th>
+			<th width="150">最后登录时间</th>
+			<th width="150">上次修改密码时间</th>
+			<th width="70">登录次数</th>
+			<th width="70">管理员状态</th>
+			<th width="100">操作</th>
+		</tr>
+	</thead>
+	<tbody id="tableBody"></tbody>
+</table>
+<div style="text-align:right;">
+	<ul id="grid_paging_part"></ul>
+</div>
+@Html.AntiForgeryToken()
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+			loadTables(0, 10);
+		});
+		function SetAdminStatus(adminID) {
+			$.ajax({
+				type: "POST",
+				url: "/Admin/Administrator/SetAdminStatus",
+				data: { "id": adminID },
+				headers: {
+					"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+				},
+				error: function (data, status, e) {
+					layer.alert('操作失败!');
+				},
+				success: function (data) {
+					if (data.result == "ok") {
+						layer.alert('操作成功!');
+						loadTables(0, 10);
+					}
+					else {
+						layer.alert(data.result);
+					}
+				}
+			})
+		}
+		function loadTables(PageNum, PageSize) {
+			$("#tableBody").html("");
+			var roleID = $("#dropRoles").val();
+			var SearchName = $("#dropSearchName").val();
+			var SearchKeyword = $("#txtSearchKeyword").val();
+			var TabStatus = $("#hidTab").val();
+			var parm = "PageNum=" + PageNum + "&PageSize=" + PageSize
+				+ "&roleID=" + encodeURIComponent(roleID)
+				+ "&SearchName=" + encodeURIComponent(SearchName)
+				+ "&SearchKeyword=" + encodeURIComponent(SearchKeyword)
+				+ "&TabStatus=" + encodeURIComponent(TabStatus);
+			$.ajax({
+				type: "GET",
+				url: "/Admin/Administrator/GetAdminList?" + parm + "&_t=" + new Date().getTime(),
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function (data) {
+					$.each(data.rowList, function (i, item) {
+						var statusTitle = "锁定";
+						var statusIcon = "&#xe631;";
+						var statusText = "<span class='label label-success radius'>正常</span>";
+						if (item.isLock) {
+							statusTitle = "启用";
+							statusIcon = "&#xe615;";
+							statusText = "<span class='label radius'>已锁定</span>";
+						}
+						var tr = "<tr class=\"text-c\">";
+						tr += "<td><input type='checkbox' value='" + item.adminID + "' class='checkboxs'></td>";
+						tr += "<td>" + item.adminID + "</td>";
+						tr += "<td>" + item.adminName + "</td>";
+						tr += "<td>" + item.userName + "</td>";
+						tr += "<td>" + item.roleNames + "</td>";
+						tr += "<td>" + (item.isMultiLogin == true ? "<span class='label label-success radius'>已允许</span>" : "<span class='label radius'>不允许</span>") + "</td>";
+						tr += "<td>" + item.loginIP + " <br />" + (item.loginTime == null ? "" : (formatDateTime(item.loginTime) == "9999-12-31 23:59:59") ? "" : formatDateTime(item.loginTime)) + "</td>";
+						tr += "<td>" + (item.modifyPasswordTime == null ? "" : (formatDateTime(item.modifyPasswordTime) == "9999-12-31 23:59:59") ? "" : formatDateTime(item.modifyPasswordTime)) + "</td>";
+						tr += "<td>" + (item.loginTimes == null ? "0" : item.loginTimes) + "</td>";
+						tr += "<td class=\"td-status\">" + statusText + "</td>";
+						tr += "<td class=\"td-manage\">";
+						tr += "<a title='" + statusTitle + "' href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"SetAdminStatus('" + item.adminID + "')\"><i class=\"Hui-iconfont\">" + statusIcon + "</i></a>";
+						tr += "<a title=\"编辑\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('编辑管理员','/Admin/Administrator/AdminEdit/" + item.adminID + "','800','600')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6df;</i></a>";
+						tr += "<a title=\"删除\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"DeleteSingle('" + item.adminID + "','/Admin/Administrator/DelAdmin',loadTables)\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>";
+						tr += "</td>";
+						tr += "</tr>";
+						$("#tableBody").append(tr);
+					})
+					$("#ctlRecordTotal").html(data.recordTotal);
+					var elment = $("#grid_paging_part"); //分页插件的容器id
+					if (data.recordTotal > 0) {
+						var options = { //分页插件配置项
+							bootstrapMajorVersion: 3,
+							currentPage: data.pageNum + 1, //当前页
+							numberOfPages: data.recordTotal, //总数
+							totalPages: data.pageCount, //总页数
+							itemTexts: function (type, page, current) {
+								switch (type) {
+									case "first":
+										return "首页";
+									case "prev":
+										return "上一页";
+									case "next":
+										return "下一页";
+									case "last":
+										return "末页";
+									case "page":
+										return page;
+								}
+							},
+							onPageChanged: function (event, oldPage, newPage) { //页面切换事件
+								loadTables(newPage - 1, PageSize);
+							}
+						}
+						elment.bootstrapPaginator(options); //分页插件初始化
+					}
+				},
+				error: function (data, status, e) {
+					alert('得到数据失败!');
+				}
+			})
+		}
+	</script>
+}

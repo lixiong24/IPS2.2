@@ -1,0 +1,86 @@
+﻿@{
+}
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<span class="l">
+		<a href="javascript:;" onclick="layer_show('添加角色','/Admin/Administrator/RoleEdit','800','600')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a>
+	</span>
+	<span class="r">共有数据：<strong id="ctlRecordTotal">0</strong> 条</span>
+</div>
+<table class="table table-border table-bordered table-bg table-hover">
+	<thead>
+		<tr class="text-c">
+			<th width="40">ID</th>
+			<th width="150">角色名</th>
+			<th>角色描述</th>
+			<th width="100">管理操作</th>
+			<th width="200">权限设置</th>
+		</tr>
+	</thead>
+	<tbody id="tableBody"></tbody>
+</table>
+<div style="text-align:right;">
+	<ul id="grid_paging_part"></ul>
+</div>
+@Html.AntiForgeryToken()
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+			loadTables(0, 20);
+		});
+		function loadTables(PageNum, PageSize) {
+			$("#tableBody").html("");
+			var parm = "PageNum=" + PageNum + "&PageSize=" + PageSize;
+			$.ajax({
+				type: "GET",
+				url: "/Admin/Administrator/GetRoleManage?" + parm + "&_t=" + new Date().getTime(),
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function (data) {
+					$.each(data.rowList, function (i, item) {
+						var tr = "<tr class=\"text-c\">";
+						tr += "<td>" + item.roleID + "</td>";
+						tr += "<td>" + item.roleName + "</td>";
+						tr += "<td>" + item.description + "</td>";
+						tr += "<td class=\"td-manage\">";
+						tr += "<a title=\"成员管理\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('成员管理','/Admin/Administrator/RoleMember/" + item.roleID + "?roleName=" + item.roleName + "','800','600')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe62b;</i></a>";
+						tr += "<a title=\"编辑\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('编辑角色','/Admin/Administrator/RoleEdit/" + item.roleID + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6df;</i></a>";
+						tr += "<a title=\"删除\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"DeleteSingle('" + item.roleID + "','/Admin/Administrator/DelRole',loadTables)\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>";
+						tr += "</td>";
+						tr += "<td class=\"td-manage\">";
+						tr += "<a title=\"常规权限设置\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('常规权限设置','/Admin/Administrator/RolePermissions/" + item.roleID + "?roleName=" + item.roleName + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">常规权限设置</i></a>";
+						tr += "</td>";
+						tr += "</tr>";
+						$("#tableBody").append(tr);
+					})
+					$("#ctlRecordTotal").html(data.recordTotal);
+					var elment = $("#grid_paging_part"); //分页插件的容器id
+					if (data.recordTotal > 0) {
+						var options = { //分页插件配置项
+							bootstrapMajorVersion: 3,
+							currentPage: data.pageNum + 1, //当前页
+							numberOfPages: data.recordTotal, //总数
+							totalPages: data.pageCount, //总页数
+							itemTexts: function (type, page, current) {
+								switch (type) {
+									case "first":
+										return "首页";
+									case "prev":
+										return "上一页";
+									case "next":
+										return "下一页";
+									case "last":
+										return "末页";
+									case "page":
+										return page;
+								}
+							},
+							onPageChanged: function (event, oldPage, newPage) { //页面切换事件
+								loadTables(newPage - 1, PageSize);
+							}
+						}
+						elment.bootstrapPaginator(options); //分页插件初始化
+					}
+				}
+			})
+		}
+	</script>
+}

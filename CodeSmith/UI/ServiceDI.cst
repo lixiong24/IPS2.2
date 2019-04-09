@@ -1,0 +1,20 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="lixiong.Project" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." Optional="True"%>
+<%@ Property Name="DetailTable" Type="SchemaExplorer.TableSchema" Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="StoreProcedure" Type="SchemaExplorer.CommandSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="View" Type="SchemaExplorer.ViewSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+
+<%@ Assembly Name="System.Data" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+
+	#region 依赖注入
+<% for (int i = 0; i < SourceDatabase.Tables.Count; i++) { %>
+	<%= GetRepositoryDI(SourceDatabase.Tables[i].Name) %>
+	<%= GetAppServiceDI(SourceDatabase.Tables[i].Name) %>
+<% } %>
+	#endregion

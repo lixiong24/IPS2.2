@@ -1,0 +1,121 @@
+﻿@model MorePicViewModel
+
+<ul id="@{@Model.Prefix}fileList" style="display:table;margin:0 auto;margin-bottom: 5px;text-align:center; padding-left:10px;"></ul>
+<div class="webUploader" style="margin:0 auto;">
+	<div id="@{@Model.Prefix}filePicker" class="webUploader-pick">
+		@{@Model.ShowName}
+	</div>
+</div>
+<input type="hidden" value="@{@Model.PhotoPathList}" id="@{@Model.Prefix}hidFileUploadData" />
+
+<link rel="stylesheet" href="~/plugins/WebUpload/webuploader.css" />
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/plugins/WebUpload/webuploader.min.js"></script>
+<script src="~/plugins/WebUpload/WebUploaderHandler.js"></script>
+<script type="text/javascript">
+	jQuery(function () {
+		if (!WebUploader.Uploader.support()) {
+			alert('Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
+			throw new Error('WebUploader does not support the browser you are using.');
+		}
+
+		var sitePath = "@Utility.GetBasePath()";
+		var uploadPath = "@Utility.UploadDirPath()";
+		
+		// 优化retina, 在retina下这个值是2
+		var @{@Model.Prefix}ratio = window.devicePixelRatio || 1;
+		//缩略图宽度
+		var @{@Model.Prefix}thumbnailWidth = 100 * @{@Model.Prefix}ratio;
+		//缩略图高度
+		var @{@Model.Prefix}thumbnailHeight = 100 * @{@Model.Prefix}ratio;
+		//显示文件列表的容器对象
+		var $@{@Model.Prefix}fileList = jQuery("#@{@Model.Prefix}fileList");
+
+
+		// 初始化Web Uploader
+		var @{@Model.Prefix}uploader = WebUploader.create({
+			auto: true,// 自动上传
+			swf: sitePath + 'plugins/WebUpload/Uploader.swf',// swf文件路径
+			server: '@Url.Action("UploadImageHandle", "Common")',// 文件接收服务端。
+			pick: '#@{@Model.Prefix}filePicker',// 选择文件的按钮。内部根据当前运行时创建，可能是input元素，也可能是flash.
+			// 允许选择的文件
+			accept: {
+				title: 'Images',
+				extensions: '@{@Model.FileTypes}',
+				mimeTypes: '@{@Model.FileMimeTypes}'
+			},
+			//验证上传文件总数量, 超出则不允许加入队列
+			fileNumLimit: @{@Model.FileNumLimit},
+			//验证上传文件总大小是否超出限制, 超出则不允许加入队列
+			fileSizeLimit: @{@Model.FileSizeLimit},
+			//验证单个上传文件大小是否超出限制
+			fileSingleSizeLimit: @{@Model.FileSingleSizeLimit},
+			//文件上传请求的参数表，每次发送都会发送此对象中的参数
+			formData: {
+				isThumb: @{@Model.IsThumb.ToString().ToLower()},
+				isWaterMark: @{@Model.IsWaterMark.ToString().ToLower()}
+			},
+			//是否要分片处理大文件上传
+			chunked: true,
+			//如果要分片，分多大一片？ 默认大小为5M.单位B
+			chunkSize: 5 * 1024 * 1024,
+			//是否以二进制流的方式发送文件，如果手机端上传出错，可以启用。
+			sendAsBinary: false
+		});
+
+		//事件处理
+		//1、当有错误时
+		@{@Model.Prefix}uploader.on("error", error);
+
+		// 2、当文件被加入队列以后触发
+		@{@Model.Prefix}uploader.on("fileQueued", function (file) {
+
+			//创建图片区域，并加入到显示区域列表中。返回创建的图片对象。
+			var $img = addImageWU(sitePath, '@{@Model.Prefix}hidFileUploadData', '@{@Model.Prefix}fileList', file.id,@{@Model.Prefix}uploader,@{@Model.IsShowText.ToString().ToLower()});
+			// 创建缩略图预览
+			var arrImg = file.name.split("|");
+			if (arrImg[0] == WebUploader.File.Status.COMPLETE) {
+				ShowImgByServer(sitePath, uploadPath, arrImg, file.id);
+			}
+			else {
+				@{@Model.Prefix}uploader.makeThumb(file, function (error, src) {
+					if (error) {
+						$img.replaceWith('<span>不能预览</span>');
+						return;
+					}
+					$img.attr('src', src);
+				}, @{@Model.Prefix}thumbnailWidth, @{@Model.Prefix}thumbnailHeight);
+			}
+		});
+
+		//3、上传过程中触发，携带上传进度。创建进度条实时显示。
+		@{@Model.Prefix}uploader.on('uploadProgress', function (file, percentage) {
+			ShowUploadProgress(file, percentage);
+		});
+
+		//4、判断文件上传是否成功。
+		@{@Model.Prefix}uploader.on('uploadAccept', function (file, response) {
+			if (response.flag == "error") {
+				alert(response.msg);
+				return false;
+			}
+		});
+
+		//5、文件上传成功时触发。
+		@{@Model.Prefix}uploader.on('uploadSuccess', function (file, response) {
+			ShowUploadSuccess(file, response);
+			SavaLatestServerDataWU('@{@Model.Prefix}hidFileUploadData', '@{@Model.Prefix}fileList');
+		});
+
+		//6、文件上传失败时触发。
+		@{@Model.Prefix}uploader.on('uploadError', function (file, reason) {
+			ShowUploadError(file, reason);
+		});
+
+		//7、不管成功或者失败，文件上传完成时触发。
+		@{@Model.Prefix}uploader.on('uploadComplete', function (file) {
+			ShowUploadComplete(file);
+		});
+		LoadImageWU("@{@Model.Prefix}hidFileUploadData", sitePath, uploadPath,@{@Model.Prefix}uploader);
+	});
+</script>

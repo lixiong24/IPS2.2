@@ -1,0 +1,61 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="JX.EF" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." Optional="True"%>
+<%@ Property Name="DetailTable" Type="SchemaExplorer.TableSchema" Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="StoreProcedure" Type="SchemaExplorer.CommandSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="View" Type="SchemaExplorer.ViewSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+
+<%@ Assembly Name="System.Data" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+using JX.Core.Entity;
+using Microsoft.EntityFrameworkCore;
+
+namespace <%= NameSpace %>
+{
+	/// <summary>
+	/// EF数据操作上下文。
+	/// 使用方法：在展示层的Startup.cs文件的ConfigureServices方法中，添加services.AddDbContext《ApplicationDbContext》(options =>options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection")));
+	/// </summary>
+	public class ApplicationDbContext: DbContext
+	{
+		/// <summary>
+		/// 构造器注入
+		/// </summary>
+		/// <param name="options"></param>
+		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+		{
+		}
+		
+		#region 数据库表对应属性
+<% for (int i = 0; i < SourceDatabase.Tables.Count; i++) { %>
+		/// <summary>
+		/// <%=SourceDatabase.Tables[i].Name %>表
+		/// </summary>
+		public virtual DbSet<<%=GetEntityClassName(SourceDatabase.Tables[i].Name) %>> <%=GetClassName(SourceDatabase.Tables[i].Name) %> { get; set; }
+<% } %>
+		#endregion
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="modelBuilder"></param>
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			#region 数据库表属性设置
+<% for (int i = 0; i < SourceDatabase.Tables.Count; i++) { %>
+	<% if(SourceDatabase.Tables[i].HasPrimaryKey){ %>
+			modelBuilder.Entity<<%=GetEntityClassName(SourceDatabase.Tables[i].Name) %>>(entity =>
+			{
+				entity.HasKey(e => new { <%=GenPrimaryKeyEF(SourceDatabase.Tables[i])%> });
+			});
+	<% } %>
+<% } %>
+			#endregion
+			base.OnModelCreating(modelBuilder);
+		}
+	}
+}

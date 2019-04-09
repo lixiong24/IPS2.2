@@ -1,0 +1,44 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="lixiong.Project" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." %>
+<%@ Property Name="DetailTable" Type="SchemaExplorer.TableSchema" Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="StoreProcedure" Type="SchemaExplorer.CommandSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="View" Type="SchemaExplorer.ViewSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+
+<%@ Assembly Name="System.Data" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+// =================================================================== 
+// 项目说明,功能实体类,用CodeSmith自动生成。
+// =================================================================== 
+// 文件名: <%=GetEntityClassName(SourceTable) %>.cs
+// 修改时间：<%=DateTime.Now.ToString() %>
+// 修改人: <%=DevelopersName %>
+// =================================================================== 
+using System;
+
+namespace <%= NameSpace %>
+{
+	/// <summary>
+	/// 数据库表：<%= SourceTable.Name %> 的实体类.
+	/// </summary>
+	public partial class <%=GetEntityClassName(SourceTable) %>
+	{
+		#region Properties
+		<% for (int i = 0; i < SourceTable.Columns.Count; i++) { %>
+		<%= GetMemberVariableDeclarationStatement("private",SourceTable.Columns[i]) %>
+		/// <summary>
+		/// <%= SourceTable.Columns[i].Description %> <% if (SourceTable.Columns[i].IsPrimaryKeyMember) {%>(主键)<%}%><% if (IsIdentity(SourceTable.Columns[i])) {%>(自增长)<%}%>
+		/// </summary>
+		public <%= GetCSType(SourceTable.Columns[i]) %> <%= GetPropertyName(SourceTable.Columns[i]) %>
+		{
+			get {return <%= GetMemberVariableName(SourceTable.Columns[i]) %>;}
+			set {<%= GetMemberVariableName(SourceTable.Columns[i]) %> = value;}
+		}
+		<% } %>
+		#endregion
+	}
+}

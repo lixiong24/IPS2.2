@@ -1,0 +1,102 @@
+﻿@model JX.Core.Entity.AddressEntity
+
+@{
+    ViewData["Title"] = "EFTest";
+}
+
+<h2>EFTest</h2>
+
+<div>
+    <h4>Address</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ConsigneeName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ConsigneeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HomePhone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HomePhone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Mobile)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Country)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Province)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Province)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Area)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Area)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Area1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Area1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Area2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Area2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Addresses)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Addresses)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ZipCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ZipCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsDefault)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsDefault)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

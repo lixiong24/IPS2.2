@@ -1,0 +1,107 @@
+﻿@{
+	ViewData["Title"] = "TestCommon";
+}
+<h2>这是HelloWorld 的视图页</h2>
+
+<p>ContentRootPath:@ViewData["ContentRootPath"]</p>
+<p>WebRootPath:@ViewData["WebRootPath"]</p>
+<p>WebRootName:@ViewData["WebRootName"]</p>
+<p>RequestMsg:@ViewData["RequestMsg"]</p>
+<p>RequestReferer:@ViewData["RequestReferer"]</p>
+<p>RequestHeaders:@ViewData["RequestHeaders"]</p>
+<p>RequestHeadersJSON:@ViewData["RequestHeadersJSON"]</p>
+<p>RequestFormJSON:@ViewData["RequestFormJSON"]</p>
+-----------------------------------------------------------------------------
+<p>CurrentTime:@ViewData["CurrentTime"]</p>
+-----------------------------------------------------------------------------
+<p>EncryptAes:@ViewData["EncryptAes"]</p>
+<p>DecryptAes:@ViewData["DecryptAes"]</p>
+-----------------------------------------------------------------------------
+<p>EncryptHmacSha1:@ViewData["EncryptHmacSha1"]</p>
+<p>EncryptHmacSha1Base64:@ViewData["EncryptHmacSha1Base64"]</p>
+-----------------------------------------------------------------------------
+<p>EncryptMd5:@ViewData["EncryptMd5"]</p>
+<p>EncryptSha1:@ViewData["EncryptSha1"]</p>
+-----------------------------------------------------------------------------
+<p>ClientIP:@ViewData["ClientIP"]</p>
+<p>HostIP:@ViewData["HostIP"]</p>
+-----------------------------------------------------------------------------
+<p>RandomFormatedNumeric:@ViewData["RandomFormatedNumeric"]</p>
+<p>RandomString:@ViewData["RandomString"]</p>
+<p>RandomStringByPattern:@ViewData["RandomStringByPattern"]</p>
+-----------------------------------------------------------------------------
+<p>StringHelper-GetHashKey:@ViewData["StringHelper-GetHashKey"]</p>
+<p>StringHelper-GetStringHashKey:@ViewData["StringHelper-GetStringHashKey"]</p>
+<p>StringHelper-MD5:@ViewData["StringHelper-MD5"]</p>
+<p>StringHelper-MD5D:@ViewData["StringHelper-MD5D"]</p>
+<p>StringHelper-MD5GB2312:@ViewData["StringHelper-MD5GB2312"]</p>
+<p>StringHelper-SHA1:@ViewData["StringHelper-SHA1"]</p>
+<p>StringHelper-ValidateMD5:@ViewData["StringHelper-ValidateMD5"]</p>
+-----------------------------------------------------------------------------
+<p>StringHelper-SubString:@ViewData["StringHelper-SubString"]</p>
+<p>StringHelper-GetInitial:@ViewData["StringHelper-GetInitial"]</p>
+<p>StringHelper-MakeSpellCode:@ViewData["StringHelper-MakeSpellCode"]</p>
+<p>StringHelper-FirstLetterOnly:@ViewData["StringHelper-FirstLetterOnly"]</p>
+-----------------------------------------------------------------------------
+<p>XmlSerializer:@ViewData["XmlSerializer"]</p>
+<p>XmlDeserialize:@ViewData["XmlDeserialize"]</p>
+------------------------------------------------------------------------------
+<p>JsonSerializer:@ViewData["JsonSerializer"]</p>
+<p>JsonDeserialize:@ViewData["JsonDeserialize"]</p>
+------------------------------------------------------------------------------
+<p>CookieHelper:@ViewData["CookieHelper"]</p>
+------------------------------------------------------------------------------
+<p>DateDiff-yyyy:@ViewData["DateDiff-yyyy"]</p>
+<p>DateDiff-q:@ViewData["DateDiff-q"]</p>
+<p>DateDiff-m:@ViewData["DateDiff-m"]</p>
+<p>DateDiff-w:@ViewData["DateDiff-w"]</p>
+<p>DateDiff-d:@ViewData["DateDiff-d"]</p>
+<p>DateDiff-h:@ViewData["DateDiff-h"]</p>
+<p>DateDiff-n:@ViewData["DateDiff-n"]</p>
+<p>DateDiff-s:@ViewData["DateDiff-s"]</p>
+------------------------------------------------------------------------------
+<p>Query-name:@ViewData["Query-name"]</p>
+<p>Query-date:@ViewData["Query-date"]</p>
+<p>Query-age:@ViewData["Query-age"]</p>
+<p>Query-mobile:@ViewData["Query-mobile"]</p>
+------------------------------------------------------------------------------
+<form asp-controller="HelloWorld" asp-action="Index" method="post" class="form-horizontal">
+	<input type="text" name="username" />
+	<input type="tel" name="userMobile" />
+	<input type="email" name="userEmail" />
+	<button type="submit" class="btn btn-default">提交</button>
+</form>
+------------------------------------------------------------------------------
+<p>Email:@ViewData["Email"]</p>
+<p>Mobile:@ViewData["Mobile"]</p>
+<p>Sex:@ViewData["Sex"]</p>
+<p>TrueName:@ViewData["TrueName"]</p>
+<p>UserID:@ViewData["UserID"]</p>
+<p>GroupID:@ViewData["GroupID"]</p>
+
+<p>初始净利润：<input type="text" id="jll" />亿</p>
+<p>增长年限：<input type="text" id="yearLength" value="10" /></p>
+<p>年增长率：<input type="text" id="zzl" value="0" />%</p>
+<p>贴现率：<input type="text" id="txl" value="8" />%</p>
+<p>总市值：<span id="spanSZ"></span>亿</p>
+<input type="button" class="btn btn-default" onclick="TestTXL()" value="计算" />
+
+@section scripts {
+	<script type="text/javascript">
+		function TestTXL() {
+			var jllInit = $("#jll").val();
+			var zzl = $("#zzl").val();
+			var txl = 1 + parseFloat($("#txl").val()) / 100;
+			var yearLength = $("#yearLength").val();
+			var totalSZ = 0;
+			var prveJLL = jllInit;
+			for (i = 0; i < yearLength; i++) {
+				var yearJLL = parseFloat(prveJLL) + (prveJLL * zzl / 100);
+				var yearSZ = parseFloat(yearJLL) / txl;
+				prveJLL = yearSZ;
+				totalSZ = parseFloat(totalSZ) + yearSZ;
+			}
+			$("#spanSZ").html(totalSZ);
+		}
+	</script>
+}

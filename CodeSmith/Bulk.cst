@@ -1,0 +1,227 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="Common.cs" Inherits="CommonFunction.Common" Debug="True" Description="Template description here." %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="指定要连接的数据库" %>
+<%@ Property Name="DevelopersName" Type="String" Category="Context" Default="lixiong" Description="开发者名称" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="lixiong.Project" Description="命名空间" %>
+<%@ Property Name="IncludeCollection" Type="System.Boolean" Default="True" Optional="False" Category="Booleans" Description="是否生成Model对象的集合类" %>
+<%@ Property Name="IncludeDataAccess" Type="System.Boolean" Default="True" Optional="False" Category="Booleans" Description="是否生成DAL对象" %>
+<%@ Property Name="IncludeBizObject"  Type="System.Boolean" Default="True" Optional="False" Category="Booleans" Description="是否生成BIZ对象" %>
+<%@ Property Name="IncludeRepositoryEF"  Type="System.Boolean" Default="True" Optional="False" Category="Booleans" Description="是否生成EF方式的仓储代码" %>
+<%@ Property Name="IncludeRepositoryADO"  Type="System.Boolean" Default="True" Optional="False" Category="Booleans" Description="是否生成ADO方式的仓储代码" %>
+
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Assembly Name="System.Design" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import NameSpace="System.IO" %>
+<%@ Import NameSpace="System.Diagnostics" %>
+
+<% Go(); %>
+
+<script runat="template">
+	private string _outputDirectory = String.Empty;
+
+	[Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))] 
+	[CodeTemplateProperty(CodeTemplatePropertyOption.Optional)]
+	[Category("General")]
+	[Description("获取或设置代码输出目录")]
+	[DefaultValue("")]
+	public string OutputDirectory 
+	{ 
+		get
+		{
+			if (_outputDirectory.Length == 0) return this.CodeTemplateInfo.DirectoryName + "output";
+			return _outputDirectory;
+		}
+		set
+		{
+			if (value.EndsWith("\\")) value = value.Substring(0, value.Length - 1);
+			_outputDirectory = value;
+		} 
+	}
+</script>
+
+<script runat="template">
+
+#region Ready Template
+private System.Collections.Hashtable _CodeTemplates = new System.Collections.Hashtable();
+
+private string[] _templatesFileNames = new string[] {
+														"Domain\\MyEntityByTable.cst" ,
+														"Domain\\MyIRepositoriesByTable.cst" ,
+														"Domain\\MyIRepositoriesADOByTable.cst" ,
+														"Infrastructure\\Repository.cst" ,
+														"Infrastructure\\RepositoryADO.cst" ,
+														"Infrastructure\\ApplicationDbContext.cst" ,
+														"Application\\IAppServices.cst" ,
+														"Application\\AppService.cst" ,
+														"Application\\IAppServicesADO.cst" ,
+														"Application\\AppServiceADO.cst" ,
+														"UI\\ServiceDI.cst"
+													};
+														
+
+public CodeTemplate CompileTemplate(string templateName)
+{
+	CodeTemplateCompiler compiler = new CodeTemplateCompiler(templateName);
+	compiler.Compile();
+	
+	if (compiler.Errors.Count == 0)
+	{
+		return compiler.CreateInstance();
+	}
+	else
+	{
+		for (int i = 0; i < compiler.Errors.Count; i++)
+		{
+			Response.WriteLine(compiler.Errors[i].ToString());
+		}
+		return null;
+	}
+}
+
+public void LoadTemplates()
+{	
+	foreach(string _templatesFileName in _templatesFileNames)
+	{
+		string key = System.IO.Path.GetFileName(_templatesFileName);
+		
+		_CodeTemplates.Add(key, this.CompileTemplate(this.CodeTemplateInfo.DirectoryName + _templatesFileName));
+	
+		// Set the properties that all the commonsqlcode inherited templates should set
+		try
+		{
+			//((CodeSmith.Engine.CodeTemplate)_CodeTemplates[key]).SetProperty("EntityFormat", EntityFormat);
+			//((CodeSmith.Engine.CodeTemplate)_CodeTemplates[key]).SetProperty("CollectionFormat", CollectionFormat);
+		}
+		catch(Exception) {}
+	}
+}
+
+public CodeTemplate GetTemplate(string templateType)
+{
+	return (CodeSmith.Engine.CodeTemplate)_CodeTemplates[templateType];
+}
+#endregion
+
+#region directory
+public void SafeCreateDirectory(string path)
+{
+	if (!Directory.Exists(path))
+		Directory.CreateDirectory(path);
+}
+
+// TODO allow overwrite
+public void SafeCopyFile(string path, string destination)
+{
+	FileInfo file1 = new FileInfo(path);
+	//try
+	//{
+		file1.CopyTo(destination, true);
+	//}
+	//catch(System.IO.IOException){}
+}
+#endregion
+
+public void Go()
+{
+	#region Create all directory and copy common files
+	SafeCreateDirectory(OutputDirectory + "\\Entity");
+	if(IncludeRepositoryEF)
+	{
+		SafeCreateDirectory(OutputDirectory + "\\IRepositories");
+		SafeCreateDirectory(OutputDirectory + "\\Repository");
+		
+		SafeCreateDirectory(OutputDirectory + "\\IServicesApp");
+		SafeCreateDirectory(OutputDirectory + "\\ServicesApp");
+	}
+	if(IncludeRepositoryADO)
+	{
+		SafeCreateDirectory(OutputDirectory + "\\IRepositoriesADO");
+		SafeCreateDirectory(OutputDirectory + "\\RepositoryADO");
+		SafeCreateDirectory(OutputDirectory + "\\IServicesAppADO");
+		SafeCreateDirectory(OutputDirectory + "\\ServicesAppADO");
+	}
+	#endregion
+	
+	#region LoadTemplates
+	LoadTemplates();
+	#endregion
+	
+	#region Go
+	for (int i=0; i < SourceDatabase.Tables.Count; i++)
+	{
+		this.GetTemplate("MyEntityByTable.cst").SetProperty("SourceDatabase", SourceDatabase);
+		this.GetTemplate("MyEntityByTable.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+		this.GetTemplate("MyEntityByTable.cst").SetProperty("NameSpace", "JX.Core.Entity");
+		this.GetTemplate("MyEntityByTable.cst").SetProperty("DevelopersName", DevelopersName);
+		this.GetTemplate("MyEntityByTable.cst").RenderToFile(OutputDirectory + "\\Entity\\" + GetClassName(SourceDatabase.Tables[i].Name) + "Entity.cs", true);
+		
+		if(IncludeRepositoryEF)
+		{
+			this.GetTemplate("MyIRepositoriesByTable.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("MyIRepositoriesByTable.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("MyIRepositoriesByTable.cst").SetProperty("NameSpace", "JX.Core");
+			this.GetTemplate("MyIRepositoriesByTable.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("MyIRepositoriesByTable.cst").RenderToFile(OutputDirectory + "\\IRepositories\\" + GetIRepositoriesClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("Repository.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("Repository.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("Repository.cst").SetProperty("NameSpace", "JX.EF");
+			this.GetTemplate("Repository.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("Repository.cst").RenderToFile(OutputDirectory + "\\Repository\\" + GetRepositoryClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("IAppServices.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("IAppServices.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("IAppServices.cst").SetProperty("NameSpace", "JX.Application");
+			this.GetTemplate("IAppServices.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("IAppServices.cst").RenderToFile(OutputDirectory + "\\IServicesApp\\" + GetIAppServiceClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("AppService.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("AppService.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("AppService.cst").SetProperty("NameSpace", "JX.Application");
+			this.GetTemplate("AppService.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("AppService.cst").RenderToFile(OutputDirectory + "\\ServicesApp\\" + GetAppServiceClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+		}
+		if(IncludeRepositoryADO)
+		{
+			this.GetTemplate("MyIRepositoriesADOByTable.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("MyIRepositoriesADOByTable.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("MyIRepositoriesADOByTable.cst").SetProperty("NameSpace", "JX.Core");
+			this.GetTemplate("MyIRepositoriesADOByTable.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("MyIRepositoriesADOByTable.cst").RenderToFile(OutputDirectory + "\\IRepositoriesADO\\" + GetIRepositoriesADOClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("RepositoryADO.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("RepositoryADO.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("RepositoryADO.cst").SetProperty("NameSpace", "JX.ADO");
+			this.GetTemplate("RepositoryADO.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("RepositoryADO.cst").RenderToFile(OutputDirectory + "\\RepositoryADO\\" + GetRepositoryADOClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("IAppServicesADO.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("IAppServicesADO.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("IAppServicesADO.cst").SetProperty("NameSpace", "JX.Application");
+			this.GetTemplate("IAppServicesADO.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("IAppServicesADO.cst").RenderToFile(OutputDirectory + "\\IServicesAppADO\\" + GetIAppServiceADOClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+			
+			this.GetTemplate("AppServiceADO.cst").SetProperty("SourceDatabase", SourceDatabase);
+			this.GetTemplate("AppServiceADO.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+			this.GetTemplate("AppServiceADO.cst").SetProperty("NameSpace", "JX.Application");
+			this.GetTemplate("AppServiceADO.cst").SetProperty("DevelopersName", DevelopersName);
+			this.GetTemplate("AppServiceADO.cst").RenderToFile(OutputDirectory + "\\ServicesAppADO\\" + GetAppServiceADOClassName(SourceDatabase.Tables[i].Name) + ".cs", true);
+		}
+		
+		this.GetTemplate("ServiceDI.cst").SetProperty("SourceDatabase", SourceDatabase);
+		this.GetTemplate("ServiceDI.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+		this.GetTemplate("ServiceDI.cst").SetProperty("NameSpace", "JX.Application");
+		this.GetTemplate("ServiceDI.cst").SetProperty("DevelopersName", DevelopersName);
+		this.GetTemplate("ServiceDI.cst").RenderToFile(OutputDirectory + "\\ServiceDI.cs", true);
+		
+		this.GetTemplate("ApplicationDbContext.cst").SetProperty("SourceDatabase", SourceDatabase);
+		this.GetTemplate("ApplicationDbContext.cst").SetProperty("SourceTable", SourceDatabase.Tables[i]);
+		this.GetTemplate("ApplicationDbContext.cst").SetProperty("NameSpace", "JX.EF");
+		this.GetTemplate("ApplicationDbContext.cst").SetProperty("DevelopersName", DevelopersName);
+		this.GetTemplate("ApplicationDbContext.cst").RenderToFile(OutputDirectory + "\\ApplicationDbContext.cs", true);
+	}
+	
+	#endregion
+	
+}
+</script>

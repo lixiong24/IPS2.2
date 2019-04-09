@@ -1,0 +1,95 @@
+﻿@model RoleMemberViewModel
+<form class="form form-horizontal" asp-controller="Administrator" asp-action="RoleMember" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>角色名：</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			@ViewBag.RoleName
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>成员管理：</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			<table border="0" cellspacing="0" cellpadding="0" width="100%">
+				<tr align="center">
+					<td>
+						<strong>未属于该角色的管理员</strong><br />
+						<select id="NotBelongRole" multiple="multiple" style="width:100%; height:300px;">
+							@if (Model != null && Model.MemberByNotRole != null)
+							{
+								foreach (var adminDTO in Model.MemberByNotRole)
+								{
+									<option value="@adminDTO.AdminID">@adminDTO.AdminName</option>
+								}
+							}
+						</select>
+					</td>
+					<td style="width: 100px;" align="center">
+						<input type="button" class="btn btn-primary size-MINI radius" value="添加>>" onclick="JavaScript:addItem(NotBelongRole,BelongRole);delItem(NotBelongRole)" /><br />
+						<br />
+						<input type="button" class="btn btn-primary size-MINI radius" value="<<移除" onclick="JavaScript:addItem(BelongRole,NotBelongRole);delItem(BelongRole)" />
+					</td>
+					<td>
+						<strong>已属于该角色的管理员</strong><br />
+						<select id="BelongRole" multiple="multiple" style="width:100%; height:300px;">
+							@if (Model != null && Model.MemberByRole != null)
+							{
+								foreach (var adminDTO in Model.MemberByRole)
+								{
+									<option value="@adminDTO.AdminID">@adminDTO.AdminName</option>
+								}
+							}
+						</select>						
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit" onclick="GetBelongToRole(BelongRole)"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+			<input type="hidden" id="hidBelongToRole" name="hidBelongToRole" />
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		function addItem(ItemList, Target) {
+			for (var x = 0; x < ItemList.length; x++) {
+				var opt = ItemList.options[x];
+				if (opt.selected) {
+					flag = true;
+					for (var y = 0; y < Target.length; y++) {
+						var myopt = Target.options[y];
+						if (myopt.value == opt.value) {
+							flag = false;
+						}
+					}
+					if (flag) {
+						Target.options[Target.options.length] = new Option(opt.text, opt.value, 0, 0);
+					}
+				}
+			}
+		}
+		function delItem(ItemList) {
+			for (var x = ItemList.length - 1; x >= 0; x--) {
+				var opt = ItemList.options[x];
+				if (opt.selected) {
+					ItemList.options[x] = null;
+				}
+			}
+		}
+		function GetBelongToRole(ItemList) {
+			var adminId = "";
+			for (var x = 0; x < ItemList.length; x++) {
+				if (adminId == "") {
+					adminId = ItemList.options[x].value;
+				}
+				else {
+					adminId += "," + ItemList.options[x].value;
+				}
+			}
+			var belongToRole = document.getElementById("hidBelongToRole");
+			belongToRole.value = adminId;
+		}
+	</script>
+}
