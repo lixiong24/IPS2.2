@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hangfire;
 using JX.Application;
 using JX.Application.CommonService;
 using JX.Core;
@@ -782,6 +783,10 @@ namespace JXWebHost
 				options.SuppressXFrameOptionsHeader = false;
 			});
 
+			//添加Hangfire服务，用于定时任务
+			services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddHangfireServer();
+
 			services.AddMvc(options =>
 			{
 				options.Filters.Add<ModelStateActionFilter>();
@@ -819,6 +824,36 @@ namespace JXWebHost
 			app.UseSession();
 
 			app.UseAuthentication();
+
+			//启用Hangfire仪表盘
+			app.UseHangfireDashboard();
+			//app.Map("/TimeJob1", r =>
+			//{
+			//	r.Run(context =>
+			//	{
+			//		//任务每分钟执行一次
+			//		RecurringJob.AddOrUpdate(() => Console.WriteLine($"ASP.NET Core LineZero"), Cron.Minutely());
+			//		return context.Response.WriteAsync("ok");
+			//	});
+			//});
+			//app.Map("/TimeJob2", r =>
+			//{
+			//	r.Run(context =>
+			//	{
+			//		//任务执行一次
+			//		BackgroundJob.Enqueue(() => Console.WriteLine($"ASP.NET Core One Start LineZero{DateTime.Now}"));
+			//		return context.Response.WriteAsync("ok");
+			//	});
+			//});
+			//app.Map("/TimeJob3", r =>
+			//{
+			//	r.Run(context =>
+			//	{
+			//		//任务延时两分钟执行
+			//		BackgroundJob.Schedule(() => Console.WriteLine($"ASP.NET Core await LineZero{DateTime.Now}"), TimeSpan.FromMinutes(2));
+			//		return context.Response.WriteAsync("ok");
+			//	});
+			//});
 
 			app.UseMvc(routes =>
 			{
