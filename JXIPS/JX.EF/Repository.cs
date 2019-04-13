@@ -1720,7 +1720,7 @@ namespace JX.EF
 			}
 			if (string.IsNullOrEmpty(TableName))
 			{
-				TableName = typeof(T).Name;
+				TableName = GetTableName(TableName);
 			}
 			SqlParameter parmStartRows = new SqlParameter("StartRows", startRowIndexId);
 			SqlParameter parmPageSize = new SqlParameter("PageSize", maxNumberRows);
@@ -1783,7 +1783,7 @@ namespace JX.EF
 			}
 			if (string.IsNullOrEmpty(TableName))
 			{
-				TableName = typeof(T).Name;
+				TableName = GetTableName(TableName);
 			}
 			SqlParameter parmStartRows = new SqlParameter("StartRows", startRowIndexId);
 			SqlParameter parmPageSize = new SqlParameter("PageSize", maxNumberRows);
@@ -2243,6 +2243,19 @@ namespace JX.EF
 				}
 			}
 			return query;
+		}
+		private string GetTableName(string tableName="")
+		{
+			var result = "";
+			if (string.IsNullOrEmpty(tableName))
+			{
+				result = typeof(T).Name;
+			}
+			if (result.EndsWith("Entity"))
+			{
+				result = result.Replace("Entity", "");
+			}
+			return result;
 		}
 		#endregion
 	}

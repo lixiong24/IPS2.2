@@ -137,7 +137,7 @@ namespace JX.Application
 		public IList<AdminEntity> GetListFull(int startRowIndexId, int maxNumberRows, string Filter, out int Total)
 		{
 			Total = 0;
-			var entityList = _repository.GetList(startRowIndexId, maxNumberRows,"AdminID"," * ", "DESC", Filter,"AdminEntity", out Total);
+			var entityList = _repository.GetList(startRowIndexId, maxNumberRows,"AdminID"," * ", "DESC", Filter,"Admin", out Total);
 			foreach (var entity in entityList)
 			{
 				_repository.GetAdminFull(entity);
