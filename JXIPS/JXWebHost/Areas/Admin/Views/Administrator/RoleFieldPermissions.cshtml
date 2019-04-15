@@ -1,0 +1,87 @@
+﻿@model List<RoleFieldPermissionsViewModels>
+@{
+	ViewData["Title"] = "字段权限设置";
+	Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<form class="form form-horizontal" asp-controller="Administrator" asp-action="RoleFieldPermissions" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>角色名：</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			@ViewBag.RoleName
+		</div>
+	</div>
+	<div class="row cl HuiTab" id="tab-models">
+		<label class="form-label col-xs-4 col-sm-2 tabBar">
+			模型列表：<br /><br />
+			@foreach (var vm in Model)
+			{
+				<span class="f-r">@vm.ModelsEntity.ModelName</span><br /><br />
+			}
+		</label>
+		<div class="formControls col-xs-8 col-sm-10">
+			@{
+				if (Model != null)
+				{
+					<table class="table table-border table-bordered table-bg table-hover">
+						<thead>
+							<tr class="text-c">
+								<th width="20%">字段名称</th>
+								<th width="20%">字段别名</th>
+								<th width="20%">字段类型</th>
+								<th width="20%">字段级别</th>
+								<th width="20%">禁止设置值</th>
+							</tr>
+						</thead>
+						@foreach (var vm in Model)
+						{
+							<tbody class="tabCon">
+								@foreach (var field in vm.FieldInfoList)
+								{
+									<tr class="text-c">
+										<td>@field.FieldName</td>
+										<td>@field.FieldAlias</td>
+										<td>@EnumHelper.GetDescription(field.FieldType)</td>
+										<td>
+											@if (field.FieldLevel == 0)
+											{
+												<span style="color:Green">系统</span>
+											}
+											else
+											{
+												<span>自定义</span>
+											}
+										</td>
+										<td>
+											@if (vm.RoleFieldPermissionsEntityList.Where(item => item.FieldName == field.FieldName).Count() >= 1)
+											{
+												<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview" checked="checked">
+											}
+											else
+											{
+												<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview">
+											}
+										</td>
+									</tr>
+								}
+
+							</tbody>
+						}
+
+					</table>
+				}
+			}
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$.Huitab("#tab-models .tabBar span", "#tab-models .tabCon", "current", "click", "0");
+		});
+	</script>
+}

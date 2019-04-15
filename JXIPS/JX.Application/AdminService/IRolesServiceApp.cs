@@ -37,6 +37,31 @@ namespace JX.Application
 		/// <param name="roleID"></param>
 		/// <returns></returns>
 		Task<bool> DeletePermissionFromRoles(int roleID);
+
+		/// <summary>
+		/// 移除指定角色的所有模型字段权限
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <returns></returns>
+		Task<bool> DeleteFieldPermissionFromRoles(int roleID);
+
+		/// <summary>
+		/// 移除指定角色的所有节点权限
+		/// </summary>
+		/// <param name="roleID">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="nodeId">节点ID，小于等于-3表示所有节点</param>
+		/// <param name="operateCode">权限码</param>
+		/// <returns></returns>
+		Task<bool> DeleteNodePermissionFromRoles(int roleID = -1, int nodeId = -3, OperateCode operateCode=OperateCode.None);
+
+		/// <summary>
+		/// 移除指定角色的所有专题权限
+		/// </summary>
+		/// <param name="roleID">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="specialId">专题ID，小于等于0表示所有专题</param>
+		/// <param name="operateCode">权限码</param>
+		/// <returns></returns>
+		Task<bool> DeleteSpecialPermissionFromRoles(int roleID = -1, int specialId = 0, OperateCode operateCode = OperateCode.None);
 		#endregion
 
 		#region 角色成员管理
@@ -63,7 +88,7 @@ namespace JX.Application
 		Task<bool> AddMembersToRole(string admins, int roleId);
 		#endregion
 
-		#region 常规权限管理
+		#region 角色－菜单权限管理
 		/// <summary>
 		/// 添加常规权限到角色
 		/// </summary>
@@ -87,7 +112,14 @@ namespace JX.Application
 		Task<IList<RolesPermissionsEntity>> GetRolesPermissionsByOperateCode(string operateCode);
 		#endregion
 
-		#region 节点权限管理
+		#region 角色－节点权限管理
+		/// <summary>
+		/// 添加模型字段权限到角色
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <param name="nodeIdAndOperateCode">节点ID与权限码的集合体，多个内容用“,”分隔（例：-2:101005001,-2:101005002）</param>
+		/// <returns></returns>
+		Task<bool> AddNodePermissionToRoles(int roleID, string nodeIdAndOperateCode);
 		/// <summary>
 		/// 获取指定角色、指定节点的权限列表
 		/// </summary>
@@ -95,6 +127,25 @@ namespace JX.Application
 		/// <param name="nodeId">节点ID，小于等于-3表示所有节点</param>
 		/// <returns></returns>
 		Task<IList<RoleNodePermissionsEntity>> GetNodePermissionsById(int roleId=-1, int nodeId=-3);
+		#endregion
+
+		#region 角色－模型字段权限管理
+		/// <summary>
+		/// 添加模型字段权限到角色
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <param name="operateCodes">权限码</param>
+		/// <param name="modelIdAndFieldName">模型ID与字段名的集合体，多个内容用“,”分隔（例：11:FieldName,11:FieldName1）</param>
+		/// <returns></returns>
+		Task<bool> AddFieldPermissionToRoles(int roleID, OperateCode operateCodes,string modelIdAndFieldName);
+
+		/// <summary>
+		/// 获取指定角色、指定模型的字段权限列表
+		/// </summary>
+		/// <param name="roleId">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="modelId">模型ID，小于等于0表示所有模型</param>
+		/// <returns></returns>
+		Task<IList<RoleFieldPermissionsEntity>> GetFieldPermissionsById(int roleId=-1,int modelId=0);
 		#endregion
 	}
 }

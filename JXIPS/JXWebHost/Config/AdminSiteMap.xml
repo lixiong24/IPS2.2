@@ -8,6 +8,8 @@
 			<siteMapNode title="角色编辑" url="/Admin/Administrator/RoleEdit" />
 			<siteMapNode title="成员管理" url="/Admin/Administrator/RoleMember" />
 			<siteMapNode title="常规权限设置" url="/Admin/Administrator/RolePermissions" />
+			<siteMapNode title="节点权限设置" url="/Admin/Administrator/NodePermissions" />
+			<siteMapNode title="字段权限设置" url="/Admin/Administrator/RoleFieldPermissions" />
 		</siteMapNode>
 	</siteMapNode>
 </siteMap>

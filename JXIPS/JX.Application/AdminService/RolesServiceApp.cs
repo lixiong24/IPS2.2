@@ -16,7 +16,7 @@ namespace JX.Application
 	public partial class RolesServiceApp : IRolesServiceApp
 	{
 		private char[] split = new char[] { ',' };
-
+		
 		#region 仓储接口
 		private readonly IAdminRepository _AdminRepository;
 		private readonly IAdminRolesRepository _AdminRolesRepository;
@@ -102,6 +102,59 @@ namespace JX.Application
 			return await _RolesPermissionsRepository.DeletePermissionFromRolesAsync(roleID);
 		}
 
+		/// <summary>
+		/// 移除指定角色的所有模型字段权限
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <returns></returns>
+		public async Task<bool> DeleteFieldPermissionFromRoles(int roleID)
+		{
+			return await _RoleFieldPermissionsRepository.DeleteFieldPermissionFromRolesAsync(roleID);
+		}
+
+		/// <summary>
+		/// 移除指定角色的所有节点权限
+		/// </summary>
+		/// <param name="roleID">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="nodeId">节点ID，小于等于-3表示所有节点</param>
+		/// <param name="operateCode">权限码</param>
+		/// <returns></returns>
+		public async Task<bool> DeleteNodePermissionFromRoles(int roleID = -1, int nodeId = -3, OperateCode operateCode = OperateCode.None)
+		{
+			string strCode = "";
+			if(operateCode != OperateCode.None)
+			{
+				strCode = ((int)operateCode).ToString();
+			}
+			string strNodeID = "";
+			if(nodeId > -3)
+			{
+				strNodeID = nodeId.ToString();
+			}
+			return await _RoleNodePermissionsRepository.DeleteNodePermissionFromRolesAsync(roleID, strNodeID, strCode);
+		}
+
+		/// <summary>
+		/// 移除指定角色的所有专题权限
+		/// </summary>
+		/// <param name="roleID">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="specialId">专题ID，小于等于0表示所有专题</param>
+		/// <param name="operateCode">权限码</param>
+		/// <returns></returns>
+		public async Task<bool> DeleteSpecialPermissionFromRoles(int roleID = -1, int specialId = 0, OperateCode operateCode = OperateCode.None)
+		{
+			string strCode = "";
+			if (operateCode != OperateCode.None)
+			{
+				strCode = ((int)operateCode).ToString();
+			}
+			string strSpecialID = "";
+			if (specialId > 0)
+			{
+				strSpecialID = specialId.ToString();
+			}
+			return await _RoleSpecialPermissionsRepository.DeleteSpecialPermissionFromRolesAsync(roleID, strSpecialID, strCode);
+		}
 
 		/// <summary>
 		/// 删除角色相关的所有权限
@@ -160,7 +213,7 @@ namespace JX.Application
 		}
 		#endregion
 
-		#region 常规权限管理
+		#region 角色－菜单权限管理
 		/// <summary>
 		/// 添加权限到角色，并清除对应权限的缓存数据
 		/// </summary>
@@ -171,18 +224,18 @@ namespace JX.Application
 		{
 			if (roleID <= 0 || string.IsNullOrEmpty(operateCodes))
 				return false;
-			List<string> listCacheKey = new List<string>();
+			//List<string> listCacheKey = new List<string>();
 			var arrOperateCodes = operateCodes.Split(split, StringSplitOptions.RemoveEmptyEntries);
 			arrOperateCodes = StringHelper.RemoveRepeatItem(arrOperateCodes);
 			foreach (string str in arrOperateCodes)
 			{
 				if (!string.IsNullOrEmpty(str) && (str != "None"))
 				{
-					listCacheKey.Add("CK_OperatorCode_" + str);
+					//listCacheKey.Add(CK_RolePermission_OperatorCode_Pre + str);
 					await _RolesPermissionsRepository.AddAsync(new RolesPermissionsEntity() { RoleID = roleID, OperateCode = str });
 				}
 			}
-			CacheHelper.CacheServiceProvider.RemoveAll(listCacheKey);
+			//CacheHelper.CacheServiceProvider.RemoveAll(listCacheKey);
 			return true;
 		}
 
@@ -209,7 +262,33 @@ namespace JX.Application
 		}
 		#endregion
 
-		#region 节点权限管理
+		#region 角色－节点权限管理
+		/// <summary>
+		/// 添加模型字段权限到角色
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <param name="nodeIdAndOperateCode">节点ID与权限码的集合体，多个内容用“,”分隔（例：-2:101005001,-2:101005002）</param>
+		/// <returns></returns>
+		public async Task<bool> AddNodePermissionToRoles(int roleID, string nodeIdAndOperateCode)
+		{
+			if (roleID <= 0 || string.IsNullOrEmpty(nodeIdAndOperateCode))
+				return false;
+
+			var arrNodeIdAndOperateCode = nodeIdAndOperateCode.Split(split, StringSplitOptions.RemoveEmptyEntries);
+			arrNodeIdAndOperateCode = StringHelper.RemoveRepeatItem(arrNodeIdAndOperateCode);
+			foreach (string strItem in arrNodeIdAndOperateCode)
+			{
+				if (!string.IsNullOrEmpty(strItem))
+				{
+					var arrItem = strItem.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+					var nodeID = DataConverter.CLng(arrItem[0]);
+					var operateCodes = arrItem[1];
+
+					await _RoleNodePermissionsRepository.AddAsync(new RoleNodePermissionsEntity() { RoleID = roleID, OperateCode = operateCodes,NodeID=nodeID});
+				}
+			}
+			return true;
+		}
 		/// <summary>
 		/// 获取指定角色、指定节点的权限列表
 		/// </summary>
@@ -228,6 +307,56 @@ namespace JX.Application
 				predicate = predicate.And(p => p.NodeID == nodeId);
 			}
 			var entityList = await _RoleNodePermissionsRepository.LoadListAllAsync(predicate);
+			return entityList;
+		}
+		#endregion
+
+		#region 角色－模型字段权限管理
+		/// <summary>
+		/// 添加模型字段权限到角色
+		/// </summary>
+		/// <param name="roleID"></param>
+		/// <param name="operateCodes">权限码</param>
+		/// <param name="modelIdAndFieldName">模型ID与字段名的集合体，多个内容用“,”分隔（例：11:FieldName,11:FieldName1）</param>
+		/// <returns></returns>
+		public async Task<bool> AddFieldPermissionToRoles(int roleID, OperateCode operateCodes, string modelIdAndFieldName)
+		{
+			if (roleID <= 0 || string.IsNullOrEmpty(modelIdAndFieldName))
+				return false;
+
+			var arrModelIdAndFieldName = modelIdAndFieldName.Split(split, StringSplitOptions.RemoveEmptyEntries);
+			arrModelIdAndFieldName = StringHelper.RemoveRepeatItem(arrModelIdAndFieldName);
+			foreach (string strItem in arrModelIdAndFieldName)
+			{
+				if (!string.IsNullOrEmpty(strItem))
+				{
+					var arrItem = strItem.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+					var modelID = DataConverter.CLng(arrItem[0]);
+					var fieldName = arrItem[1];
+
+					await _RoleFieldPermissionsRepository.AddAsync(new RoleFieldPermissionsEntity() { RoleID = roleID, OperateCode = ((int)operateCodes).ToString(), ModelID = modelID, FieldName = fieldName });
+				}
+			}
+			return true;
+		}
+		/// <summary>
+		/// 获取指定角色、指定模型的字段权限列表
+		/// </summary>
+		/// <param name="roleId">角色ID，小于等于-1表示所有角色</param>
+		/// <param name="modelId">模型ID，小于等于0表示所有模型</param>
+		/// <returns></returns>
+		public async Task<IList<RoleFieldPermissionsEntity>> GetFieldPermissionsById(int roleId = -1, int modelId = 0)
+		{
+			Expression<Func<RoleFieldPermissionsEntity, bool>> predicate = p => true;
+			if (roleId >= 0)
+			{
+				predicate = predicate.And(p => p.RoleID == roleId);
+			}
+			if (modelId > 0)
+			{
+				predicate = predicate.And(p => p.ModelID == modelId);
+			}
+			var entityList = await _RoleFieldPermissionsRepository.LoadListAllAsync(predicate);
 			return entityList;
 		}
 		#endregion

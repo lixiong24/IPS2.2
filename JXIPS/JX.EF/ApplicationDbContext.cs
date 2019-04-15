@@ -16,7 +16,7 @@ namespace JX.EF
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 		{
 		}
-		
+
 		#region 数据库表对应属性
 		/// <summary>
 		/// Address表
@@ -682,8 +682,9 @@ namespace JX.EF
 		/// WorkNextProcessRoles表
 		/// </summary>
 		public virtual DbSet<WorkNextProcessRolesEntity> WorkNextProcessRoles { get; set; }
-		#endregion
 		
+		#endregion
+
 		/// <summary>
 		/// 
 		/// </summary>

@@ -13,4 +13,8 @@
     <ProjectReference Include="..\JX.EF\JX.EF.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ModelsService\" />
+  </ItemGroup>
+
 </Project>

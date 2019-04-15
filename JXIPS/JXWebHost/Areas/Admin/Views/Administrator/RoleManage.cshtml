@@ -47,6 +47,7 @@
 						tr += "</td>";
 						tr += "<td class=\"td-manage\">";
 						tr += "<a title=\"常规权限设置\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('常规权限设置','/Admin/Administrator/RolePermissions/" + item.roleID + "?roleName=" + item.roleName + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">常规权限设置</i></a>";
+						tr += "<a title=\"字段权限设置\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('字段权限设置','/Admin/Administrator/RoleFieldPermissions/" + item.roleID + "?roleName=" + item.roleName + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">字段权限设置</i></a>";
 						tr += "</td>";
 						tr += "</tr>";
 						$("#tableBody").append(tr);

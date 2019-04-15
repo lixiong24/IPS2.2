@@ -14,6 +14,7 @@ using JX.Core.Entity;
 using System.Security.Claims;
 using System.Linq.Expressions;
 using JX.Infrastructure.Data;
+using JX.Infrastructure.Field;
 
 namespace JXWebHost.Areas.Admin.Controllers
 {
@@ -24,11 +25,16 @@ namespace JXWebHost.Areas.Admin.Controllers
 		private IAdminServiceApp _AdminService;
 		private IRolesServiceApp _RolesService;
 		private INodesServiceApp _NodesService;
-		public AdministratorController(IAdminServiceApp AdminService, IRolesServiceApp RolesService, INodesServiceApp NodesService)
+		private IModelsServiceApp _ModelsService;
+		public AdministratorController(IAdminServiceApp AdminService, 
+			IRolesServiceApp RolesService, 
+			INodesServiceApp NodesService,
+			IModelsServiceApp ModelsService)
 		{
 			_AdminService = AdminService;
 			_RolesService = RolesService;
 			_NodesService = NodesService;
+			_ModelsService = ModelsService;
 		}
 
 		#region 管理员列表
@@ -583,7 +589,94 @@ namespace JXWebHost.Areas.Admin.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AdminAuthorize(Roles = "SuperAdmin,AdminRoleManage")]
-		public async Task<ActionResult> NodePermissions(int id, IFormCollection collection)
+		public async Task<ActionResult> NodePermissions(int id, string PermissionsType = "Node", IFormCollection collection=null)
+		{
+			if (id <= -1)
+			{
+				Utility.WriteMessage("权限配置必须指定角色", "mClose");
+				return Content("");
+			}
+			if (id == 0)
+			{
+				Utility.WriteMessage("超级管理员不用设置权限", "mClose");
+				return Content("");
+			}
+			switch (PermissionsType)
+			{
+				case "Node":
+					await _RolesService.DeleteNodePermissionFromRoles(id,-3,OperateCode.CurrentNodesManage);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.ChildNodesManage);
+					break;
+				case "Content":
+				case "Product":
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeContentPreview);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeContentInput);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeContentCheck);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeContentManage);
+					break;
+				case "Comment":
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeCommentReply);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeCommentCheck);
+					await _RolesService.DeleteNodePermissionFromRoles(id, -3, OperateCode.NodeCommentManage);
+					break;
+			}
+			var ModelPurview = collection["ModelPurview"];
+			if (!string.IsNullOrEmpty(ModelPurview))
+			{
+				if (await _RolesService.AddNodePermissionToRoles(id, ModelPurview))
+				{
+					Utility.WriteMessage("设置权限成功", "mRefresh");
+				}
+				else
+				{
+					Utility.WriteMessage("设置权限失败", "mClose");
+				}
+			}
+			else
+			{
+				Utility.WriteMessage("设置权限成功", "mRefresh");
+			}
+			return Content("");
+		}
+		#endregion
+
+		#region 角色-模型字段权限设置
+		[AdminAuthorize(Roles = "SuperAdmin,AdminRoleManage")]
+		public async Task<IActionResult> RoleFieldPermissions(int id = -1, string roleName = "")
+		{
+			var permissionsViewModels = new List<RoleFieldPermissionsViewModels>();
+			if (id <= -1)
+			{
+				Utility.WriteMessage("权限配置必须指定角色", "mClose");
+				return View(permissionsViewModels);
+			}
+			if (id == 0)
+			{
+				Utility.WriteMessage("超级管理员不用设置权限", "mClose");
+				return View(permissionsViewModels);
+			}
+			ViewBag.RoleID = id;
+			ViewBag.RoleName = roleName;
+
+			var modelsEntityList = await _ModelsService.LoadListAllAsync(p=>p.IsDisabled==false);
+			foreach (ModelsEntity modelsEntity in modelsEntityList)
+			{
+				List<FieldInfo> fieldInfoList = modelsEntity.Field.ToXmlObject<List<FieldInfo>>();
+				fieldInfoList.Sort(new FieldInfoComparer());
+				var vm = new RoleFieldPermissionsViewModels();
+				vm.ModelsEntity = modelsEntity;
+				vm.FieldInfoList = fieldInfoList;
+				vm.RoleFieldPermissionsEntityList = await _RolesService.GetFieldPermissionsById(id, modelsEntity.ModelID);
+				permissionsViewModels.Add(vm);
+			}
+			
+			return View(permissionsViewModels);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,AdminRoleManage")]
+		public async Task<IActionResult> RoleFieldPermissions(int id, IFormCollection collection)
 		{
 			if (id <= -1)
 			{
@@ -596,8 +689,8 @@ namespace JXWebHost.Areas.Admin.Controllers
 				return Content("");
 			}
 			var ModelPurview = collection["ModelPurview"];
-			await _RolesService.DeletePermissionFromRoles(id);
-			if (await _RolesService.AddPermissionToRoles(id, ModelPurview))
+			await _RolesService.DeleteFieldPermissionFromRoles(id);
+			if (await _RolesService.AddFieldPermissionToRoles(id, OperateCode.ContentFieldInput, ModelPurview))
 			{
 				Utility.WriteMessage("设置权限成功", "mRefresh");
 			}
