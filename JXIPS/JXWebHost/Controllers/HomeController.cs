@@ -53,6 +53,29 @@ namespace JXWebHost.Controllers
             return View();
         }
 
+		public IActionResult Category(string id="")
+		{
+			if (string.IsNullOrEmpty(id))
+			{
+				return RedirectToAction(nameof(HomeController.Error), "Home");
+			}
+			var arrNodeID = id.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+			int nodeID = DataConverter.CLng(arrNodeID[0]);
+			int pageNum = 0;
+			if (nodeID <= 0)
+			{
+				return RedirectToAction(nameof(HomeController.Error), "Home");
+			}
+			if(arrNodeID.Length == 2)
+			{
+				pageNum = DataConverter.CLng(arrNodeID[1]);
+			}
+			ViewBag.NodeID = nodeID;
+			ViewBag.PageNum = pageNum;
+			ViewData["Title"] = "栏目标题";
+			return View();
+		}
+
 		public IActionResult TestCommon()
 		{
 			ViewData["ContentRootPath"] = FileHelper.ContentRootPath;

@@ -1,4 +1,6 @@
-﻿namespace JX.Infrastructure.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JX.Infrastructure.Common
 {
 	/// <summary>
 	/// B2C商店配置文件类
@@ -8,6 +10,7 @@
 		/// <summary>
 		/// 继续购买URL
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string AgainBuyUrl { get; set; }
 		/// <summary>
 		/// 是否在线支付成功后以邮件发送卡号和密码
@@ -24,22 +27,27 @@
 		/// <summary>
 		/// 所在的城市
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string City { get; set; }
 		/// <summary>
 		/// 通知确认订阅的邮件内容模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string ConfirmSubscribeEmail { get; set; }
 		/// <summary>
 		/// 发货单打印内容模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string ConsignmentFormat { get; set; }
 		/// <summary>
 		/// 继续购买
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string ContinueBuy { get; set; }
 		/// <summary>
 		/// 所在国家
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string Country { get; set; }
 		/// <summary>
 		/// 使用优惠券时是否允许优惠券抵消运费部分
@@ -48,30 +56,37 @@
 		/// <summary>
 		/// 发出货物后站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfDeliver { get; set; }
 		/// <summary>
 		/// 开发票后站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfInvoice { get; set; }
 		/// <summary>
 		/// 确认订单时站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfOrderConfirm { get; set; }
 		/// <summary>
 		/// 收到银行汇款后站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfReceiptMoney { get; set; }
 		/// <summary>
 		/// 退款后站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfRefund { get; set; }
 		/// <summary>
 		/// 发送卡号后站内短信/Email通知内容
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfSendCard { get; set; }
 		/// <summary>
 		/// 发送缺货登记补货邮件通知模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string EmailOfSendOutOfStockLog { get; set; }
 		/// <summary>
 		/// 是否启用优惠券功能
@@ -88,22 +103,27 @@
 		/// <summary>
 		/// 补货单打印模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string FillProductFormat { get; set; }
 		/// <summary>
 		/// 购物车缩略图高度
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public int GwcThumbsHeight { get; set; }
 		/// <summary>
 		/// 购物车缩略图宽度
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public int GwcThumbsWidth { get; set; }
 		/// <summary>
 		/// 是否在购物车显示商品缩略图
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public bool IsGwcShowProducdtThumb { get; set; }
 		/// <summary>
 		/// 是否在订单信息页的商品列表中显示商品缩略图
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public bool IsOrderProductListShowThumb { get; set; }
 		/// <summary>
 		/// 是否在收银台显示商品缩略图
@@ -176,6 +196,7 @@
 		/// <summary>
 		/// 订单打印模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string OrderFormat { get; set; }
 		/// <summary>
 		/// 订单信息页的商品缩略图高度
@@ -204,14 +225,17 @@
 		/// <summary>
 		/// 邮政编码
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string PostCode { get; set; }
 		/// <summary>
 		/// 订单编号前缀
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string PrefixOrderFormNum { get; set; }
 		/// <summary>
 		/// 在线支付单编号前缀
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string PrefixPaymentNum { get; set; }
 		/// <summary>
 		/// 预览页面显示商品缩略图高度
@@ -232,6 +256,7 @@
 		/// <summary>
 		/// 所在省份
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string Province { get; set; }
 		/// <summary>
 		/// 
@@ -248,118 +273,35 @@
 		/// <summary>
 		/// 邮件退订模板
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string UnsubscribeEmail { get; set; }
-
-		private bool m_IsEnableHP;
 		/// <summary>
 		/// 是否启用商品分期模块
 		/// </summary>
-		public bool IsEnableHP
-		{
-			get
-			{
-				return m_IsEnableHP;
-			}
-			set
-			{
-				m_IsEnableHP = value;
-			}
-		}
-
-		private float m_OverdueHP;
+		public bool IsEnableHP { get; set; }
 		/// <summary>
 		/// 逾期滞纳金费率（%）
 		/// </summary>
-		public float OverdueHP
-		{
-			get
-			{
-				return m_OverdueHP;
-			}
-			set
-			{
-				m_OverdueHP = value;
-			}
-		}
-
-		private float m_MinOverdueHP;
+		public float OverdueHP { get; set; }
 		/// <summary>
 		/// 最低逾期滞纳金（元）
 		/// </summary>
-		public float MinOverdueHP
-		{
-			get
-			{
-				return m_MinOverdueHP;
-			}
-			set
-			{
-				m_MinOverdueHP = value;
-			}
-		}
-
-		private float m_MaxOverdueHP;
+		public float MinOverdueHP { get; set; }
 		/// <summary>
 		/// 最高逾期滞纳金（元）
 		/// </summary>
-		public float MaxOverdueHP
-		{
-			get
-			{
-				return m_MaxOverdueHP;
-			}
-			set
-			{
-				m_MaxOverdueHP = value;
-			}
-		}
-
-		private bool m_IsCommentByBuy = false;
+		public float MaxOverdueHP { get; set; }
 		/// <summary>
 		/// 是否购买商品后才能添加评论
 		/// </summary>
-		public bool IsCommentByBuy
-		{
-			get
-			{
-				return m_IsCommentByBuy;
-			}
-			set
-			{
-				m_IsCommentByBuy = value;
-			}
-		}
-
-		private int m_CommentExp = 0;
+		public bool IsCommentByBuy { get; set; } = false;
 		/// <summary>
 		/// 评论成功后，添加的积分
 		/// </summary>
-		public int CommentExp
-		{
-			get
-			{
-				return m_CommentExp;
-			}
-			set
-			{
-				m_CommentExp = value;
-			}
-		}
-
-		private int m_FirstOrderDiscount = 100;
+		public int CommentExp { get; set; } = 0;
 		/// <summary>
 		/// 首单的折扣比例，默认100，表示不打折。
 		/// </summary>
-		public int FirstOrderDiscount
-		{
-			get
-			{
-				return m_FirstOrderDiscount;
-			}
-			set
-			{
-				m_FirstOrderDiscount = value;
-			}
-		}
+		public int FirstOrderDiscount { get; set; } = 100;
 	}
 }

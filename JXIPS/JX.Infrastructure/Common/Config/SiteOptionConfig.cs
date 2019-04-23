@@ -1,335 +1,137 @@
-﻿namespace JX.Infrastructure.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JX.Infrastructure.Common
 {
 	/// <summary>
 	/// 网站操作参数配置文件类
 	/// </summary>
 	public class SiteOptionConfig
     {
-		private string m_ManageDir = string.Empty;
 		/// <summary>
 		/// 后台管理目录
 		/// </summary>
-		public string ManageDir
-		{
-			get
-			{
-				return this.m_ManageDir;
-			}
-			set
-			{
-				this.m_ManageDir = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string ManageDir { get; set; } = string.Empty;
 
-		private int m_TicketTime;
 		/// <summary>
 		/// 管理员身份验证票过期时间 单位：分钟
 		/// </summary>
-		public int TicketTime
-		{
-			get
-			{
-				return this.m_TicketTime;
-			}
-			set
-			{
-				this.m_TicketTime = value;
-			}
-		}
+		[Required(ErrorMessage = "管理员身份验证票过期时间不得为空")]
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int TicketTime { get; set; }
 
-		private bool m_EnableSiteManageCode;
 		/// <summary>
 		/// 是否启用后台管理认证码
 		/// </summary>
-		public bool EnableSiteManageCode
-		{
-			get
-			{
-				return this.m_EnableSiteManageCode;
-			}
-			set
-			{
-				this.m_EnableSiteManageCode = value;
-			}
-		}
+		public bool EnableSiteManageCode { get; set; } = false;
 
-		private string m_SiteManageCode = string.Empty;
 		/// <summary>
 		/// 后台管理认证码
 		/// </summary>
-		public string SiteManageCode
-		{
-			get
-			{
-				return this.m_SiteManageCode;
-			}
-			set
-			{
-				this.m_SiteManageCode = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string SiteManageCode { get; set; } = string.Empty;
 
-		private string m_SiteHashCode = string.Empty;
 		/// <summary>
 		/// 管理员密码哈希值
 		/// </summary>
-		public string SiteHashCode
-		{
-			get
-			{
-				return this.m_SiteHashCode;
-			}
-			set
-			{
-				this.m_SiteHashCode = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		[Required(ErrorMessage = "管理员密码哈希值不得为空")]
+		[RegularExpression(RegexHelper.PasswordPattern, ErrorMessage = "只能输入字母、数字、下划线，长度在6－20之间")]
+		public string SiteHashCode { get; set; } = "JieXiang";
 
-		private string m_MainDomain = string.Empty;
 		/// <summary>
 		/// 网站根域名
 		/// </summary>
-		public string MainDomain
-		{
-			get
-			{
-				return this.m_MainDomain;
-			}
-			set
-			{
-				this.m_MainDomain = value;
-			}
-		}
-
-		private string m_AdvertisementDir = string.Empty;
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string MainDomain { get; set; } = string.Empty;
 		/// <summary>
 		/// 网站广告目录
 		/// </summary>
-		public string AdvertisementDir
-		{
-			get
-			{
-				return this.m_AdvertisementDir;
-			}
-			set
-			{
-				this.m_AdvertisementDir = value;
-			}
-		}
-
-		private string m_CreateHtmlPath = string.Empty;
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string AdvertisementDir { get; set; } = string.Empty;
 		/// <summary>
 		/// 网站生成目录，用于在生成静态页时存放静态页面。如果生成在根目录下，请保留为空！
 		/// </summary>
-		public string CreateHtmlPath
-		{
-			get
-			{
-				return this.m_CreateHtmlPath;
-			}
-			set
-			{
-				this.m_CreateHtmlPath = value;
-			}
-		}
-
-		private string m_TemplateDir = string.Empty;
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		[RegularExpression(RegexHelper.UserNamePattern, ErrorMessage = "只能输入字母、数字、下划线和汉字，长度在2－20之间")]
+		public string CreateHtmlPath { get; set; } = string.Empty;
 		/// <summary>
 		/// 网站模板根目录
 		/// </summary>
-		public string TemplateDir
-		{
-			get
-			{
-				return this.m_TemplateDir;
-			}
-			set
-			{
-				this.m_TemplateDir = value;
-			}
-		}
-
-		private string m_LabelDirConfig = "标签库";
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string TemplateDir { get; set; } = "Template";
 		/// <summary>
 		/// 标签库目录
 		/// </summary>
-		public string LabelDirConfig
-		{
-			get
-			{
-				return this.m_LabelDirConfig;
-			}
-			set
-			{
-				this.m_LabelDirConfig = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string LabelDirConfig { get; set; } = "标签库";
 
 		/// <summary>
 		/// 标签库完整目录（模板库目录+标签库目录）
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string LabelDir
 		{
 			get
 			{
-				return (this.m_TemplateDir + "/" + this.m_LabelDirConfig);
+				return (this.TemplateDir + "/" + this.LabelDirConfig);
 			}
 		}
-
-		private string m_PagerLabelDirConfig = "分页标签库";
 		/// <summary>
 		/// 分页标签库
 		/// </summary>
-		public string PagerLabelDirConfig
-		{
-			get
-			{
-				return this.m_PagerLabelDirConfig;
-			}
-			set
-			{
-				this.m_PagerLabelDirConfig = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string PagerLabelDirConfig { get; set; } = "分页标签库";
 
 		/// <summary>
 		/// 分页标签库完整目录（模板库目录+分页标签库目录）
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string PagerLabelDir
 		{
 			get
 			{
-				return (this.m_TemplateDir + "/" + this.m_PagerLabelDirConfig);
+				return (this.TemplateDir + "/" + this.PagerLabelDirConfig);
 			}
 		}
-
-		private bool m_IsAutoSignin;
 		/// <summary>
 		/// 是否启用内容自动签收
 		/// </summary>
-		public bool IsAutoSignIn
-		{
-			get
-			{
-				return this.m_IsAutoSignin;
-			}
-			set
-			{
-				this.m_IsAutoSignin = value;
-			}
-		}
-
-		private int m_AutoSignInTime;
+		public bool IsAutoSignIn { get; set; } = false;
 		/// <summary>
 		/// 自动签收内容时间.单位：秒
 		/// </summary>
-		public int AutoSignInTime
-		{
-			get
-			{
-				return this.m_AutoSignInTime;
-			}
-			set
-			{
-				this.m_AutoSignInTime = value;
-			}
-		}
-
-		private int m_RefreshQueueSize;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int AutoSignInTime { get; set; }
 		/// <summary>
 		/// 防刷新队列长度。队列长度越长，防止用户恶意刷新提交重复表单越有效。
 		/// </summary>
-		public int RefreshQueueSize
-		{
-			get
-			{
-				return this.m_RefreshQueueSize;
-			}
-			set
-			{
-				this.m_RefreshQueueSize = value;
-			}
-		}
-
-		private int m_CollectionSleep;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int RefreshQueueSize { get; set; }
 		/// <summary>
 		/// 采集休眠时间.单位：秒
 		/// </summary>
-		public int CollectionSleep
-		{
-			get
-			{
-				return this.m_CollectionSleep;
-			}
-			set
-			{
-				this.m_CollectionSleep = value;
-			}
-		}
-
-		private bool m_EnableRefreshHits;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int CollectionSleep { get; set; }
 		/// <summary>
 		/// 是否启用防恶意刷新点击数功能
 		/// 启用此功能后同一用户每刷新一次并不会增加点击数，只有重新打开浏览器才会被统计到。 
 		/// </summary>
-		public bool EnableRefreshHits
-		{
-			get
-			{
-				return this.m_EnableRefreshHits;
-			}
-			set
-			{
-				this.m_EnableRefreshHits = value;
-			}
-		}
-
-		private int m_HitsOfHot;
+		public bool EnableRefreshHits { get; set; } = false;
 		/// <summary>
 		/// 点击数最小值
 		/// </summary>
-		public int HitsOfHot
-		{
-			get
-			{
-				return this.m_HitsOfHot;
-			}
-			set
-			{
-				this.m_HitsOfHot = value;
-			}
-		}
-
-		private int m_LeastOfEliteLevel;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int HitsOfHot { get; set; }
 		/// <summary>
 		/// 推荐级最小值
 		/// </summary>
-		public int LeastOfEliteLevel
-		{
-			get
-			{
-				return this.m_LeastOfEliteLevel;
-			}
-			set
-			{
-				this.m_LeastOfEliteLevel = value;
-			}
-		}
-
-		private string m_IncludeFilePath = string.Empty;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int LeastOfEliteLevel { get; set; }
 		/// <summary>
 		/// 内嵌代码生成路径
 		/// </summary>
-		public string IncludeFilePath
-		{
-			get
-			{
-				return this.m_IncludeFilePath;
-			}
-			set
-			{
-				this.m_IncludeFilePath = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string IncludeFilePath { get; set; } = string.Empty;
 	}
 }

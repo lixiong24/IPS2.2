@@ -12,4 +12,13 @@
 			<siteMapNode title="字段权限设置" url="/Admin/Administrator/RoleFieldPermissions" />
 		</siteMapNode>
 	</siteMapNode>
+	<siteMapNode title="网站管理" url="/Admin/SiteConfig">
+		<siteMapNode title="网站信息配置" url="/Admin/SiteConfig/Index"/>
+		<siteMapNode title="常规参数配置" url="/Admin/SiteConfig/SiteOption"/>
+		<siteMapNode title="用户参数配置" url="/Admin/SiteConfig/UserConfig"/>
+		<siteMapNode title="上传配置" url="/Admin/SiteConfig/UpLoadFilesConfig"/>
+		<siteMapNode title="邮件配置" url="/Admin/SiteConfig/MailConfig"/>
+		<siteMapNode title="缩略图配置" url="/Admin/SiteConfig/ThumbConfig"/>
+		<siteMapNode title="IP访问配置" url="/Admin/SiteConfig/IPLockConfig"/>
+	</siteMapNode>
 </siteMap>

@@ -1,0 +1,86 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="IPLockConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">全站来访限定方式：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box radius">
+				<select class="select" asp-for="IPLockConfigEntity.LockIPType">
+					<option value="0">不启用来访限定功能，任何IP都可以访问本站。</option>
+					<option value="1">仅仅启用白名单，只允许白名单中的IP访问本站。</option>
+					<option value="2">仅仅启用黑名单，只禁止黑名单中的IP访问本站。</option>
+					<option value="3">同时启用白名单与黑名单，先判断IP是否在白名单中，如果不在，则禁止访问；如果在则再判断是否在黑名单中，如果IP在黑名单中则禁止访问，否则允许访问。</option>
+					<option value="4">同时启用白名单与黑名单，先判断IP是否在黑名单中，如果不在，则允许访问；如果在则再判断是否在白名单中，如果IP在白名单中则允许访问，否则禁止访问。</option>
+				</select>
+			</span>
+			<span asp-validation-for="IPLockConfigEntity.LockIPType" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			全站IP段白名单：
+			
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="IPLockConfigEntity.LockIPWhite"></textarea>
+			<span class="label label-warning radius">说明：每一行都由一个起始IP和结束IP组成，中间用“----”分隔</span>
+			<span asp-validation-for="IPLockConfigEntity.LockIPWhite" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			全站IP段黑名单：
+			
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="IPLockConfigEntity.LockIPBlack"></textarea>
+			<span class="label label-warning radius">说明：每一行都由一个起始IP和结束IP组成，中间用“----”分隔</span>
+			<span asp-validation-for="IPLockConfigEntity.LockIPBlack" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">后台来访限定方式：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box radius">
+				<select class="select" asp-for="IPLockConfigEntity.AdminLockIPType">
+					<option value="0">不启用来访限定功能，任何IP都可以访问本站后台。</option>
+					<option value="1">仅仅启用白名单，只允许白名单中的IP访问本站后台。</option>
+					<option value="2">仅仅启用黑名单，只禁止黑名单中的IP访问本站后台。</option>
+					<option value="3">同时启用白名单与黑名单，先判断IP是否在白名单中，如果不在，则禁止访问；如果在则再判断是否在黑名单中，如果IP在黑名单中则禁止访问，否则允许访问。</option>
+					<option value="4">同时启用白名单与黑名单，先判断IP是否在黑名单中，如果不在，则允许访问；如果在则再判断是否在白名单中，如果IP在白名单中则允许访问，否则禁止访问。</option>
+				</select>
+			</span>
+			<span asp-validation-for="IPLockConfigEntity.AdminLockIPType" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			后台IP段白名单：
+			
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="IPLockConfigEntity.AdminLockIPWhite"></textarea>
+			<span class="label label-warning radius">说明：每一行都由一个起始IP和结束IP组成，中间用“----”分隔</span>
+			<span asp-validation-for="IPLockConfigEntity.AdminLockIPWhite" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			后台IP段黑名单：
+			
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="IPLockConfigEntity.AdminLockIPBlack"></textarea>
+			<span class="label label-warning radius">说明：每一行都由一个起始IP和结束IP组成，中间用“----”分隔</span>
+			<span asp-validation-for="IPLockConfigEntity.AdminLockIPBlack" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>

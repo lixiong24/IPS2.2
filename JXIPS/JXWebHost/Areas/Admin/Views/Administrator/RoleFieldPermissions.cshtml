@@ -52,14 +52,22 @@
 											}
 										</td>
 										<td>
-											@if (vm.RoleFieldPermissionsEntityList.Where(item => item.FieldName == field.FieldName).Count() >= 1)
+											@if (field.FieldName == "Title" || field.FieldName == "Status" || field.FieldName == "NodeId")
 											{
-												<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview" checked="checked">
+												<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview" disabled="disabled">
 											}
 											else
 											{
-												<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview">
+												@if (vm.RoleFieldPermissionsEntityList.Where(item => item.FieldName == field.FieldName).Count() >= 1)
+												{
+													<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview" checked="checked">
+												}
+												else
+												{
+													<input type="checkbox" value="@vm.ModelsEntity.ModelID:@field.FieldName" name="ModelPurview">
+												}
 											}
+
 										</td>
 									</tr>
 								}

@@ -48,7 +48,7 @@
 
         if (replace) {
             container.empty();
-            error.removeClass("input-validation-error").appendTo(container);
+			error.removeClass("input-validation-error").appendTo(container);
         }
         else {
             error.hide();
@@ -65,7 +65,7 @@
 
             $.each(validator.errorList, function () {
                 $("<li />").html(this.message).appendTo(list);
-            });
+			});
         }
     }
 

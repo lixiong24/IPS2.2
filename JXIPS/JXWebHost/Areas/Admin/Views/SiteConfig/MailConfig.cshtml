@@ -1,0 +1,74 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="MailConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">发送人邮箱：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="MailConfigEntity.MailFrom" placeholder="例：someone@qq.com">
+			<span asp-validation-for="MailConfigEntity.MailFrom" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">发送邮件服务器(SMTP)：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="MailConfigEntity.MailServer" placeholder="例：smtp.qq.com">
+			<span asp-validation-for="MailConfigEntity.MailServer" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">端口号：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="MailConfigEntity.Port" placeholder="例：25">
+			<span asp-validation-for="MailConfigEntity.Port" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">此服务器要求安全连接(SSL)：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="MailConfigEntity.EnabledSsl"></div>
+			<span asp-validation-for="MailConfigEntity.EnabledSsl" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">发件人的用户名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="MailConfigEntity.MailServerUserName">
+			<span asp-validation-for="MailConfigEntity.MailServerUserName" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">发件人的密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="MailConfigEntity.MailServerPassWord">
+			<span asp-validation-for="MailConfigEntity.MailServerPassWord" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">测试收件人邮箱：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:200px;" value="" id="mailToAddress" name="mailToAddress" placeholder="例：someone@qq.com">
+			<button class="btn btn-primary radius" type="button" onclick="SendMail('mailToAddress','subject','mailBody')">发送测试邮件</button>
+			<input type="hidden" id="subject" name="subject" value="这是一封测试邮件，如果您可以成功收到此邮件，则说明您的“邮件参数配置”设置正确。" />
+			<input type="hidden" id="mailBody" name="mailBody" value="这是一封测试邮件，如果您可以成功收到此邮件，则说明您的“邮件参数配置”设置正确。<a href='www.baidu.com'>百度</a>" />
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			})
+		});
+	</script>
+}

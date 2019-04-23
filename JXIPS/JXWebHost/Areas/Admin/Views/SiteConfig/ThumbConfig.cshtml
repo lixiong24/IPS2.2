@@ -1,0 +1,294 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="ThumbConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">缩略图默认宽度：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="ThumbsConfigEntity.ThumbsWidth" placeholder="">像素
+			<span class="label label-warning radius">说明：</span>设为0时，将以高度为准按比例缩小。
+			<span asp-validation-for="ThumbsConfigEntity.ThumbsWidth" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">缩略图默认高度：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="ThumbsConfigEntity.ThumbsHeight" placeholder="">像素
+			<span class="label label-warning radius">说明：</span>设为0时，将以宽度为准按比例缩小。
+			<span asp-validation-for="ThumbsConfigEntity.ThumbsHeight" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">缩略图算法：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<span class="select-box radius">
+				<select class="select" id="dropThumbsMode" asp-for="ThumbsConfigEntity.ThumbsMode">
+					<option value="0">常规算法：宽度和高度都大于0时，直接缩小成指定大小，其中一个为0时，按比例缩小。</option>
+					<option value="1">裁剪法：宽度和高度都大于0时，先按最佳比例缩小再裁剪成指定大小，其中一个为0时，按比例缩小。</option>
+					<option value="2">补充法：在指定大小的背景图上附加上按最佳比例缩小的图片。</option>
+				</select>
+			</span>
+			<span asp-validation-for="ThumbsConfigEntity.ThumbsMode" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">缩略图底色：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="ThumbsConfigEntity.AddBackColor" id="ctlAddBackColor">
+			<span class="label label-warning radius">说明：</span>使用补充算法时将以此设置的背景色填充
+			<span asp-validation-for="ThumbsConfigEntity.AddBackColor" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">水印类型：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<span class="select-box radius">
+				<select class="select" id="dropWaterMarkType" onchange="ShowTabWaterMark()" asp-for="WaterMarkConfigEntity.WaterMarkType">
+					<option value="0">文字水印</option>
+					<option value="1">图片水印</option>
+				</select>
+			</span>
+			<span asp-validation-for="WaterMarkConfigEntity.WaterMarkType" style="color:red;"></span>
+		</div>
+	</div>
+	<div id="ctlTextWaterMark" style="display:none;">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">水印文字：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.Text" placeholder="">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.Text" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文字字体：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box radius">
+					<select class="select" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneType">
+						<option value="宋体">宋体</option>
+						<option value="楷体_GB2312">楷体</option>
+						<option value="仿宋_GB2312">新宋体</option>
+						<option value="黑体">黑体</option>
+						<option value="隶书">隶书</option>
+						<option value="幼圆">幼圆</option>
+						<option value="Andale Mono">Andale Mono</option>
+						<option value="Arial">Arial</option>
+						<option value="Arial Black">Arial Black</option>
+						<option value="Book Antiqua">Book Antiqua</option>
+						<option value="Century Gothic">Century Gothic</option>
+						<option value="Comic Sans MS">Comic Sans MS</option>
+						<option value="Courier New">Courier New</option>
+						<option value="Georgia">Georgia</option>
+						<option value="Impact">Impact</option>
+						<option value="Tahoma">Tahoma</option>
+						<option value="Times New Roman">Times New Roman</option>
+						<option value="Trebuchet MS">Trebuchet MS</option>
+						<option value="Script MT Bold">Script MT Bold</option>
+						<option value="Stencil">Stencil</option>
+						<option value="Verdana">Verdana</option>
+						<option value="Lucida Console">Lucida Console</option>
+					</select>
+				</span>
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneType" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">字体样式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box radius">
+					<select class="select" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneStyle">
+						<option value="Regular">常规</option>
+						<option value="Bold">加粗</option>
+						<option value="Italic">倾斜</option>
+						<option value="Strikeout">中间有直线通过</option>
+						<option value="Underline">带下划线</option>
+					</select>
+				</span>
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneStyle" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文字大小：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneSize" placeholder="">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneSize" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文字颜色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneColor" id="ctlWaterMarkTextFoneColor">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneColor" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文字边框大小：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneBorder" placeholder="设置为0时没有边框">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneBorder" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">文字边框颜色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneBorderColor" id="ctlWaterMarkTextFoneBorderColor">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.FoneBorderColor" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">坐标起点位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box radius">
+					<select class="select" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPosition">
+						<option value="WM_TOP_LEFT">左上</option>
+						<option value="WM_TOP_RIGHT">右上</option>
+						<option value="WM_BOTTOM_RIGHT">右下</option>
+						<option value="WM_BOTTOM_LEFT">左下</option>
+						<option value="WM_SetByManual">手动设置</option>
+					</select>
+				</span>
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPosition" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">手动设置时的坐标位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				X:<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPositionX">像素&nbsp;&nbsp;
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPositionX" style="color:red;"></span>
+				Y:<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPositionY">像素
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkTextInfo.WaterMarkPositionY" style="color:red;"></span>
+			</div>
+		</div>
+	</div>
+	<div id="ctlPicWaterMark" style="display:none;">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">水印图片文件名：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.ImagePath" placeholder="请填写图片文件的相对路径">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.ImagePath" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">水印图片缩小比例：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				当水印图片宽度或高度大于要加水印图片的1/
+				<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPercent">
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPercent" style="color:red;"></span>时，按
+				<span class="select-box radius" style="width:120px;">
+					<select class="select" id="dropWaterMarkPercentType" onchange="SelectWaterMarkPercentType()" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPercentType">
+						<option value="AutoSet">自动计算值</option>
+						<option value="ManualSet">手动设置值</option>
+					</select>
+				</span><span id="divWaterMarkPercent" style="display:none;">
+					1/<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkThumbPercent">
+					<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkThumbPercent" style="color:red;"></span>
+				</span>比例缩小。
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">水印图片透明度：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.Transparence">%，0为完全透明，100为完全不透明
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.Transparence" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">坐标起点位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box radius">
+					<select class="select" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPosition">
+						<option value="WM_TOP_LEFT">左上</option>
+						<option value="WM_TOP_RIGHT">右上</option>
+						<option value="WM_BOTTOM_RIGHT">右下</option>
+						<option value="WM_BOTTOM_LEFT">左下</option>
+						<option value="WM_SetByManual">手动设置</option>
+					</select>
+				</span>
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPosition" style="color:red;"></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2">手动设置时的坐标位置：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				X:<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPositionX">像素&nbsp;&nbsp;
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPositionX" style="color:red;"></span>
+				Y:<input type="text" class="input-text" style="width:15%;" asp-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPositionY">像素
+				<span asp-validation-for="WaterMarkConfigEntity.WaterMarkImageInfo.WaterMarkPositionY" style="color:red;"></span>
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		function ShowTabWaterMark() {
+			var type = $("#dropWaterMarkType").val();
+			if (type == "0") {
+				document.getElementById('ctlTextWaterMark').style.display = "";
+				document.getElementById('ctlPicWaterMark').style.display = "none";
+			}
+			else {
+				document.getElementById('ctlTextWaterMark').style.display = "none";
+				document.getElementById('ctlPicWaterMark').style.display = "";
+			}
+		} 		function SelectWaterMarkPercentType() {
+			var type = $("#dropWaterMarkPercentType").val();
+			if (type == "ManualSet") {
+				document.getElementById('divWaterMarkPercent').style.display = "";
+			}
+			else {
+				document.getElementById('divWaterMarkPercent').style.display = "none";
+			}
+		}
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+			//缩略图底色
+			$('#ctlAddBackColor').colpick({
+				layout: 'hex',
+				submit: 0,
+				colorScheme: 'dark',
+				onChange: function (hsb, hex, rgb, el, bySetColor) {
+					$(el).css('border-color', '#' + hex);
+					if (!bySetColor) $(el).val(hex);
+				}
+			}).keyup(function () {
+				$(this).colpickSetColor(this.value);
+				});
+			//水印文字颜色
+			$('#ctlWaterMarkTextFoneColor').colpick({
+				layout: 'hex',
+				submit: 0,
+				colorScheme: 'dark',
+				onChange: function (hsb, hex, rgb, el, bySetColor) {
+					$(el).css('border-color', '#' + hex);
+					if (!bySetColor) $(el).val(hex);
+				}
+			}).keyup(function () {
+				$(this).colpickSetColor(this.value);
+				});
+			//水印文字边框颜色
+			$('#ctlWaterMarkTextFoneBorderColor').colpick({
+				layout: 'hex',
+				submit: 0,
+				colorScheme: 'dark',
+				onChange: function (hsb, hex, rgb, el, bySetColor) {
+					$(el).css('border-color', '#' + hex);
+					if (!bySetColor) $(el).val(hex);
+				}
+			}).keyup(function () {
+				$(this).colpickSetColor(this.value);
+			});
+			ShowTabWaterMark();
+			SelectWaterMarkPercentType();
+		});
+	</script>
+}

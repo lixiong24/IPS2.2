@@ -1,71 +1,40 @@
-﻿namespace JX.Infrastructure.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JX.Infrastructure.Common
 {
 	/// <summary>
 	/// 水印配置文件类
 	/// </summary>
 	public class WaterMarkConfig
     {
-		private int m_WaterMarkType;
 		/// <summary>
 		/// 水印的类型
 		/// 0：文字水印；1：图片水印
 		/// </summary>
-		public int WaterMarkType
-		{
-			get
-			{
-				return this.m_WaterMarkType;
-			}
-			set
-			{
-				this.m_WaterMarkType = value;
-			}
-		}
-
-		private WaterMarkImage waterMarkImageInfo;
+		[Required(ErrorMessage = "水印类型不能为空")]
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "只能输入数字")]
+		public int WaterMarkType { get; set; } = 0;
 		/// <summary>
 		/// 获取或设置水印图片的配置文件类
 		/// </summary>
-		public WaterMarkImage WaterMarkImageInfo
-		{
-			get
-			{
-				return this.waterMarkImageInfo;
-			}
-			set
-			{
-				this.waterMarkImageInfo = value;
-			}
-		}
-
-		private WaterMarkText waterMarkTextInfo;
+		public WaterMarkImage WaterMarkImageInfo { get; set; }
 		/// <summary>
 		/// 获取或设置水印文字的配置文件类
 		/// </summary>
-		public WaterMarkText WaterMarkTextInfo
-		{
-			get
-			{
-				return this.waterMarkTextInfo;
-			}
-			set
-			{
-				this.waterMarkTextInfo = value;
-			}
-		}
-		
+		public WaterMarkText WaterMarkTextInfo { get; set; }
+
 		/// <summary>
 		/// 初始化水印的文字和图片信息
 		/// </summary>
 		public WaterMarkConfig()
 		{
-			if (this.waterMarkTextInfo == null)
+			if (this.WaterMarkTextInfo == null)
 			{
-				this.waterMarkTextInfo = new WaterMarkText();
+				this.WaterMarkTextInfo = new WaterMarkText();
 			}
-			if (this.waterMarkImageInfo == null)
+			if (this.WaterMarkImageInfo == null)
 			{
-				this.waterMarkImageInfo = new WaterMarkImage();
+				this.WaterMarkImageInfo = new WaterMarkImage();
 			}
 		}
 	}

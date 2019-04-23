@@ -239,8 +239,10 @@ namespace JX.Infrastructure.Common
 			string foneType = waterMarkTextInfo.FoneType;
 			string foneStyle = waterMarkTextInfo.FoneStyle;
 			string foneColor = waterMarkTextInfo.FoneColor;
+			foneColor = "#" + foneColor.TrimStart('#');
 			int foneBorder = waterMarkTextInfo.FoneBorder;
 			string foneBorderColor = waterMarkTextInfo.FoneBorderColor;
+			foneBorderColor = "#" + foneBorderColor.TrimStart('#');
 			Font font = null;
 			string str7 = foneStyle;
 			if (str7 != null)

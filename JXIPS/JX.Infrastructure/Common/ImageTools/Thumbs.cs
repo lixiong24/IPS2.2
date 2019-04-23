@@ -203,6 +203,7 @@ namespace JX.Infrastructure.Common
 			graphics.SmoothingMode = SmoothingMode.HighQuality;
 			if ((thumbsMode == ThumbsMode.AddBackColor) && !string.IsNullOrEmpty(bgColor))
 			{
+				bgColor = "#" + bgColor.TrimStart('#');
 				ColorConverter converter = new ColorConverter();
 				Color color = (Color)converter.ConvertFromString(bgColor);
 				graphics.Clear(color);

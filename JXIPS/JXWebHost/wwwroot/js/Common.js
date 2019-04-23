@@ -192,6 +192,7 @@ function layer_showFull(title, url) {
 	layer.full(index);
 }
 
+//通过腾讯发送验证码
 var valSendCodeSMSID = "TencentCaptcha";
 var valMobileID = "txtMobile";
 var valImgCodeID = "txtImgCode";
@@ -251,4 +252,45 @@ function valCodeSMSSendCodeSMS(res) {
 		layer.alert("验证失败");
 		return false;
 	}
+}
+
+//发送邮件
+//mailToAddressID：收件人地址控件ID；subjectID：邮件标题控件ID；mailBodyID：邮件内容控件ID；
+function SendMail(mailToAddressID, subjectID, mailBodyID) {
+	var mailToAddress = jQuery("#" + mailToAddressID).val();
+	if (mailToAddress == null || mailToAddress == '') {
+		layer.alert('收件人邮箱不能为空!');
+		return false;
+	}
+	var subject = jQuery("#" + subjectID).val();
+	if (subject == null || subject == '') {
+		layer.alert('邮件标题不能为空!');
+		return false;
+	}
+	var mailBody = jQuery("#" + mailBodyID).val();
+	if (mailBody == null || mailBody == '') {
+		layer.alert('邮件内容不能为空!');
+		return false;
+	}
+	var url = '/Common/SendMail';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "mailToAddress": mailToAddress, "subject": subject, "mailBody": mailBody },
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			layer.alert('网络超时，发送失败!');
+			return false;
+		},
+		success: function (returnData) {
+			if (returnData.status == "1") {
+				layer.alert(returnData.msg);
+			}
+			else {
+				layer.alert(returnData.msg);
+			}
+		}
+	});
 }

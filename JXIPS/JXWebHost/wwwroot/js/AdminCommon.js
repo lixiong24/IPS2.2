@@ -106,6 +106,28 @@ function loadRolesAjax(selectID, selectValue, isMultiple) {
 	});
 }
 
+//用于加载会员组列表。selectID：显示控件的ID；selectValue：选中的值；isMultiple：控件是否能多选；
+function loadUserGroupsAjax(selectID, selectValue, isMultiple) {
+	var placeholder = "请选择";
+	if (isMultiple) {
+		placeholder += "(可以多选)";
+	}
+	$.ajax({
+		type: "GET",
+		url: "/Admin/User/GetUserGroupsList?_t=" + new Date().getTime(),
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		success: function (data) {
+			var option = "";
+			$.each(data, function (i, item) {
+				option += "<option value='" + item.groupID + "'>" + item.groupName + "</option>";
+			});
+			$("#" + selectID).select2({ language: "zh-CN", placeholder: placeholder, allowClear: true, multiple: isMultiple });
+			$("#" + selectID).html(option);
+			$("#" + selectID).val(selectValue.split(',')).trigger("change");
+		}
+	});
+}
+
 //适用于HUI中，从子窗口刷新父页面
 function HuiRefresh()
 {

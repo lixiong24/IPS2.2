@@ -1,0 +1,152 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="Index" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			网站名称：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteName" class="input-text" placeholder="控制在25个字、50个字节以内">
+
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			网站地址：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteUrl" placeholder="例：http://www.baidu.com" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站Title：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteTitle" placeholder="用于SEO优化，控制在25个字以内" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站META网页描述：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.MetaDescription" placeholder="用于SEO优化，控制在100个字以内" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站META关键词：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.MetaKeywords" placeholder="用于SEO优化，例：关键字,关键字1,关键字2" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			站长姓名：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.Webmaster" placeholder="例：李四" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			站长邮箱：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.WebmasterEmail" placeholder="例：123456789@qq.com" class="input-text">
+			<span asp-validation-for="SiteConfigEntity.WebmasterEmail" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			公司名称：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.Company" placeholder="控制在25个字以内" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			公司地址：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.Address" placeholder="例：湖北省武汉市武昌区中南二路29号" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系电话：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteTel" placeholder="4008006600" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系电话1：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteTel1" placeholder="88888888" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系电话2：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteTel2" placeholder="15871358897" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系QQ：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteQQ" placeholder="123456789" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系QQ1：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteQQ1" placeholder="123456789" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			<span class="c-red"></span>
+			联系QQ2：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.SiteQQ2" placeholder="123456789" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">备案号：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.ICPNO" placeholder="京ICP备00000000号" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">版权信息：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteConfigEntity.Copyright" placeholder="© 2019 www.baidu.com" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>

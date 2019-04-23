@@ -1,0 +1,85 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="UpLoadFilesConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否允许上传文件：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UploadFilesConfigEntity.EnableUploadFiles"></div>
+			<span asp-validation-for="UploadFilesConfigEntity.EnableUploadFiles" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">允许上传的最大文件大小：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UploadFilesConfigEntity.UploadFileMaxSize" placeholder="">KB
+			<span class="label label-warning radius">说明：</span>1 KB = 1024 Byte，1 MB = 1024 KB
+			<span asp-validation-for="UploadFilesConfigEntity.UploadFileMaxSize" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站上传目录：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="UploadFilesConfigEntity.UploadDir" placeholder="例：UploadFiles">
+			<span asp-validation-for="UploadFilesConfigEntity.UploadDir" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">上传文件的保存目录规则：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box radius">
+				<select class="select" asp-for="UploadFilesConfigEntity.UploadFilePathRule">
+					<option value="{$RootDir}/{$Year}/{$Month}">{$RootDir}/{$Year}/{$Month}</option>
+					<option value="{$NodeDir}/{$Year}/{$Month}">{$NodeDir}/{$Year}/{$Month}</option>
+					<option value="{$ParentDir}/{$Year}/{$Month}">{$ParentDir}/{$Year}/{$Month}</option>
+					<option value="{$FileType}/{$Year}/{$Month}">{$FileType}/{$Year}/{$Month}</option>
+				</select>
+			</span>
+			<span class="label label-warning radius">说明：</span>
+			{$RootDir}：一级栏目目录、{$NodeDir}：当前栏目目录、{$ParentDir}：当前栏目的父目录、
+			{$Year}：年、{$Month}：月、{$Day}：日、{$FileType}：文件类型
+			<span asp-validation-for="UploadFilesConfigEntity.UploadFilePathRule" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">上传文件名保存规则：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box radius">
+				<select class="select" asp-for="UploadFilesConfigEntity.UploadFileName">
+					<option value="{$Year}{$Month}{$Day}{$Hour}{$Minute}{$Second}">{$Year}{$Month}{$Day}{$Hour}{$Minute}{$Second}</option>
+					<option value="{$Random}">{$Random}</option>
+					<option value="{$Origin}">{$Origin}</option>
+				</select>
+			</span>
+			<span class="label label-warning radius">说明：</span>
+			{$Origin}：原文件名、{$Random}：随机数、
+			{$Year}：年、{$Month}：月、{$Day}：日、{$Hour}：时、{$Minute}：分、{$Second}：秒
+			<span asp-validation-for="UploadFilesConfigEntity.UploadFileName" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">允许上传文件的后缀名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="UploadFilesConfigEntity.UploadFileExts" placeholder="例：gif,jpg,jpeg,jpe,bmp,png,rar,zip,xls,xlsx,doc,docx,ppt,pptx,txt">
+			<span asp-validation-for="UploadFilesConfigEntity.UploadFileExts" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			})
+		});
+	</script>
+}

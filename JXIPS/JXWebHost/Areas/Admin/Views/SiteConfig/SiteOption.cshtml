@@ -1,0 +1,41 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="SiteOption" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">管理员身份验证票过期时间：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="SiteOptionConfigEntity.TicketTime" placeholder="管理员登录后台后，在不操作的情况下自动保持登录状态的时间设置。如果为0则在当前浏览器保持登录状态。" class="input-text">
+			<span asp-validation-for="SiteOptionConfigEntity.TicketTime" style="color:red;"></span>
+		</div>
+		<label>分钟</label>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">管理员密码哈希值：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="SiteOptionConfigEntity.SiteHashCode" placeholder="用于验证管理员密码数据的有效性，防止被非法方式修改">
+			<span asp-validation-for="SiteOptionConfigEntity.SiteHashCode" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站根域名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="SiteOptionConfigEntity.MainDomain" placeholder="在启用子域名单点登录的情况下，必须要设置此值。例：baidu.com">
+			<span asp-validation-for="SiteOptionConfigEntity.MainDomain" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">网站生成目录：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="SiteOptionConfigEntity.CreateHtmlPath" placeholder="用于在生成静态页时存放静态页面。如果生成在根目录下，请保留为空！">
+			<span asp-validation-for="SiteOptionConfigEntity.CreateHtmlPath" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>

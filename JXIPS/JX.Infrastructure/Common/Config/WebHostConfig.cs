@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,10 +14,12 @@ namespace JX.Infrastructure.Common
 		/// <summary>
 		/// 记录日志到数据库的类库名称和程序集名称，用“,”分隔（例：JX.IPS.Biz.LogManager,JX.IPS.Biz）
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string LogFactoryName { get; set; }
 		/// <summary>
 		/// 程序版本：Base、BaseUser、Industry、Shop
 		/// </summary>
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
 		public string Edition { get; set; }
 		/// <summary>
 		/// 是否启用二级域名功能

@@ -1,120 +1,46 @@
-﻿namespace JX.Infrastructure.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JX.Infrastructure.Common
 {
 	/// <summary>
 	/// 邮件配置文件类
 	/// </summary>
 	public class MailConfig
 	{
-		private AuthenticationType m_AuthenticationType;
 		/// <summary>
 		/// 验证类型
 		/// </summary>
-		public AuthenticationType AuthenticationType
-		{
-			get
-			{
-				return this.m_AuthenticationType;
-			}
-			set
-			{
-				this.m_AuthenticationType = value;
-			}
-		}
-
-		private bool m_EnabledSsl;
+		public AuthenticationType AuthenticationType { get; set; } = AuthenticationType.Basic;
 		/// <summary>
 		/// 是否启用安全连接(ssl)
 		/// </summary>
-		public bool EnabledSsl
-		{
-			get
-			{
-				return this.m_EnabledSsl;
-			}
-			set
-			{
-				this.m_EnabledSsl = value;
-			}
-		}
-
-		private string m_MailFrom;
+		public bool EnabledSsl { get; set; } = false;
 		/// <summary>
 		/// 发送人邮箱
 		/// </summary>
-		public string MailFrom
-		{
-			get
-			{
-				return this.m_MailFrom;
-			}
-			set
-			{
-				this.m_MailFrom = value;
-			}
-		}
-
-		private string m_MailServer;
+		[Required(ErrorMessage = "发送人邮箱不能为空")]
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string MailFrom { get; set; }
 		/// <summary>
 		/// 发送邮件服务器(SMTP)
 		/// </summary>
-		public string MailServer
-		{
-			get
-			{
-				return this.m_MailServer;
-			}
-			set
-			{
-				this.m_MailServer = value;
-			}
-		}
-
-		private int m_Port;
+		[Required(ErrorMessage = "发送邮件服务器不能为空")]
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string MailServer { get; set; }
 		/// <summary>
 		/// 端口号
 		/// </summary>
-		public int Port
-		{
-			get
-			{
-				return this.m_Port;
-			}
-			set
-			{
-				this.m_Port = value;
-			}
-		}
-
-		private string m_MailServerUserName;
+		[RegularExpression(RegexHelper.NumberPattern, ErrorMessage = "端口号只能输入数字")]
+		public int Port { get; set; }
 		/// <summary>
 		/// 发件人的用户名
 		/// </summary>
-		public string MailServerUserName
-		{
-			get
-			{
-				return this.m_MailServerUserName;
-			}
-			set
-			{
-				this.m_MailServerUserName = value;
-			}
-		}
-
-		private string m_MailServerPassWord;
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string MailServerUserName { get; set; }
 		/// <summary>
 		/// 发件人的密码
 		/// </summary>
-		public string MailServerPassWord
-		{
-			get
-			{
-				return this.m_MailServerPassWord;
-			}
-			set
-			{
-				this.m_MailServerPassWord = value;
-			}
-		}
+		[DisplayFormat(ConvertEmptyStringToNull = false)]
+		public string MailServerPassWord { get; set; }
 	}
 }

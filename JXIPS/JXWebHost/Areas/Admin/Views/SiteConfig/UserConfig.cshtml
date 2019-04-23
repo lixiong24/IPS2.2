@@ -1,0 +1,271 @@
+﻿@model SiteConfigViewModel
+@{
+}
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="UserConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否开启会员注册功能：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="UserConfigEntity.EnableUserReg">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否允许一个Email注册多个会员：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="UserConfigEntity.EnableMultiRegPerEmail">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册时用户名最少字符数：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="UserConfigEntity.UserNameLimit">
+			<span asp-validation-for="UserConfigEntity.UserNameLimit" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册时用户名最大字符数：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="UserConfigEntity.UserNameMax">
+			<span asp-validation-for="UserConfigEntity.UserNameMax" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">禁止注册的用户名：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="UserConfigEntity.UserNameRegDisabled" placeholder="指定的用户名将被禁止注册，每个用户名请用“|”符号分隔"></textarea>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否启用注册商户功能：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UserConfigEntity.EnableRegCompany"></div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册是否需要管理员认证：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="UserConfigEntity.AdminCheckReg" id="chkAdminCheckReg">
+				<label for="chkAdminCheckReg">若选择“是”，则会员必须在通过管理员认证后才能真正成为正式注册会员。</label>
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册是否需要邮件验证：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="UserConfigEntity.EmailCheckReg" id="chkEmailCheckReg">
+				<label for="chkEmailCheckReg">若选择“是”，则会员注册后系统会发一封带有验证码的邮件给此会员，会员必须在通过邮件验证后才能真正成为正式注册会员。</label>
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			新会员注册时发送的验证邮件内容：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="UserConfigEntity.EmailOfRegCheck" placeholder="邮件内容支持HTML，邮件内容中可用标签说明如下：{$CheckNum}：验证码；{$CheckUrl}：验证地址；"></textarea>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			新会员注册成功后所属会员组：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box radius">
+				<select class="select" asp-for="UserConfigEntity.GroupID" asp-items="ViewBag.GroupsList"></select>
+			</span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否启用会员的资金功能：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UserConfigEntity.EnableMoney"></div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否启用会员的积分功能：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UserConfigEntity.EnableExp"></div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否启用会员的
+			@ViewBag.PointName
+			功能：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UserConfigEntity.EnablePoint"></div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">是否启用会员的有效期功能：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;"><input type="checkbox" asp-for="UserConfigEntity.EnableValidNum"></div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册时赠送的资金：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PresentMoney">元
+			<span asp-validation-for="UserConfigEntity.PresentMoney" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册时赠送的积分：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PresentExp">
+			积分
+			<span asp-validation-for="UserConfigEntity.PresentExp" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			新会员注册时赠送的
+			@ViewBag.PointName ：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PresentPoint">
+			@ViewBag.PointUnit
+			<span asp-validation-for="UserConfigEntity.PresentPoint" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">新会员注册时赠送的有效期：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PresentValidNum">
+			<select asp-for="UserConfigEntity.PresentValidUnit">
+				<option value="1">天</option>
+				<option value="2">月</option>
+				<option value="3">年</option>
+			</select>
+			（为－1表示无限期）
+			<span asp-validation-for="UserConfigEntity.PresentValidNum" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员每登录一次奖励的积分：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PresentExpPerLogOn">
+			积分(一天只计算一次)
+			<span asp-validation-for="UserConfigEntity.PresentExpPerLogOn" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员每登录一次奖励的
+			@ViewBag.PointName：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.AddPointPerLogOn">
+			@ViewBag.PointUnit (一天只计算一次)
+			<span asp-validation-for="UserConfigEntity.AddPointPerLogOn" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员的资金与积分的兑换比率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			每<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangeExpByMoney">
+			<span asp-validation-for="UserConfigEntity.MoneyExchangeExpByMoney" style="color:red;"></span>
+			元钱可兑换<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangeExpByExp">
+			积分
+			<span asp-validation-for="UserConfigEntity.MoneyExchangeExpByExp" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员的资金与
+			@ViewBag.PointName
+			的兑换比率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			每<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangePointByMoney">
+			<span asp-validation-for="UserConfigEntity.MoneyExchangePointByMoney" style="color:red;"></span>
+			元钱可兑换<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangePointByPoint">
+			@ViewBag.PointUnit@ViewBag.PointName
+			<span asp-validation-for="UserConfigEntity.MoneyExchangePointByPoint" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员的资金与有效期的兑换比率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			每<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangeValidDayByMoney">
+			<span asp-validation-for="UserConfigEntity.MoneyExchangeValidDayByMoney" style="color:red;"></span>
+			元钱可兑换<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.MoneyExchangeValidDayByValidDay">
+			天有效期
+			<span asp-validation-for="UserConfigEntity.MoneyExchangeValidDayByValidDay" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员的积分与
+			@ViewBag.PointName
+			的兑换比率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			每<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.UserExpExchangePointByExp">
+			<span asp-validation-for="UserConfigEntity.UserExpExchangePointByExp" style="color:red;"></span>
+			积分可兑换<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.UserExpExchangePointByPoint">
+			@ViewBag.PointUnit@ViewBag.PointName
+			<span asp-validation-for="UserConfigEntity.UserExpExchangePointByPoint" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			会员的积分与有效期的兑换比率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			每<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.UserExpExchangeValidDayByExp">
+			<span asp-validation-for="UserConfigEntity.UserExpExchangeValidDayByExp" style="color:red;"></span>
+			积分可兑换<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.UserExpExchangeValidDayByValidDay">
+			天有效期
+			<span asp-validation-for="UserConfigEntity.UserExpExchangeValidDayByValidDay" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			@ViewBag.PointName
+			的名称：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PointName">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			@ViewBag.PointName
+			的单位：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" style="width:15%;" asp-for="UserConfigEntity.PointUnit">
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			})
+		});
+	</script>
+}

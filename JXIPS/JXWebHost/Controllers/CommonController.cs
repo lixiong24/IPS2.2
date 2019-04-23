@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using JX.Infrastructure.Common;
 using JX.Infrastructure;
 using JX.Infrastructure.TencentCaptcha;
+using MimeKit;
 
 namespace JXWebHost.Controllers
 {
@@ -93,6 +94,55 @@ namespace JXWebHost.Controllers
 				resultInfo.Msg = "ticket验证不通过，发送失败！";
 				return Json(resultInfo);
 			}
+		}
+
+		/// <summary>
+		/// 发送邮件
+		/// </summary>
+		/// <param name="mailToAddress">收件人地址</param>
+		/// <param name="subject">邮件标题</param>
+		/// <param name="mailBody">邮件内容</param>
+		/// <returns></returns>
+		[HttpPost]
+		public IActionResult SendMail(string mailToAddress, string subject= "这是一封测试邮件", string mailBody= "这是一封测试邮件，如果您可以成功收到此邮件，则说明您的“邮件参数配置”设置正确。")
+		{
+			ResultInfo resultInfo = new ResultInfo();
+			if (string.IsNullOrEmpty(mailToAddress))
+			{
+				resultInfo.Status = 0;
+				resultInfo.Msg = "收件人地址不能为空";
+				return Json(resultInfo);
+			}
+			if (string.IsNullOrEmpty(subject))
+			{
+				resultInfo.Status = 0;
+				resultInfo.Msg = "邮件标题不能为空";
+				return Json(resultInfo);
+			}
+			if (string.IsNullOrEmpty(mailBody))
+			{
+				resultInfo.Status = 0;
+				resultInfo.Msg = "邮件内容不能为空";
+				return Json(resultInfo);
+			}
+			MailSender sender2 = new MailSender();
+			sender2.Subject = subject;
+			sender2.MailBody = mailBody;
+			sender2.IsBodyHtml = true;
+			sender2.FromName = "系统";
+			sender2.MailToAddressList.Add(new MailboxAddress(mailToAddress));
+			//sender2.AttachmentFilePath = Utility.UploadDirPath(true) + "a.rar";
+			if (sender2.Send() == MailState.Ok)
+			{
+				resultInfo.Status = 1;
+				resultInfo.Msg = "邮件发送成功";
+			}
+			else
+			{
+				resultInfo.Status = 0;
+				resultInfo.Msg = sender2.Msg;
+			}
+			return Json(resultInfo);
 		}
 
 		private IActionResult RedirectToLocal(string returnUrl)
