@@ -7,7 +7,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
+using System.DrawingCore;
+using System.DrawingCore.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -718,7 +721,7 @@ namespace JX.Infrastructure
 		}
 
 		/// <summary>
-		/// 返回跨两个指定日期的日期和时间边界数。
+		/// 返回跨两个指定日期的日期和时间边界数。间隔数=结束时间-开始时间；结束时间比开始时间晚，返回大于0的值，否则，返回小于0的值。
 		/// </summary>
 		/// <param name="startDate">开始日期</param>
 		/// <param name="endDate">结束日期</param>
@@ -756,6 +759,39 @@ namespace JX.Infrastructure
 					break;
 			}
 			return (lngDateDiffValue);
+		}
+		#endregion
+
+		#region 时间戳
+		/// <summary>
+		/// 得到当前时间戳(ms)
+		/// </summary>
+		/// <returns></returns>
+		public static long CurrentTimeMillis()
+		{
+			return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+		}
+		/// <summary>
+		/// 时间戳转为C#格式时间
+		/// </summary>
+		/// <param name="timeStamp">Unix时间戳格式</param>
+		/// <returns>C#格式时间</returns>
+		public static DateTime GetTimeByTimeStamp(string timeStamp)
+		{
+			DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+			long lTime = long.Parse(timeStamp);
+			if (timeStamp.Length == 13)
+			{
+				return dtStart.AddMilliseconds(lTime);
+			}
+			else if (timeStamp.Length == 10)
+			{
+				return dtStart.AddSeconds(lTime);
+			}
+			else
+			{
+				return dtStart.AddMilliseconds(lTime);
+			}
 		}
 		#endregion
 
@@ -4868,6 +4904,65 @@ namespace JX.Infrastructure
 		}
 		#endregion
 
+		#region 图片与base64编码互相转换
+		/// <summary>
+		/// 图片转为base64编码的字符串
+		/// </summary>
+		/// <param name="Imagefilename">图片物理路径</param>
+		/// <returns></returns>
+		public static string ImgToBase64String(string Imagefilename)
+		{
+			try
+			{
+				Bitmap bmp = new Bitmap(Imagefilename);
+
+				MemoryStream ms = new MemoryStream();
+				bmp.Save(ms, ImageFormat.Jpeg);
+				byte[] arr = new byte[ms.Length];
+				ms.Position = 0;
+				ms.Read(arr, 0, (int)ms.Length);
+				ms.Close();
+				return Convert.ToBase64String(arr);
+			}
+			catch (Exception)
+			{
+				return "";
+			}
+		}
+		/// <summary>
+		/// base64编码的字符串转为图片。成功返回图片名字。
+		/// </summary>
+		/// <param name="strbase64"></param>
+		/// <param name="saveDir">图片保存目录</param>
+		/// <returns></returns>
+		public static string Base64StringToImage(string strbase64, string saveDir = "UploadFiles/")
+		{
+			try
+			{
+				saveDir = saveDir.Replace("/", FileHelper.DirectorySeparatorChar);
+				if (!saveDir.EndsWith(Path.DirectorySeparatorChar.ToString()))
+				{
+					saveDir = saveDir + Path.DirectorySeparatorChar.ToString();
+				}
+				string strOriImagePhysical = FileHelper.MapPath(FileHelper.WebRootPath + FileHelper.DirectorySeparatorChar + saveDir.Replace("/", FileHelper.DirectorySeparatorChar));
+				if (!Directory.Exists(strOriImagePhysical))
+				{
+					Directory.CreateDirectory(strOriImagePhysical);
+				}
+				string strFile = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".jpg";
+				byte[] arr = Convert.FromBase64String(strbase64);
+				MemoryStream ms = new MemoryStream(arr);
+				Image img = Image.FromStream(ms);
+				img.Save(strOriImagePhysical + strFile, ImageFormat.Jpeg);
+				return strFile;
+			}
+			catch (Exception)
+			{
+				return "";
+			}
+		}
+		#endregion
+
 		#region 其他常用方法
 		/// <summary>
 		/// 判断是否移动设备
@@ -5185,26 +5280,40 @@ namespace JX.Infrastructure
 		/// </summary>
 		/// <param name="postUrl">请求地址（例：http://xxx.com/acquireData）</param>
 		/// <param name="param">请求参数（例：phone=12345678901）</param>
-		/// <param name="contentType">ContentType参数值</param>
+		/// <param name="contentType">ContentType参数值:application/x-www-form-urlencoded或application/json</param>
+		/// <param name="isGzip">是否启用GZIP压缩</param>
 		/// <param name="headerKey">请求头名称</param>
 		/// <param name="headerValue">请求头值</param>
 		/// <returns></returns>
-		public static string HttpPost(string postUrl, string param,string contentType= "application/x-www-form-urlencoded",string headerKey="",string headerValue="")
+		public static string HttpPost(string postUrl, string param,string contentType= "application/x-www-form-urlencoded", bool isGzip = false, string headerKey="",string headerValue="")
 		{
 			try
 			{
 				byte[] bytes = Encoding.UTF8.GetBytes(param);
+				byte[] byteParam;
+				if (isGzip)
+				{
+					MemoryStream ms = new MemoryStream();
+					GZipStream compressedzipStream = new GZipStream(ms, CompressionMode.Compress, true);
+					compressedzipStream.Write(bytes, 0, bytes.Length);
+					compressedzipStream.Close();
+					byteParam = ms.ToArray();
+				}
+				else
+				{
+					byteParam = bytes;
+				}
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(postUrl);
 				request.Timeout = 30000;
 				request.Method = "Post";
 				request.ContentType = contentType;
-				request.ContentLength = bytes.Length;
+				request.ContentLength = byteParam.Length;
 				if (!string.IsNullOrEmpty(headerKey))
 				{
 					request.Headers.Add(headerKey,headerValue);
 				}
 				Stream requestStream = request.GetRequestStream();
-				requestStream.Write(bytes, 0, bytes.Length);
+				requestStream.Write(byteParam, 0, byteParam.Length);
 				requestStream.Close();
 				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 				Stream responseStream = response.GetResponseStream();
@@ -5233,12 +5342,13 @@ namespace JX.Infrastructure
 		/// </summary>
 		/// <param name="postUrl">请求地址（例：http://xxx.com/acquireData）</param>
 		/// <param name="param">请求参数（例：{"name":"aaa","age":"18"}）</param>
+		/// <param name="isGzip">是否启用GZIP压缩</param>
 		/// <param name="headerKey">请求头名称</param>
 		/// <param name="headerValue">请求头值</param>
 		/// <returns></returns>
-		public static string HttpPostByJSON(string postUrl, string param, string headerKey = "", string headerValue = "")
+		public static string HttpPostByJSON(string postUrl, string param, bool isGzip = false, string headerKey = "", string headerValue = "")
 		{
-			return HttpPost(postUrl, param, "application/json", headerKey, headerValue);
+			return HttpPost(postUrl, param, "application/json", isGzip, headerKey, headerValue);
 		}
 		/// <summary>
 		/// http get 请求方法，返回请求结果
