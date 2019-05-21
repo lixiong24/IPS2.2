@@ -18,6 +18,10 @@ namespace JX.Infrastructure
 		/// </summary>
 		public string Msg { set; get; } = "";
 		/// <summary>
+		/// url
+		/// </summary>
+		public string Url { set; get; } = "";
+		/// <summary>
 		/// 结果数据
 		/// </summary>
 		public string Data { set; get; } = "";

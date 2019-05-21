@@ -66,7 +66,7 @@ JX.Infrastructure								基础设施层
 			WaterMarkConfig							水印配置文件类
 			WaterMarkImage							水印图片的配置文件类
 			WaterMarkText							水印文字的配置文件类
-			VierificationCodeHelper					验证码帮助类
+			ValidateCodeHelper						验证码帮助类
 
 		IP										IP模块
 			IPHelper								IP操作帮助类
@@ -103,6 +103,7 @@ JX.Infrastructure								基础设施层
 
 		Zip										压缩、解压模块
 			ZipHelper								压缩帮助类
+			GZipHelper								对字符串进行GZIP压缩
 
 		Pager									分页模块
 			PagerModel								分页数据模型
