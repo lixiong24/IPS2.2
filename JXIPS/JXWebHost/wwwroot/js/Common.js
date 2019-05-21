@@ -171,6 +171,40 @@ function dynIFrameSize(IFrameIDs) {
 	}
 }
 
+function IsWeiXin() {
+	var ua = navigator.userAgent.toLowerCase();
+	if (ua.match(/MicroMessenger/i) == "micromessenger") {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function ShowWeiXinTip() {
+	var isWeixin = IsWeiXin();
+	if (isWeixin) {
+		var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight;
+		var weixinTip = $('<div id="weixinTip"><p><img src="/Images/live_weixin.png" alt="微信打开" width="100%" /></p></div>');
+		$("body").append(weixinTip);
+		$("#weixinTip").css({
+			"position": "fixed",
+			"left": "0",
+			"top": "0",
+			"height": winHeight,
+			"width": "100%",
+			"z-index": "1000",
+			"background-color": "rgba(0,0,0,0.8)",
+			"filter": "alpha(opacity=80)",
+		});
+		$("#weixinTip p").css({
+			"text-align": "center",
+			"margin-top": "10%",
+			"padding-left": "5%",
+			"padding-right": "5%"
+		});
+	}
+}
+
 function layer_showFull(title, url) {
 	if (title == null || title == '') {
 		title = false;
