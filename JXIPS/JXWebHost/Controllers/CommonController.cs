@@ -7,11 +7,21 @@ using JX.Infrastructure.Common;
 using JX.Infrastructure;
 using JX.Infrastructure.TencentCaptcha;
 using MimeKit;
+using System.Text;
+using JX.Application;
+using JX.Core.Entity;
 
 namespace JXWebHost.Controllers
 {
     public class CommonController : Controller
     {
+		private IRegionServiceApp _RegionServiceApp;
+		
+		public CommonController(IRegionServiceApp regionServiceApp)
+		{
+			_RegionServiceApp = regionServiceApp;
+		}
+
 		/// <summary>
 		/// 上传文件
 		/// </summary>
@@ -142,6 +152,85 @@ namespace JXWebHost.Controllers
 				resultInfo.Status = 0;
 				resultInfo.Msg = sender2.Msg;
 			}
+			return Json(resultInfo);
+		}
+
+		/// <summary>
+		/// 得到国家、省份、城市、区域相对应的下拉选项代码
+		/// </summary>
+		/// <param name="Action"></param>
+		/// <param name="Country"></param>
+		/// <param name="Province"></param>
+		/// <param name="City"></param>
+		/// <param name="Area"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public IActionResult Region(string Action = "country", string Country = "中华人民共和国", string Province = "", string City = "", string Area="")
+		{
+			ResultInfo resultInfo = new ResultInfo();
+			StringBuilder sb = new StringBuilder();
+			sb.Append("<option value=\"\">请选择</option>");
+			switch (Action.ToLower())
+			{
+				case "country":
+					IList<RegionEntity> CountryList = _RegionServiceApp.GetCountryList();
+					foreach (RegionEntity info in CountryList)
+					{
+						if (Country == info.Country)
+						{
+							sb.Append("<option selected=\"selected\" value=\"" + info.Country + "\">" + info.Country + "</option>");
+						}
+						else
+						{
+							sb.Append("<option value=\"" + info.Country + "\">" + info.Country + "</option>");
+						}
+					}
+					break;
+				case "province":
+					IList<RegionEntity> ProvinceList = _RegionServiceApp.GetProvinceListByCountry(Country);
+					foreach (RegionEntity info in ProvinceList)
+					{
+						if (Province == info.Province)
+						{
+							sb.Append("<option selected=\"selected\" value=\"" + info.Province + "\">" + info.Province + "</option>");
+						}
+						else
+						{
+							sb.Append("<option value=\"" + info.Province + "\">" + info.Province + "</option>");
+						}
+					}
+					break;
+				case "city":
+					IList<RegionEntity> CityList = _RegionServiceApp.GetCityListByProvince(Province);
+					foreach (RegionEntity info in CityList)
+					{
+						if (City == info.City)
+						{
+							sb.Append("<option selected=\"selected\" value=\"" + info.City + "\">" + info.City + "</option>");
+						}
+						else
+						{
+							sb.Append("<option value=\"" + info.City + "\">" + info.City + "</option>");
+						}
+					}
+					break;
+				case "area":
+					IList<RegionEntity> AreaList = _RegionServiceApp.GetAreaListByCity(City);
+					foreach (RegionEntity info in AreaList)
+					{
+						if (Area == info.Area)
+						{
+							sb.Append("<option selected=\"selected\" value=\"" + info.Area + "\">" + info.Area + "</option>");
+						}
+						else
+						{
+							sb.Append("<option value=\"" + info.Area + "\">" + info.Area + "</option>");
+						}
+					}
+					break;
+			}
+			resultInfo.Status = 1;
+			resultInfo.Data = sb.ToString();
 			return Json(resultInfo);
 		}
 

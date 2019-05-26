@@ -71,7 +71,10 @@ namespace JX.Infrastructure.Common
 		/// 密码正则表达式，只能包含字符、数字和下划线,长度在6-20之间
 		/// </summary>
 		public const string PasswordPattern = @"^[a-zA-Z0-9_]{6,20}$";
-
+		/// <summary>
+		/// 前缀正则表达式，只能包含字母与数字，长度在2-6之间
+		/// </summary>
+		public const string PrefixPattern = @"^[a-zA-Z0-9]{2,6}$";
 		#endregion
 
 		/// <summary>

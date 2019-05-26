@@ -171,6 +171,132 @@ function dynIFrameSize(IFrameIDs) {
 	}
 }
 
+//绑定国家 country：选中的国家；PrefixID：被绑定控件ID的前缀；
+function DataBindCountry(country, PrefixID) {
+	var Action = "Country";
+	var url = '/Common/Region';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "Action": Action, "Country": country },
+		async: true,
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			layer.alert('网络超时，发送失败!');
+		},
+		success: function (returnData) {
+			if (returnData.status == "1") {
+				var objID = PrefixID + "Country";
+				$("#" + objID).empty();
+				$("#" + objID).append(returnData.data);
+			}
+			else {
+				layer.alert(returnData.msg);
+			}
+		}
+	});
+}
+//绑定省份 country：选中的国家；province：选中的省份；PrefixID：被绑定控件ID的前缀；
+function DataBindProvince(country, province, PrefixID) {
+	var Action = "Province";
+	var url = '/Common/Region';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "Action": Action, "Country": country, "Province": province },
+		async: true,
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			layer.alert('网络超时，发送失败!');
+		},
+		success: function (returnData) {
+			if (returnData.status == "1") {
+				var objID = PrefixID + "Province";
+				$("#" + objID).empty();
+				$("#" + objID).append(returnData.data);
+			}
+			else {
+				layer.alert(returnData.msg);
+			}
+		}
+	});
+}
+//绑定城市 province：选中的省份；city：选中的城市；PrefixID：被绑定控件ID的前缀；
+function DataBindCity(province, city, PrefixID) {
+	var Action = "City";
+	var url = '/Common/Region';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "Action": Action, "Province": province, "City": city },
+		async: true,
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			layer.alert('网络超时，发送失败!');
+		},
+		success: function (returnData) {
+			if (returnData.status == "1") {
+				var objID = PrefixID + "City";
+				$("#" + objID).empty();
+				$("#" + objID).append(returnData.data);
+			}
+			else {
+				layer.alert(returnData.msg);
+			}
+		}
+	});
+}
+//绑定区县 city：选中的城市；area：选中的区县；PrefixID：被绑定控件ID的前缀；
+function DataBindArea(city, area, PrefixID) {
+	var Action = "Area";
+	var url = '/Common/Region';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "Action": Action, "City": city, "Area": area },
+		async: true,
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			layer.alert('网络超时，发送失败!');
+		},
+		success: function (returnData) {
+			if (returnData.status == "1") {
+				var objID = PrefixID + "Area";
+				$("#" + objID).empty();
+				$("#" + objID).append(returnData.data);
+			}
+			else {
+				layer.alert(returnData.msg);
+			}
+		}
+	});
+}
+function SelectProvince(PrefixID) {
+	var province = $("#" + PrefixID +"Province").val();
+	var city = $("#" + PrefixID +"City").val();
+	DataBindCity(province, "", PrefixID);
+	DataBindArea(city, "", PrefixID);
+}
+function SelectCity(PrefixID) {
+	var city = $("#" + PrefixID + "City").val();
+	DataBindArea(city, "", PrefixID);
+}
+//初始化区域控件
+//province：选中的省份；city：选中的城市；area：选中的区县；PrefixID：被绑定控件ID的前缀；
+function InitRegion(province, city, area, PrefixID) {
+	DataBindProvince("中华人民共和国", province, PrefixID);
+	DataBindCity(province, city, PrefixID);
+	DataBindArea(city, area, PrefixID);
+}
+
 function IsWeiXin() {
 	var ua = navigator.userAgent.toLowerCase();
 	if (ua.match(/MicroMessenger/i) == "micromessenger") {
@@ -179,7 +305,6 @@ function IsWeiXin() {
 		return false;
 	}
 }
-
 function ShowWeiXinTip() {
 	var isWeixin = IsWeiXin();
 	if (isWeixin) {

@@ -20,5 +20,6 @@
 		<siteMapNode title="邮件配置" url="/Admin/SiteConfig/MailConfig"/>
 		<siteMapNode title="缩略图配置" url="/Admin/SiteConfig/ThumbConfig"/>
 		<siteMapNode title="IP访问配置" url="/Admin/SiteConfig/IPLockConfig"/>
+		<siteMapNode title="商城参数配置" url="/Admin/SiteConfig/ShopConfig"/>
 	</siteMapNode>
 </siteMap>

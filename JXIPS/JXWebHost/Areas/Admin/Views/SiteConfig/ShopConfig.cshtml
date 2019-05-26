@@ -1,0 +1,198 @@
+﻿@model SiteConfigViewModel
+
+<form class="form form-horizontal" asp-controller="SiteConfig" asp-action="ShopConfig" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否允许游客购买商品：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.EnableGuestBuy">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			订单编号前缀：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.PrefixOrderFormNum" placeholder="只能输入数字与字母，例：JX" class="input-text">
+			<span asp-validation-for="ShopConfigEntity.PrefixOrderFormNum" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">在线支付单编号前缀：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.PrefixPaymentNum" placeholder="只能输入数字与字母，例：OP" class="input-text">
+			<span asp-validation-for="ShopConfigEntity.PrefixPaymentNum" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">我所在的地区：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			@await Component.InvokeAsync("Region", new RegionViewModel { Prefix = "ctl", Province = ViewBag.Province, City = ViewBag.City })
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">我所在地区的邮政编码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.PostCode" placeholder="例：100000" class="input-text">
+			<span asp-validation-for="ShopConfigEntity.PostCode" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			订单商品种类的数量限制：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.OrderProductNumber" placeholder="当设置为＂0＂时，代表不限制。" class="input-text">
+			<span class="label label-warning radius">说明：当设置为＂0＂时，代表不限制。</span>
+			<span asp-validation-for="ShopConfigEntity.OrderProductNumber" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否开启预付款支付密码功能：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.IsPayPassword">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否启用自动指派跟单员功能：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.IsSetFunctionary">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否启用商品分期付款功能：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.IsEnableHP">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			逾期滞纳金费率：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.OverdueHP" placeholder="" class="input-text" style="width:98%;">%
+			<span asp-validation-for="ShopConfigEntity.OverdueHP" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			最低逾期滞纳金：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.MinOverdueHP" placeholder="" class="input-text" style="width:98%;">元
+			<span asp-validation-for="ShopConfigEntity.MinOverdueHP" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			最高逾期滞纳金：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.MaxOverdueHP" placeholder="" class="input-text" style="width:98%;">元
+			<span asp-validation-for="ShopConfigEntity.MaxOverdueHP" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否购买商品后才能添加评论：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.IsCommentByBuy">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			评论成功后，添加的积分：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.CommentExp" placeholder="" class="input-text">
+			<span asp-validation-for="ShopConfigEntity.CommentExp" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			首单的折扣比例：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.FirstOrderDiscount" placeholder="" class="input-text" style="width:98%;">%
+			<span asp-validation-for="ShopConfigEntity.FirstOrderDiscount" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">购物车继续购物按钮链接地址：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.ContinueBuy" placeholder="" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">订购成功返回按钮链接地址：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" asp-for="ShopConfigEntity.AgainBuyUrl" placeholder="" class="input-text">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			购物车中是否默认选择赠品赠送：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.ShoppingCartSendPresent">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否启用三级分销：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.EnableDistributor">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-2">
+			是否启用经销商：
+		</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<div class="skin-minimal check-box" style="top:-10px;">
+				<input type="checkbox" asp-for="ShopConfigEntity.EnableDealer">
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onClick="removeIframe();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			})
+		});
+	</script>
+}

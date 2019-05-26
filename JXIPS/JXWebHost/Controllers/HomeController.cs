@@ -304,18 +304,31 @@ namespace JXWebHost.Controllers
 
 		public IActionResult Upload()
 		{
+			ViewBag.UploadData1 = "|201921123056.jpg";
+			ViewBag.UploadData2 = "|201921123056.jpg$$$|201912816370.jpg";
+			return View();
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Upload(IFormCollection form)
+		{
+			var ctlhidFileUploadData = form["ctlhidFileUploadData"];
+			var ctl1hidFileUploadData = form["ctl1hidFileUploadData"];
+			ViewBag.UploadData1 = ctlhidFileUploadData;
+			ViewBag.UploadData2 = ctl1hidFileUploadData;
 			return View();
 		}
 
 		public IActionResult EFTest()
 		{
-			SortModelField[] orderByExpression = new SortModelField[2] 
-            {
-                new SortModelField { SortName = "Province", IsDESC = true },
-                new SortModelField { SortName = "City", IsDESC = true }
-            };
-			var result = _RegionRepository.LoadAll(null, orderByExpression);
-			var list = result.ToList();
+			var list = _RegionRepository.GetCityListByProvince("");
+			//SortModelField[] orderByExpression = new SortModelField[2] 
+			//         {
+			//             new SortModelField { SortName = "Province", IsDESC = true },
+			//             new SortModelField { SortName = "City", IsDESC = true }
+			//         };
+			//var result = _RegionRepository.LoadAll(null, orderByExpression);
+			//var list = result.ToList();
 			AddressEntity address = new AddressEntity();
 			//address.AddressID = _AddressRepository.GetMax<int>(p => p.AddressID) + 1;
 			//address.UserName = "test";

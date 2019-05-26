@@ -276,5 +276,46 @@ namespace JXWebHost.Areas.Admin.Controllers
 				return View();
 			}
 		}
+
+		public ActionResult ShopConfig()
+		{
+			SiteConfigViewModel model = new SiteConfigViewModel();
+			model.ShopConfigEntity = ConfigHelper.Get<ShopConfig>();
+			ViewBag.Province = model.ShopConfigEntity.Province;
+			ViewBag.City = model.ShopConfigEntity.City;
+			return View(model);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult ShopConfig(SiteConfigViewModel model, IFormCollection form)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "验证未通过");
+					return View(model);
+				}
+				if (model.ShopConfigEntity != null)
+				{
+					var ctlProvince = form["ctlProvince"];
+					var ctlCity = form["ctlCity"];
+					model.ShopConfigEntity.Province = ctlProvince;
+					model.ShopConfigEntity.City = ctlCity;
+					ConfigHelper.Save(model.ShopConfigEntity);
+					Utility.WriteMessage("保存成功", "/admin/SiteConfig/ShopConfig");
+				}
+				else
+				{
+					Utility.WriteMessage("保存失败", "/admin/SiteConfig/ShopConfig");
+				}
+
+				return View();
+			}
+			catch
+			{
+				return View();
+			}
+		}
 	}
 }

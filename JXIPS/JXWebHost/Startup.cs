@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using Hangfire;
 using JX.Application;
@@ -787,6 +789,8 @@ namespace JXWebHost
 			services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
 			services.AddHangfireServer();
 
+			//解决MVC输出中文被编码的问题
+			services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
 			services.AddMvc(options =>
 			{
 				options.Filters.Add<ModelStateActionFilter>();

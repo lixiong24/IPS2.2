@@ -451,6 +451,10 @@ namespace JX.Infrastructure.Common
 		/// <returns></returns>
 		public static string GetClientIP()
 		{
+			if(MyHttpContext.Current == null)
+			{
+				return "0.0.0.0";
+			}
 			var ip = MyHttpContext.Current.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 			if (string.IsNullOrEmpty(ip))
 			{

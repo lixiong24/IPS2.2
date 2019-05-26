@@ -23,5 +23,7 @@ namespace JXWebHost.Areas.Admin.Models.SiteConfigViewModels
 		public WaterMarkConfig WaterMarkConfigEntity { get; set; }
 
 		public IPLockConfig IPLockConfigEntity { get; set; }
+
+		public ShopConfig ShopConfigEntity { get; set; }
 	}
 }

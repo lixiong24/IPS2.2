@@ -274,14 +274,14 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		bool Delete(string sql, params DbParameter[] para);
+		bool Delete(string sql, params IDataParameter[] para);
 		/// <summary>
 		/// 根据SQL删除一条或多条记录（异步方式）
 		/// </summary>
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		Task<bool> DeleteAsync(string sql, params DbParameter[] para);
+		Task<bool> DeleteAsync(string sql, params IDataParameter[] para);
 		#endregion
 
 		#region 修改
@@ -338,14 +338,14 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		bool Update(string sql, params DbParameter[] para);
+		bool Update(string sql, params IDataParameter[] para);
 		/// <summary>
 		/// 根据SQL修改一条或多条记录（异步方式）
 		/// </summary>
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		Task<bool> UpdateAsync(string sql, params DbParameter[] para);
+		Task<bool> UpdateAsync(string sql, params IDataParameter[] para);
 		#endregion
 
 		#region 得到实体
@@ -401,14 +401,14 @@ namespace JX.Core
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		IQueryable<T> LoadAllBySql(string sql, params DbParameter[] para);
+		IQueryable<T> LoadAllBySql(string sql, params IDataParameter[] para);
 		/// <summary>
 		/// T-Sql方式：返回IQueryable集合（异步方式）
 		/// </summary>
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		Task<IQueryable<T>> LoadAllBySqlAsync(string sql, params DbParameter[] para);
+		Task<IQueryable<T>> LoadAllBySqlAsync(string sql, params IDataParameter[] para);
 
 		/// <summary>
 		/// T-Sql方式：返回List集合
@@ -416,14 +416,14 @@ namespace JX.Core
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		List<T> LoadListAllBySql(string sql, params DbParameter[] para);
+		List<T> LoadListAllBySql(string sql, params IDataParameter[] para);
 		/// <summary>
 		/// T-Sql方式：返回List集合（异步方式）
 		/// </summary>
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		Task<List<T>> LoadListAllBySqlAsync(string sql, params DbParameter[] para);
+		Task<List<T>> LoadListAllBySqlAsync(string sql, params IDataParameter[] para);
 		#endregion
 
 		#region 得到数据列表
@@ -785,14 +785,14 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		int ExeSQL(string sql, params DbParameter[] para);
+		int ExeSQL(string sql, params IDataParameter[] para);
 		/// <summary>
 		/// 执行SQL语句，返回受影响的行数(select语句只返回－1)
 		/// </summary>
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		Task<int> ExeSQLAsync(string sql, params DbParameter[] para);
+		Task<int> ExeSQLAsync(string sql, params IDataParameter[] para);
 
 		/// <summary>
 		/// 执行SQL语句，返回受影响的行数(select语句只返回－1)
@@ -839,7 +839,7 @@ namespace JX.Core
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		TResult GetBySQL<TResult>(string sql, Expression<Func<T, TResult>> scalar, params DbParameter[] para);
+		TResult GetBySQL<TResult>(string sql, Expression<Func<T, TResult>> scalar, params IDataParameter[] para);
 		/// <summary>
 		/// 执行SQL，返回结果。
 		/// 例：var s = testDal.GetBySQL《string》("select name from tablename",m=>m.Name);
@@ -851,7 +851,7 @@ namespace JX.Core
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<T, TResult>> scalar, params DbParameter[] para);
+		Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<T, TResult>> scalar, params IDataParameter[] para);
 
 		/// <summary>
 		/// 执行SQL，返回查询结果。主要用于返回实体类，返回参数需要带有空白构造函数。
@@ -860,7 +860,7 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		IList<TResult> SqlQuery<TResult>(string sql, params object[] parameters) where TResult : new();
+		IList<TResult> SqlQuery<TResult>(string sql, params IDataParameter[] parameters) where TResult : new();
 		/// <summary>
 		/// 执行SQL，返回查询结果。主要用于返回实体类，返回参数需要带有空白构造函数。
 		/// </summary>
@@ -868,7 +868,7 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, params object[] parameters) where TResult : new();
+		Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, params IDataParameter[] parameters) where TResult : new();
 
 		/// <summary>
 		/// 执行SQL，返回查询结果。主要用于返回IList《string》。
@@ -877,7 +877,7 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		IList<TResult> SqlQueryOne<TResult>(string sql, params object[] parameters);
+		IList<TResult> SqlQueryOne<TResult>(string sql, params IDataParameter[] parameters);
 		/// <summary>
 		/// 执行SQL，返回查询结果。主要用于返回IList《string》。
 		/// </summary>
@@ -885,7 +885,7 @@ namespace JX.Core
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, params object[] parameters);
+		Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, params IDataParameter[] parameters);
 		#endregion
 	}
 }

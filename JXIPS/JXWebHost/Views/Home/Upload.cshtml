@@ -4,32 +4,36 @@
 }
 
 <h2>这是Upload视图页</h2>
-<div id="divUpload1">
-	文件1： <input type="file" name="file1" />
-	<input type="button" value="上传" onclick="doUpload('divUpload1')" />
-	<input type="hidden" id="hidFile1" value="" />
-</div>
-<div id="divUpload2">
-	文件2： <input type="file" name="file2" />
-	<input type="button" value="上传" onclick="doUpload('divUpload2')" />
-	<input type="hidden" id="hidFile2" value="" />
-</div>
-<div id="divUpload3">
-	图片： <input type="file" name="file3" />
-	<input type="button" value="上传" onclick="doUploadImage('divUpload3')" />
-	<br />
-	<img src="" />
-	<input type="hidden" id="hidFile3" value="" />
-</div>
-<div id="divUpload4">
-	@await Component.InvokeAsync("MorePic",new MorePicViewModel { Prefix="ctl",PhotoPathList= "|201921123056.jpg",FileNumLimit=1 })
-</div>
-<div id="divUpload5">
-	@await Component.InvokeAsync("MorePic", new MorePicViewModel { Prefix = "ctl1" })
-</div>
-
+<form class="form form-horizontal" asp-controller="Home" asp-action="Upload" method="post">
+	<div id="divUpload1">
+		文件1： <input type="file" name="file1" />
+		<input type="button" value="上传" onclick="doUpload('divUpload1')" />
+		<input type="hidden" id="hidFile1" name="hidFile1" value="" />
+	</div>
+	<div id="divUpload2">
+		文件2： <input type="file" name="file2" />
+		<input type="button" value="上传" onclick="doUpload('divUpload2')" />
+		<input type="hidden" id="hidFile2" name="hidFile2" value="" />
+	</div>
+	<div id="divUpload3">
+		图片： <input type="file" name="file3" />
+		<input type="button" value="上传" onclick="doUploadImage('divUpload3')" />
+		<br />
+		<img src="" />
+		<input type="hidden" id="hidFile3" name="hidFile3" value="" />
+	</div>
+	<div id="divUpload4">
+		@await Component.InvokeAsync("MorePic", new MorePicViewModel { Prefix = "ctl", PhotoPathList = ViewBag.UploadData1, FileNumLimit = 1 })
+	</div>
+	<div id="divUpload5">
+		@await Component.InvokeAsync("MorePic", new MorePicViewModel { Prefix = "ctl1", PhotoPathList = ViewBag.UploadData2 })
+	</div>
+	<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+	UploadData1:@ViewBag.UploadData1
+	UploadData2:@ViewBag.UploadData2
+</form>
 @section scripts {
-	<script type="text/javascript">
+<script type="text/javascript">
 	function doUpload(containerID) {
 		var objContainer = $("#" + containerID);
 		var fileUpload = $(objContainer).find("input[type='file']").get(0).files[0];
@@ -88,5 +92,5 @@
 			}
 		});
 	}
-	</script>
+</script>
 }

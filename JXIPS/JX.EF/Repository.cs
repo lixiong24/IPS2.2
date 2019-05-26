@@ -679,7 +679,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual bool Delete(string sql, params DbParameter[] para)
+		public virtual bool Delete(string sql, params IDataParameter[] para)
 		{
 			return ExeSQL(sql, para) > 0;
 		}
@@ -689,7 +689,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual async Task<bool> DeleteAsync(string sql, params DbParameter[] para)
+		public virtual async Task<bool> DeleteAsync(string sql, params IDataParameter[] para)
 		{
 			return await ExeSQLAsync(sql, para) > 0;
 		}
@@ -821,7 +821,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual bool Update(string sql, params DbParameter[] para)
+		public virtual bool Update(string sql, params IDataParameter[] para)
 		{
 			return ExeSQL(sql, para) > 0;
 		}
@@ -831,7 +831,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual async Task<bool> UpdateAsync(string sql, params DbParameter[] para)
+		public virtual async Task<bool> UpdateAsync(string sql, params IDataParameter[] para)
 		{
 			return await ExeSQLAsync(sql, para) > 0;
 		}
@@ -859,7 +859,6 @@ namespace JX.EF
 		#endregion
 
 		#region 得到实体列表
-
 		/// <summary>
 		/// Lamda返回IQueryable集合，延时加载数据
 		/// </summary>
@@ -932,9 +931,10 @@ namespace JX.EF
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		public virtual IQueryable<T> LoadAllBySql(string sql, params DbParameter[] para)
+		public virtual IQueryable<T> LoadAllBySql(string sql, params IDataParameter[] para)
 		{
-			return _Context.Set<T>().AsNoTracking().FromSql(sql, para);
+			var parameter = CheckParamDBNull(para);
+			return _Context.Set<T>().AsNoTracking().FromSql(sql, parameter);
 		}
 		/// <summary>
 		/// T-Sql方式：返回IQueryable《T》集合（异步方式）
@@ -942,9 +942,10 @@ namespace JX.EF
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		public virtual async Task<IQueryable<T>> LoadAllBySqlAsync(string sql, params DbParameter[] para)
+		public virtual async Task<IQueryable<T>> LoadAllBySqlAsync(string sql, params IDataParameter[] para)
 		{
-			return await Task.Run(() => _Context.Set<T>().AsNoTracking().FromSql(sql, para));
+			var parameter = CheckParamDBNull(para);
+			return await Task.Run(() => _Context.Set<T>().AsNoTracking().FromSql(sql, parameter));
 		}
 
 		/// <summary>
@@ -953,9 +954,10 @@ namespace JX.EF
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		public virtual List<T> LoadListAllBySql(string sql, params DbParameter[] para)
+		public virtual List<T> LoadListAllBySql(string sql, params IDataParameter[] para)
 		{
-			return _Context.Set<T>().AsNoTracking().FromSql(sql, para).Cast<T>().ToList();
+			var parameter = CheckParamDBNull(para);
+			return _Context.Set<T>().AsNoTracking().FromSql(sql, parameter).Cast<T>().ToList();
 		}
 		/// <summary>
 		/// T-Sql方式：返回List《T》集合（异步方式）
@@ -963,9 +965,10 @@ namespace JX.EF
 		/// <param name="sql">SQL语句</param>
 		/// <param name="para">Parameters参数</param>
 		/// <returns></returns>
-		public virtual async Task<List<T>> LoadListAllBySqlAsync(string sql, params DbParameter[] para)
+		public virtual async Task<List<T>> LoadListAllBySqlAsync(string sql, params IDataParameter[] para)
 		{
-			return await Task.Run(() => _Context.Set<T>().AsNoTracking().FromSql(sql, para).Cast<T>().ToList());
+			var parameter = CheckParamDBNull(para);
+			return await Task.Run(() => _Context.Set<T>().AsNoTracking().FromSql(sql, parameter).Cast<T>().ToList());
 		}
 		#endregion
 
@@ -1820,9 +1823,10 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual int ExeSQL(string sql, params DbParameter[] para)
+		public virtual int ExeSQL(string sql, params IDataParameter[] para)
 		{
-			return _Context.Database.ExecuteSqlCommand(sql, para);
+			var parameter = CheckParamDBNull(para);
+			return _Context.Database.ExecuteSqlCommand(sql, parameter);
 		}
 		/// <summary>
 		/// 执行SQL语句，返回受影响的行数
@@ -1830,9 +1834,10 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual async Task<int> ExeSQLAsync(string sql, params DbParameter[] para)
+		public virtual async Task<int> ExeSQLAsync(string sql, params IDataParameter[] para)
 		{
-			return await _Context.Database.ExecuteSqlCommandAsync(sql, para);
+			var parameter = CheckParamDBNull(para);
+			return await _Context.Database.ExecuteSqlCommandAsync(sql, parameter);
 		}
 
 		/// <summary>
@@ -1854,6 +1859,10 @@ namespace JX.EF
 				parameterArray[j] = new SqlParameter();
 				parameterArray[j].ParameterName = paraName[j].ToString();
 				parameterArray[j].Value = paraValue[j];
+				if (parameterArray[j].Value == null)
+				{
+					parameterArray[j].Value = DBNull.Value;
+				}
 			}
 			return _Context.Database.ExecuteSqlCommand(sql, parameterArray);
 		}
@@ -1876,6 +1885,10 @@ namespace JX.EF
 				parameterArray[j] = new SqlParameter();
 				parameterArray[j].ParameterName = paraName[j].ToString();
 				parameterArray[j].Value = paraValue[j];
+				if (parameterArray[j].Value == null)
+				{
+					parameterArray[j].Value = DBNull.Value;
+				}
 			}
 			return await _Context.Database.ExecuteSqlCommandAsync(sql, parameterArray);
 		}
@@ -1940,11 +1953,12 @@ namespace JX.EF
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<T, TResult>> scalar, params DbParameter[] para)
+		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<T, TResult>> scalar, params IDataParameter[] para)
 		{
 			try
 			{
-				return _Context.Set<T>().FromSql(sql, para).Select(scalar).First();
+				var parameter = CheckParamDBNull(para);
+				return _Context.Set<T>().FromSql(sql, parameter).Select(scalar).First();
 			}
 			catch
 			{
@@ -1962,11 +1976,12 @@ namespace JX.EF
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<T, TResult>> scalar, params DbParameter[] para)
+		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<T, TResult>> scalar, params IDataParameter[] para)
 		{
 			try
 			{
-				return await _Context.Set<T>().FromSql(sql, para).Select(scalar).FirstAsync();
+				var parameter = CheckParamDBNull(para);
+				return await _Context.Set<T>().FromSql(sql, parameter).Select(scalar).FirstAsync();
 			}
 			catch
 			{
@@ -1981,7 +1996,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public virtual IList<TResult> SqlQuery<TResult>(string sql, params object[] parameters) where TResult:new()
+		public virtual IList<TResult> SqlQuery<TResult>(string sql, params IDataParameter[] parameters) where TResult:new()
 		{
 			//注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常 
 			var conn = _Context.Database.GetDbConnection();
@@ -1990,8 +2005,9 @@ namespace JX.EF
 				conn.Open();
 				using (var command = conn.CreateCommand())
 				{
+					var param = CheckParamDBNull(parameters);
 					command.CommandText = sql;
-					command.Parameters.AddRange(parameters);
+					command.Parameters.AddRange(param);
 					var propts = typeof(TResult).GetProperties();
 					var rtnList = new List<TResult>();
 					TResult model;
@@ -2046,7 +2062,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public virtual async Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, params object[] parameters) where TResult : new()
+		public virtual async Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, params IDataParameter[] parameters) where TResult : new()
 		{
 			//注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常 
 			var conn = _Context.Database.GetDbConnection();
@@ -2055,8 +2071,9 @@ namespace JX.EF
 				conn.Open();
 				using (var command = conn.CreateCommand())
 				{
+					var param = CheckParamDBNull(parameters);
 					command.CommandText = sql;
-					command.Parameters.AddRange(parameters);
+					command.Parameters.AddRange(param);
 					var propts = typeof(TResult).GetProperties();
 					var rtnList = new List<TResult>();
 					TResult model;
@@ -2112,7 +2129,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public virtual IList<TResult> SqlQueryOne<TResult>(string sql, params object[] parameters)
+		public virtual IList<TResult> SqlQueryOne<TResult>(string sql, params IDataParameter[] parameters)
 		{
 			//注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常 
 			var conn = _Context.Database.GetDbConnection();
@@ -2121,8 +2138,9 @@ namespace JX.EF
 				conn.Open();
 				using (var command = conn.CreateCommand())
 				{
+					var param = CheckParamDBNull(parameters);
 					command.CommandText = sql;
-					command.Parameters.AddRange(parameters);
+					command.Parameters.AddRange(param);
 					var propts = typeof(TResult).GetProperties();
 					var rtnList = new List<TResult>();
 					TResult model;
@@ -2150,7 +2168,7 @@ namespace JX.EF
 		/// <param name="sql"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public virtual async Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, params object[] parameters)
+		public virtual async Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, params IDataParameter[] parameters)
 		{
 			//注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常 
 			var conn = _Context.Database.GetDbConnection();
@@ -2159,8 +2177,9 @@ namespace JX.EF
 				conn.Open();
 				using (var command = conn.CreateCommand())
 				{
+					var param = CheckParamDBNull(parameters);
 					command.CommandText = sql;
-					command.Parameters.AddRange(parameters);
+					command.Parameters.AddRange(param);
 					var propts = typeof(TResult).GetProperties();
 					var rtnList = new List<TResult>();
 					TResult model;
@@ -2184,7 +2203,7 @@ namespace JX.EF
 		#endregion
 
 		#region 辅助方法
-		private DataTable CreateDataTable(string sql,bool isProc=true, params object[] parameters)
+		private DataTable CreateDataTable(string sql,bool isProc=true, params IDataParameter[] parameters)
 		{
 			//注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常
 			var conn = _Context.Database.GetDbConnection();
@@ -2196,8 +2215,9 @@ namespace JX.EF
 				}
 				using (var command = conn.CreateCommand())
 				{
+					var param = CheckParamDBNull(parameters);
 					command.CommandText = sql;
-					command.Parameters.AddRange(parameters);
+					command.Parameters.AddRange(param);
 					if (isProc)
 					{
 						command.CommandType = CommandType.StoredProcedure;
@@ -2256,6 +2276,25 @@ namespace JX.EF
 				result = result.Replace("Entity", "");
 			}
 			return result;
+		}
+		private IDataParameter[] CheckParamDBNull(IDataParameter[] para)
+		{
+			if (para == null)
+				return para;
+			IDataParameter[] parameterArray = new IDataParameter[para.Length];
+			for (int j = 0; j < para.Length; j++)
+			{
+				if (para[j].Value == null)
+				{
+					para[j].Value = DBNull.Value;
+				}
+				parameterArray[j] = new SqlParameter()
+				{
+					ParameterName = para[j].ParameterName,
+					Value = para[j].Value
+				};
+			}
+			return parameterArray;
 		}
 		#endregion
 	}

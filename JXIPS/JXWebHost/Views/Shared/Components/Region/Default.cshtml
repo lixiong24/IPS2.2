@@ -1,0 +1,13 @@
+﻿@model RegionViewModel
+
+<select class="select" style="width:33%;" onchange="SelectProvince('@{@Model.Prefix}')" id="@{@Model.Prefix}Province" name="@{@Model.Prefix}Province"></select>
+<select class="select" style="width:33%;" onchange="SelectCity('@{@Model.Prefix}')" id="@{@Model.Prefix}City" name="@{@Model.Prefix}City"></select>
+<select class="select" style="width:33%;" id="@{@Model.Prefix}Area" name="@{@Model.Prefix}Area"></select>
+
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="~/js/Common.js"></script>
+<script type="text/javascript">
+	jQuery(function () {
+		InitRegion("@{@Model.Province}","@{@Model.City}","@{@Model.Area}","@{@Model.Prefix}");
+	});
+</script>
