@@ -25,5 +25,7 @@ namespace JXWebHost.Areas.Admin.Models.SiteConfigViewModels
 		public IPLockConfig IPLockConfigEntity { get; set; }
 
 		public ShopConfig ShopConfigEntity { get; set; }
+
+		public ShopTemplateConfig ShopTemplateConfigEntity { get; set; }
 	}
 }

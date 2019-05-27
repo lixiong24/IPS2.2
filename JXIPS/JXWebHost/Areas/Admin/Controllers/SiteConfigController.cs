@@ -317,5 +317,40 @@ namespace JXWebHost.Areas.Admin.Controllers
 				return View();
 			}
 		}
+
+		public ActionResult ShopTemplateConfig()
+		{
+			SiteConfigViewModel model = new SiteConfigViewModel();
+			model.ShopTemplateConfigEntity = ConfigHelper.Get<ShopTemplateConfig>();
+			return View(model);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult ShopTemplateConfig(SiteConfigViewModel model)
+		{
+			try
+			{
+				if (!ModelState.IsValid)
+				{
+					ModelState.AddModelError(string.Empty, "验证未通过");
+					return View(model);
+				}
+				if (model.ShopTemplateConfigEntity != null)
+				{
+					ConfigHelper.Save(model.ShopTemplateConfigEntity);
+					Utility.WriteMessage("保存成功", "/admin/SiteConfig/ShopTemplateConfig");
+				}
+				else
+				{
+					Utility.WriteMessage("保存失败", "/admin/SiteConfig/ShopTemplateConfig");
+				}
+
+				return View();
+			}
+			catch
+			{
+				return View();
+			}
+		}
 	}
 }
