@@ -322,11 +322,14 @@ namespace JXWebHost.Areas.Admin.Controllers
 		{
 			SiteConfigViewModel model = new SiteConfigViewModel();
 			model.ShopTemplateConfigEntity = ConfigHelper.Get<ShopTemplateConfig>();
+			ViewBag.OrderFormat = model.ShopTemplateConfigEntity.OrderFormat.Replace("\r\n","").Replace("\"", "\\\"");
+			ViewBag.ConsignmentFormat = model.ShopTemplateConfigEntity.ConsignmentFormat.Replace("\r\n", "").Replace("\"", "\\\"");
+			ViewBag.FillProductFormat = model.ShopTemplateConfigEntity.FillProductFormat.Replace("\r\n", "").Replace("\"", "\\\"");
 			return View(model);
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult ShopTemplateConfig(SiteConfigViewModel model)
+		public ActionResult ShopTemplateConfig(SiteConfigViewModel model, IFormCollection form)
 		{
 			try
 			{
@@ -337,6 +340,12 @@ namespace JXWebHost.Areas.Admin.Controllers
 				}
 				if (model.ShopTemplateConfigEntity != null)
 				{
+					var ctlOrderFormat = form["ctlOrderFormat"];
+					var ctlConsignmentFormat = form["ctlConsignmentFormat"];
+					var ctlFillProductFormat = form["ctlFillProductFormat"];
+					model.ShopTemplateConfigEntity.OrderFormat = ctlOrderFormat;
+					model.ShopTemplateConfigEntity.ConsignmentFormat = ctlConsignmentFormat;
+					model.ShopTemplateConfigEntity.FillProductFormat = ctlFillProductFormat;
 					ConfigHelper.Save(model.ShopTemplateConfigEntity);
 					Utility.WriteMessage("保存成功", "/admin/SiteConfig/ShopTemplateConfig");
 				}

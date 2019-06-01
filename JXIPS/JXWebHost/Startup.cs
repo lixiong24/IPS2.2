@@ -24,22 +24,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UEditor.Core;
 
 namespace JXWebHost
 {
 	public class Startup
 	{
+		public IConfiguration Configuration { get; }
+		/// <summary>
+		/// 当前应用程序目录的绝对路径（例：D:\JXIPS\JXWebHost）
+		/// </summary>
+		public string m_ContentRoot = string.Empty;
+		/// <summary>
+		/// 当前应用程序的静态文件目录的绝对路径（例：D:\JXIPS\JXWebHost\wwwroot）
+		/// </summary>
+		public string m_WebRootPath = string.Empty;
+
 		public Startup(IConfiguration configuration, IHostingEnvironment env)
 		{
 			Configuration = configuration;
 			m_ContentRoot = env.ContentRootPath;
+			m_WebRootPath = env.WebRootPath;
 		}
-
-		public IConfiguration Configuration { get; }
-		/// <summary>
-		/// 得到应用程序根目录
-		/// </summary>
-		public string m_ContentRoot = string.Empty;
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -791,6 +797,7 @@ namespace JXWebHost
 
 			//解决MVC输出中文被编码的问题
 			services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.All));
+			services.AddUEditorService("ueditor.json",true, m_WebRootPath);
 			services.AddMvc(options =>
 			{
 				options.Filters.Add<ModelStateActionFilter>();

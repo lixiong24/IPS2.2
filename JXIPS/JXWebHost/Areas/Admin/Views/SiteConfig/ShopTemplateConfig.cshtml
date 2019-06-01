@@ -86,8 +86,8 @@
 			订单打印模板管理：
 		</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<textarea asp-for="ShopTemplateConfigEntity.OrderFormat" class="textarea"></textarea>
-			<span class="label label-warning radius">说明：支持HTML代码，可用标签详见下面的标签说明。</span>
+			<script id="ctlOrderFormat" name="ctlOrderFormat" type="text/plain"></script>
+			<span class="label label-warning radius">说明：可用标签详见下面的标签说明。</span>
 		</div>
 	</div>
 	<div class="row cl">
@@ -95,8 +95,9 @@
 			发货单打印模板管理：
 		</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<textarea asp-for="ShopTemplateConfigEntity.ConsignmentFormat" class="textarea"></textarea>
-			<span class="label label-warning radius">说明：支持HTML代码，可用标签详见下面的标签说明。</span>
+			<script id="ctlConsignmentFormat" name="ctlConsignmentFormat" type="text/plain">
+			</script>
+			<span class="label label-warning radius">说明：可用标签详见下面的标签说明。</span>
 		</div>
 	</div>
 	<div class="row cl">
@@ -181,7 +182,8 @@
 			补货单打印模板管理：
 		</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<textarea asp-for="ShopTemplateConfigEntity.FillProductFormat" class="textarea"></textarea>
+			<script id="ctlFillProductFormat" name="ctlFillProductFormat" type="text/plain">
+			</script>
 			<span class="label label-warning radius">
 				说明：{$ProductID}：商品ID、{$ProductNum}：商品编号、{$ProductImage}：商品图片、{$ProductName}：商品名称、{$BarCode}：条形码、{$Property}：规格、{$BuyNum}：购买数量、{$Stocks}：库存、{$FillNum}：补货数量、{$Unit}：单位。
 			</span>
@@ -195,3 +197,39 @@
 		</div>
 	</div>
 </form>
+@section scripts{
+	<script type="text/javascript">
+		var ueOrderFormat = UE.getEditor('ctlOrderFormat', {
+			autoHeight: true
+			,disabledTableInTable: false
+		});
+		//对编辑器的操作最好在编辑器ready之后再做
+		ueOrderFormat.ready(function () {
+			//设置编辑器的内容
+			var htmlOrderFormat = "@Html.Raw(ViewBag.OrderFormat)";
+			//var htmlOrderFormat = '<table class=\"border\" width=\"1155\" height=\"374\" cellspacing=\"1\" cellpadding=\"2\" border=\"0\"><tbody><tr class=\"firstRow\" align=\"center\"><td class=\"title\"><strong>订 单 信 息</strong>（订单编号：{$OrderNum}）</td></tr><tr><td style=\"height: 25px\"><table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\"><tbody><tr class=\"tdbg firstRow\"><td style=\"width: 18%\">客户名称：{$ClientName}</td><td style=\"width: 20%\">用 户 名：{$UserName}</td><td style=\"width: 18%\">代 理 商：{$AgentName}</td><td style=\"width: 20%\">购买日期：{$BeginDate}</td><td style=\"width: 24%\">下单时间：{$InputTime}</td></tr><tr class=\"tdbg\"><td style=\"width: 18%\">需要发票：{$NeedInvoice}</td><td style=\"width: 20%\">已开发票：{$Invoiced}</td><td style=\"width: 18%\">订单状态：{$Status}</td><td style=\"width: 20%\">付款情况：{$PayStatus}</td><td style=\"width: 24%\">物流状态：{$DeliverStatus}</td></tr></tbody></table></td></tr><tr align=\"center\"><td style=\"height: 24%\"><orderoptionforeachstart></orderoptionforeachstart><orderoptionforeachend></orderoptionforeachend><table width=\"100%\" cellspacing=\"1\" cellpadding=\"2\" border=\"0\"><tbody><tr class=\"tdbg firstRow\"><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">收货人姓名：</td><td style=\"width: 38%\" align=\"left\">{$ContacterName}</td><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">联系电话：</td><td style=\"width: 38%\" align=\"left\">{$Phone}</td></tr><tr class=\"tdbg\" valign=\"top\"><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">收货人地址：</td><td style=\"width: 38%\" align=\"left\">{$Address}</td><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">邮政编码：</td><td style=\"width: 38%\" align=\"left\">{$ZipCode}</td></tr><tr class=\"tdbg\"><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">收货人邮箱：</td><td style=\"width: 38%\" align=\"left\">{$Email}</td><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">收货人手机：</td><td style=\"width: 38%\" align=\"left\">{$Mobile}</td></tr><tr class=\"tdbg\"><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">付款方式：</td><td style=\"width: 38%\" align=\"left\">{$PaymentType}</td><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">送货方式：</td><td style=\"width: 38%\" align=\"left\">{$DeliverType}</td></tr><tr class=\"tdbg\" valign=\"top\"><td class=\"tdbgleft\" style=\"width: 12%\" align=\"right\">发票信息：</td><td colspan=\"3\" style=\"width: 38%\" align=\"left\">{$InvoiceContent}</td></tr><tr class=\"tdbg\" valign=\"top\" align=\"left\"><td class=\"tdbgleft\" align=\"right\">{$FieldName}：</td><td colspan=\"3\">{$FieldValue}</td></tr></tbody></table></td></tr><tr><td><foreachstart></foreachstart><foreachend></foreachend><table width=\"100%\" cellspacing=\"1\" cellpadding=\"0\" border=\"0\"><tbody><tr class=\"tdbgleft firstRow\" align=\"center\"><td>商 品 名 称</td><td style=\"width: 5%\">单位</td><td style=\"width: 6%\">数量</td><td style=\"width: 8%\">市场价</td><td style=\"width: 8%\">实价</td><td style=\"width: 8%\">指定价</td><td style=\"width: 8%\">金额</td><td style=\"width: 8%\">服务期限</td><td style=\"width: 10%\">备注</td></tr><tr class=\"tdbg\" align=\"center\"><td align=\"left\">{$ProductName}</td><td style=\"width: 5%\">{$Unit}</td><td style=\"width: 6%\">{$Amount}</td><td style=\"width: 8%\" align=\"right\">{$Original}</td><td style=\"width: 8%\" align=\"right\">{$Price}</td><td style=\"width: 8%\" align=\"right\">{$TruePrice}</td><td style=\"width: 8%\" align=\"right\">{$TotalMoney}</td><td style=\"width: 8%\">{$ServiceTerm}</td><td style=\"width: 10%\">{$ItemRemark}</td></tr><tr class=\"tdbg\"><td colspan=\"6\" align=\"right\">合计：</td><td align=\"right\">{$SubTotal}</td><td colspan=\"2\"><br/></td></tr><tr class=\"tdbg\"><td colspan=\"4\" align=\"left\">运费：{$ChargeDeliver}元 <br/>\r\n 实际金额：{$OrderTotalMoney}元 <br/>\r\n 返还 <span style=\"color:#ff0000\">{$TotalPresentMoney}</span> 元现金券，赠送 <span style=\"color:#ff0000\">{$TotalPresentExp} </span>点积分，赠送 <span style=\"color:#ff0000\">{$TotalPresentPoint}</span></td><td colspan=\"2\" align=\"right\">实际金额：</td><td align=\"right\">{$TotalMoney}</td><td colspan=\"2\" align=\"left\">已付款：{$MoneyReceipt}</td></tr></tbody></table></td></tr></tbody></table>';
+			ueOrderFormat.setContent(htmlOrderFormat);
+
+		});
+		var ueConsignmentFormat = UE.getEditor('ctlConsignmentFormat', {
+			autoHeight: true
+			, disabledTableInTable: false
+		});
+		//对编辑器的操作最好在编辑器ready之后再做
+		ueConsignmentFormat.ready(function () {
+			//设置编辑器的内容
+			var htmlConsignmentFormat = "@Html.Raw(ViewBag.ConsignmentFormat)";
+			ueConsignmentFormat.setContent(htmlConsignmentFormat);
+		});
+		var ueFillProductFormat = UE.getEditor('ctlFillProductFormat', {
+			autoHeight: true
+			, disabledTableInTable: false
+		});
+		//对编辑器的操作最好在编辑器ready之后再做
+		ueFillProductFormat.ready(function () {
+			//设置编辑器的内容
+			var htmlFillProductFormat = "@Html.Raw(ViewBag.FillProductFormat)";
+			ueFillProductFormat.setContent(htmlFillProductFormat);
+		});
+	</script>
+}
