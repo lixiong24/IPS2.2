@@ -49,8 +49,9 @@ namespace JXWebHost.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
-            return View();
+			
+			ViewBag.ConsignmentFormat = ConfigHelper.Get<ShopTemplateConfig>().ConsignmentFormat;
+			return View();
         }
 
 		public IActionResult Category(string id="")

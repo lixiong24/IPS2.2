@@ -322,9 +322,9 @@ namespace JXWebHost.Areas.Admin.Controllers
 		{
 			SiteConfigViewModel model = new SiteConfigViewModel();
 			model.ShopTemplateConfigEntity = ConfigHelper.Get<ShopTemplateConfig>();
-			ViewBag.OrderFormat = model.ShopTemplateConfigEntity.OrderFormat.Replace("\r\n","").Replace("\"", "\\\"");
-			ViewBag.ConsignmentFormat = model.ShopTemplateConfigEntity.ConsignmentFormat.Replace("\r\n", "").Replace("\"", "\\\"");
-			ViewBag.FillProductFormat = model.ShopTemplateConfigEntity.FillProductFormat.Replace("\r\n", "").Replace("\"", "\\\"");
+			ViewBag.OrderFormat = model.ShopTemplateConfigEntity.OrderFormat;
+			ViewBag.ConsignmentFormat = model.ShopTemplateConfigEntity.ConsignmentFormat;
+			ViewBag.FillProductFormat = model.ShopTemplateConfigEntity.FillProductFormat;
 			return View(model);
 		}
 		[HttpPost]

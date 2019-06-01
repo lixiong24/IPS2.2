@@ -1,0 +1,19 @@
+﻿@model UEditorViewModel
+
+<script id="@{@Model.ClientID}" name="@{@Model.ClientID}" type="text/plain">
+</script>
+
+<script type="text/javascript">
+	var ue@{@Model.ClientID} = UE.getEditor('@{@Model.ClientID}', {
+			autoHeight: true
+			,disabledTableInTable: false
+		});
+		//对编辑器的操作最好在编辑器ready之后再做
+		ue@{@Model.ClientID}.ready(function () {
+			//设置编辑器的内容
+			var htmlUE = "@Html.Raw(!(string.IsNullOrWhiteSpace(Model.Content))? Model.Content.Replace("\r\n", "").Replace("\"", "\\\""):"")";
+			if (htmlUE != "") {
+				ue@{@Model.ClientID}.setContent(htmlUE);
+			}
+		});
+</script>

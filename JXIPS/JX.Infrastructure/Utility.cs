@@ -973,7 +973,7 @@ namespace JX.Infrastructure
 
 		#region 保存上传文件
 		/// <summary>
-		/// 客户端通过AJAX文件，上传文件到指定位置。成功则通过ResultInfo.Data返回文件名。
+		/// 客户端通过AJAX文件，上传文件到指定位置。成功则通过ResultInfo.Data返回文件名。会从UploadFilesConfig文件中取值进行后缀名、文件大小的判断。
 		/// </summary>
 		/// <param name="file">上传控件(从Request.Form.Files[0]得到)</param>
 		/// <param name="fileDir">保存文件目录，不存在则创建。(不带文件名，相对于网站静态文件目录。如：UploadFiles/Photo/)。不指定时，从UploadFilesConfig文件中取值</param>

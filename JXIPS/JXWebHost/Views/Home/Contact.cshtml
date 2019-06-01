@@ -4,6 +4,15 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-2">
+		编辑器：
+	</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@await Component.InvokeAsync("UEditor", new UEditorViewModel { ClientID = "ctlUEditor", Content = ViewBag.ConsignmentFormat })
+	</div>
+</div>
+
 <address>
     One Microsoft Way<br />
     Redmond, WA 98052-6399<br />

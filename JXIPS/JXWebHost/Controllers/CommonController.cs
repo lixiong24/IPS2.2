@@ -29,8 +29,15 @@ namespace JXWebHost.Controllers
 		[HttpPost]
 		public async Task<IActionResult> UploadHandle()
 		{
+			ResultInfo resultInfo = new ResultInfo();
+			var uploadConfig = ConfigHelper.Get<UploadFilesConfig>();
+			if (!uploadConfig.EnableUploadFiles)
+			{
+				resultInfo.Msg = "没有开启上传权限";
+				return Json(resultInfo);
+			}
 			var formFile = Request.Form.Files[0];
-			ResultInfo resultInfo = await Utility.FileUploadSaveAs(formFile);
+			resultInfo = await Utility.FileUploadSaveAs(formFile);
 			return Json(resultInfo);
 		}
 
@@ -43,8 +50,15 @@ namespace JXWebHost.Controllers
 		[HttpPost]
 		public async Task<IActionResult> UploadImageHandle(bool isThumb = false, bool isWaterMark = false)
 		{
+			ResultInfo resultInfo = new ResultInfo();
+			var uploadConfig = ConfigHelper.Get<UploadFilesConfig>();
+			if (!uploadConfig.EnableUploadFiles)
+			{
+				resultInfo.Msg = "没有开启上传权限";
+				return Json(resultInfo);
+			}
 			var formFile = Request.Form.Files[0];
-			ResultInfo resultInfo = await Utility.FileUploadSaveAs(formFile,"","","", isThumb, isWaterMark);
+			resultInfo = await Utility.FileUploadSaveAs(formFile,"","","", isThumb, isWaterMark);
 			return Json(resultInfo);
 		}
 
