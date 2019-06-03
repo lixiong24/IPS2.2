@@ -23,5 +23,26 @@ namespace JX.Core
 		/// <param name="logPriority">日志等级</param>
 		/// <param name="logSource">异常信息</param>
 		void SaveLog(string logTitle, string logMsg, string userName = "", LogCategory logCategory = LogCategory.SystemAction, LogPriority logPriority = LogPriority.Normal, string logSource = "");
+
+		/// <summary>
+		/// 根据日志ID删除日志信息，但保留最近两天之内的数据
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
+		bool BatchDel(string ids="");
+		/// <summary>
+		/// 删除最后范围的日志信息，但保留最近两天之内的数据。如：最后一万条
+		/// </summary>
+		/// <param name="offset"></param>
+		/// <param name="category"></param>
+		/// <returns></returns>
+		bool BatchDel(int offset, int category = -1);
+		/// <summary>
+		/// 根据记录时间删除日志信息
+		/// </summary>
+		/// <param name="time"></param>
+		/// <param name="category"></param>
+		/// <returns></returns>
+		bool BatchDel(DateTime time, int category = -1);
 	}
 }

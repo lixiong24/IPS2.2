@@ -60,6 +60,87 @@ namespace JX.EF.Repository
 			Add(info);
 		}
 
+		/// <summary>
+		/// 根据日志ID删除日志信息，但保留最近两天之内的数据
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
+		public bool BatchDel(string ids)
+		{
+			if(!DataValidator.IsValidId(ids))
+			{
+				return false;
+			}
+			string strSQL = "DELETE FROM Log WHERE LogID IN ( " + ids + " ) AND [Timestamp] < DATEADD(dd,-2,GETDATE())";
+			int result = ExeSQL(strSQL);
+			if(result > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		/// <summary>
+		/// 删除指定日期以前的记录
+		/// </summary>
+		/// <param name="time"></param>
+		/// <param name="category"></param>
+		/// <returns></returns>
+		public bool BatchDel(DateTime time, int category = -1)
+		{
+			string filter = "";
+			if (category >= 0)
+			{
+				filter = " and Category=" + category;
+			}
+			string strSQL = "DELETE FROM Log WHERE DATEDIFF(dd, [timestamp], '"+ time.ToString("yyyy-MM-dd") + "') > 0" + filter;
+			int result = ExeSQL(strSQL);
+			if (result > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		/// <summary>
+		/// 删除最后范围的日志信息，但保留最近两天之内的数据。如：最后一万条
+		/// </summary>
+		/// <param name="offset">删除数量</param>
+		/// <param name="category"></param>
+		/// <returns></returns>
+		public bool BatchDel(int offset, int category = -1)
+		{
+			string filter = "";
+			if (category >= 0)
+			{
+				filter = " and Category=" + category;
+			}
+			string strSQL = "SELECT COUNT([LogId]) FROM Log WHERE DATEDIFF(dd, [timestamp], '" + DateTime.Today.AddDays(-2.0).ToString("yyyy-MM-dd") + "') > 0" + filter;
+			var resultCount = SqlQueryOne<int>(strSQL);
+			if(resultCount.Count <= 0)
+			{
+				return true;
+			}
+			int num = resultCount[0];
+			if (offset > num)
+			{
+				offset = num;
+			}
+			strSQL = "DELETE Log WHERE [LogId] < (SELECT MAX(LogId) FROM (SELECT TOP " + (offset + 1) + " LogId FROM Log where 1=1 " + filter + " ORDER BY LogId asc) AS T) " + filter;
+			int result = ExeSQL(strSQL);
+			if (result > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 	}
 }

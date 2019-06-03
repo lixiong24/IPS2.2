@@ -32,6 +32,7 @@ namespace JX.EF
 		public Repository(ApplicationDbContext Context)
 		{
 			_Context = Context;
+			_Context.Database.SetCommandTimeout(90);
 		}
 
 		#endregion
@@ -1744,7 +1745,10 @@ namespace JX.EF
 			parameterArray[6] = parmFilter;
 			parameterArray[7] = parmTotal;
 			DataTable dt = CreateDataTable("Common_GetList",true, parameterArray);
-			Total = Convert.ToInt32(parmTotal.Value);
+			string strWhere = (!string.IsNullOrEmpty(Filter)) ? " where " + Filter : "";
+			string strSQLCount = "select count(*) from "+ TableName + " "+ strWhere;
+			var resultCount = SqlQueryOne<int>(strSQLCount);
+			Total = resultCount[0];//Convert.ToInt32(parmTotal.Value);
 			return dt;
 		}
 		/// <summary>
@@ -1811,7 +1815,10 @@ namespace JX.EF
 			parameterArray[8] = parmFilter;
 			parameterArray[9] = parmTotal;
 			DataTable dt = CreateDataTable("Common_GetListBySortColumn", true, parameterArray);
-			Total = Convert.ToInt32(parmTotal.Value);
+			string strWhere = (!string.IsNullOrEmpty(Filter)) ? " where " + Filter : "";
+			string strSQLCount = "select count(*) from " + TableName + " " + strWhere;
+			var resultCount = SqlQueryOne<int>(strSQLCount);
+			Total = resultCount[0];//Convert.ToInt32(parmTotal.Value);
 			return dt;
 		}
 		#endregion
