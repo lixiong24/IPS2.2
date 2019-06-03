@@ -22,5 +22,6 @@
 		<siteMapNode title="IP访问配置" url="/Admin/SiteConfig/IPLockConfig"/>
 		<siteMapNode title="商城参数配置" url="/Admin/SiteConfig/ShopConfig"/>
 		<siteMapNode title="商城模板配置" url="/Admin/SiteConfig/ShopTemplateConfig"/>
+		<siteMapNode title="系统日志" url="/Admin/SiteConfig/LogManager"/>
 	</siteMapNode>
 </siteMap>

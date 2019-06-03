@@ -112,6 +112,9 @@
 		<mainMenu id="MemberExpenditure" title="会员购物额排名" operateCode="None" leftUrl="Shop/MemberExpenditureGuide.aspx" rightUrl="Shop/MemberExpenditure.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
 		<mainMenu id="MemberOrderliness" title="会员购物规律分析" operateCode="None" leftUrl="Shop/MemberOrderlinessGuide.aspx" rightUrl="Shop/MemberOrderliness.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
+	<channelMenu id="TrademarkManage" title="品牌管理" operateCode="TrademarkManage" icon="&#xe62e;" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="BrandManage" title="所有品牌" operateCode="BrandManage" rightUrl="/Admin/Shop/BrandManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	</channelMenu>
 	<channelMenu id="DeliverType" title="配送方式管理" operateCode="DeliverType" icon="&#xe669;" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="DeliverTypeManager" title="送货方式管理" operateCode="DeliverTypeManage" rightUrl="Shop/DeliverTypeManage.aspx" ShowOnForm="true" Description="" />
 		<mainMenu id="AddressManage" title="收货地址管理" operateCode="AddressManage" rightUrl="Shop/AddressManage.aspx" ShowOnForm="true" Description="" />
@@ -243,7 +246,7 @@
 		<mainMenu id="CacheManage" title="缓存管理" operateCode="CacheManage" leftUrl="Accessories/CacheManageGuide.aspx" rightUrl="Accessories/CacheManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ChoicesetCrmManage" title="数据字典管理" operateCode="" leftUrl="Crm/ChoicesetCrmGuide.aspx" rightUrl="Crm/ChoicesetCrm.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
 		<mainMenu id="RegionManage" title="行政区划管理" operateCode="" leftUrl="Accessories/RegionGuide.aspx" rightUrl="Accessories/RegionManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="LogManager" title="网站日志管理" operateCode="LogManager" leftUrl="Accessories/LogManagerGuide.aspx" rightUrl="Accessories/LogManager.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		
 	</channelMenu>
 	<channelMenu id="ModelManage" title="模型管理" operateCode="ModelManage" icon="&#xe72d;" ShowOnForm="false" ShowOnMenu="true" Description="">
 		<mainMenu id="ContentModel" title="内容模型管理" operateCode="ContentModel" rightUrl="Contents/ModelManage.aspx" ShowOnForm="false" Description="" />
@@ -268,6 +271,6 @@
 		<mainMenu id="IPLockConfig" title="IP访问配置" operateCode="IPLockConfig" rightUrl="/Admin/SiteConfig/IPLockConfig" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ShopConfig" title="商城参数配置" operateCode="ShopConfig" rightUrl="/Admin/SiteConfig/ShopConfig" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ShopTemplateConfig" title="商城模板配置" operateCode="ShopTemplateConfig" rightUrl="/Admin/SiteConfig/ShopTemplateConfig" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="TrademarkManage" title="品牌管理" operateCode="TrademarkManage" rightUrl="Shop/TrademarkManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="LogManager" title="系统日志" operateCode="LogManager" rightUrl="/Admin/SiteConfig/LogManager" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 </menu>
