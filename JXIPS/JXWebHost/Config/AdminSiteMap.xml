@@ -12,6 +12,25 @@
 			<siteMapNode title="字段权限设置" url="/Admin/Administrator/RoleFieldPermissions" />
 		</siteMapNode>
 	</siteMapNode>
+	<siteMapNode title="附件管理" url="/Admin/Plus">
+		<siteMapNode title="站内信管理" url="/Admin/Plus/MessageManage"/>
+		<siteMapNode title="邮件发送" url="/Admin/Plus/MailListSend"/>
+		<siteMapNode title="数据字典管理" url="/Admin/Plus/ChoicesetManage"/>
+		<siteMapNode title="行政区划管理" url="/Admin/Plus/RegionManage"/>
+	</siteMapNode>
+	<siteMapNode title="模型管理" url="/Admin/CommonModel">
+		<siteMapNode title="内容模型管理" url="/Admin/CommonModel/ContentModel"/>
+		<siteMapNode title="商品模型管理" url="/Admin/CommonModel/ProductModel"/>
+		<siteMapNode title="会员扩展字段" url="/Admin/CommonModel/UserOptionModel"/>
+		<siteMapNode title="商户扩展字段" url="/Admin/CommonModel/CompanyOptionModel"/>
+		<siteMapNode title="订单扩展字段" url="/Admin/CommonModel/OrderOptionModel"/>
+	</siteMapNode>
+	<siteMapNode title="模板标签管理" url="/Admin/Template">
+		<siteMapNode title="标签管理" url="/Admin/Template/LabelManage"/>
+		<siteMapNode title="风格管理" url="/Admin/Template/StyleManage"/>
+		<siteMapNode title="模板管理" url="/Admin/Template/TemplateManage"/>
+		<siteMapNode title="动态页模板配置" url="/Admin/Template/FrontPageTemplateConfig"/>
+	</siteMapNode>
 	<siteMapNode title="系统管理" url="/Admin/SiteConfig">
 		<siteMapNode title="网站信息配置" url="/Admin/SiteConfig/Index"/>
 		<siteMapNode title="常规参数配置" url="/Admin/SiteConfig/SiteOption"/>

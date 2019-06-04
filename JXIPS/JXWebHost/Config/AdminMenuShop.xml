@@ -234,32 +234,23 @@
 		<mainMenu id="CreateHtmlProgress" title="查看生成进度" operateCode="CreateHtmlManage" leftUrl="Contents/CreateHtmlGuide.aspx" rightUrl="Contents/CreateHtmlProgress.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="Plus" title="附件管理" operateCode="Plus" icon="&#xe63c;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ADManage" title="广告管理" operateCode="AdManage" leftUrl="ADZone/ADGuide.aspx" rightUrl="ADZone/ADManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="ADZoneManage" title="广告版位管理" operateCode="AdManage" leftUrl="ADZone/ADZoneGuide.aspx" rightUrl="ADZone/ADZoneManage.aspx" ShowOnForm="false" Description="" />
-			<subMenu id="ADManage" title="广告管理" operateCode="AdManage" leftUrl="ADZone/ADGuide.aspx" rightUrl="ADZone/ADManage.aspx" ShowOnForm="false" Description="" />
-		</mainMenu>
-		<mainMenu id="SendInfoManage" title="信息发送管理" operateCode="SendInfoManage" leftUrl="" rightUrl="" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="MessageManage" title="站内信管理" operateCode="MessageManage" leftUrl="Accessories/MessageGuide.aspx" rightUrl="Accessories/MessageManage.aspx" ShowOnForm="true" Description="" />
-			<subMenu id="MailListSend" title="邮件发送" operateCode="MailListSend" leftUrl="Accessories/MailListGuide.aspx" rightUrl="Accessories/MailListSend.aspx" ShowOnForm="true" Description="" />
-		</mainMenu>
-		<mainMenu id="FileManage" title="上传文件管理" operateCode="UploadFiledManage" leftUrl="Accessories/FilesGuide.aspx" rightUrl="Accessories/FileManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="CacheManage" title="缓存管理" operateCode="CacheManage" leftUrl="Accessories/CacheManageGuide.aspx" rightUrl="Accessories/CacheManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ChoicesetCrmManage" title="数据字典管理" operateCode="" leftUrl="Crm/ChoicesetCrmGuide.aspx" rightUrl="Crm/ChoicesetCrm.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="RegionManage" title="行政区划管理" operateCode="" leftUrl="Accessories/RegionGuide.aspx" rightUrl="Accessories/RegionManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		
+		<mainMenu id="MessageManage" title="站内信管理" operateCode="MessageManage" rightUrl="/Admin/Plus/MessageManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="MailListSend" title="邮件发送" operateCode="MailListSend" rightUrl="/Admin/Plus//MailListSend" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ChoicesetManage" title="数据字典管理" operateCode="ChoicesetManage" rightUrl="/Admin/Plus/ChoicesetManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="RegionManage" title="行政区划管理" operateCode="RegionManage" rightUrl="/Admin/Plus/RegionManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="ModelManage" title="模型管理" operateCode="ModelManage" icon="&#xe72d;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="ContentModel" title="内容模型管理" operateCode="ContentModel" rightUrl="Contents/ModelManage.aspx" ShowOnForm="false" Description="" />
-		<mainMenu id="ProductModelManage" title="商品模型管理" operateCode="ProductModelManage" rightUrl="Shop/ProductModelManage.aspx" ShowOnForm="false" Description="" />
-		<mainMenu id="UserOptionModelManage" title="会员扩展字段" operateCode="UserOptionModelManage" rightUrl="CommonModel/FieldManage.aspx?ModelType=4" ShowOnForm="false" Description="" />
-		<mainMenu id="CompanyOption" title="商户扩展字段" operateCode="CompanyOptionModelManage" rightUrl="CommonModel/FieldManage.aspx?ModelType=5" ShowOnForm="false" Description="" />
-		<mainMenu id="OrderOptionModelManage" title="订单扩展字段" operateCode="OrderOptionModelManage" rightUrl="CommonModel/FieldManage.aspx?ModelType=3" ShowOnForm="false" Description="" />
+		<mainMenu id="ContentModel" title="内容模型管理" operateCode="ContentModel" rightUrl="/Admin/CommonModel/ContentModel" ShowOnForm="false" Description="" />
+		<mainMenu id="ProductModelManage" title="商品模型管理" operateCode="ProductModelManage" rightUrl="/Admin/CommonModel/ProductModel" ShowOnForm="false" Description="" />
+		<mainMenu id="UserOptionModelManage" title="会员扩展字段" operateCode="UserOptionModelManage" rightUrl="/Admin/CommonModel/UserOptionModel" ShowOnForm="false" Description="" />
+		<mainMenu id="CompanyOption" title="商户扩展字段" operateCode="CompanyOptionModelManage" rightUrl="/Admin/CommonModel/CompanyOptionModel" ShowOnForm="false" Description="" />
+		<mainMenu id="OrderOptionModelManage" title="订单扩展字段" operateCode="OrderOptionModelManage" rightUrl="/Admin/CommonModel/OrderOptionModel" ShowOnForm="false" Description="" />
 	</channelMenu>
 	<channelMenu id="TemplateLabelManage" title="模板标签管理" operateCode="TemplateLabelManage" icon="&#xe64b;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="LabelManage" title="标签管理" operateCode="LabelManage" rightUrl="Template/LabelManage.aspx" ShowOnForm="false" Description="" />
-		<mainMenu id="StyleManage" title="风格管理" operateCode="StyleManage" rightUrl="Template/StyleManage.aspx" ShowOnForm="false" Description="" />
-		<mainMenu id="TemplateManage" title="模板管理" operateCode="TemplateManage" rightUrl="Template/TemplateManage.aspx" ShowOnForm="false" Description="" />
-		<mainMenu id="FrontPageTemplateConfig" title="动态页模板配置" operateCode="DynamicPageConfig" rightUrl="Configuration/FrontPageTemplateConfig.aspx" ShowOnForm="false" Description="" />
+		<mainMenu id="LabelManage" title="标签管理" operateCode="LabelManage" rightUrl="/Admin/Template/LabelManage" ShowOnForm="false" Description="" />
+		<mainMenu id="StyleManage" title="风格管理" operateCode="StyleManage" rightUrl="/Admin/Template/StyleManage" ShowOnForm="false" Description="" />
+		<mainMenu id="TemplateManage" title="模板管理" operateCode="TemplateManage" rightUrl="/Admin/Template/TemplateManage" ShowOnForm="false" Description="" />
+		<mainMenu id="FrontPageTemplateConfig" title="动态页模板配置" operateCode="DynamicPageConfig" rightUrl="/Admin/Template/FrontPageTemplateConfig" ShowOnForm="false" Description="" />
 	</channelMenu>
 	<channelMenu id="SiteManage" title="系统管理" operateCode="SiteManage" icon="&#xe62e;" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="SiteInfo" title="网站信息配置" operateCode="SiteInfo" rightUrl="/Admin/SiteConfig/Index" ShowOnForm="true" ShowOnMenu="true" Description="" />
