@@ -1,56 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu>
 	<channelMenu id="NodesManage" title="栏目管理" operateCode="NodesManage" icon="&#xe681;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="NodesList" title="所有栏目" operateCode="NodesManage" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/CategoryManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description=""></mainMenu>
-		<mainMenu id="Category" title="添加栏目节点" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/Category.aspx?Action=add" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="BatchCategory" title="批量添加节点" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/Category.aspx?Action=add&amp;AddType=BatchCategory" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="Single" title="添加单页节点" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/Single.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="OutLink" title="添加外部链接" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/OutLink.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CategoryOrder" title="节点排序" operateCode="None" leftUrl="Contents/CategoryOrderGuide.aspx" rightUrl="Contents/CategoryOrder.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CategoryUnite" title="合并节点" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/CategoryUnite.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CategoryMove" title="移动节点" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/CategoryMove.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CategoryBatchSet" title="批量设置" operateCode="None" leftUrl="Contents/CategoryGuide.aspx" rightUrl="Contents/CategoryBatchSet.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="NodesList" title="所有栏目" operateCode="NodesManage" rightUrl="/Admin/Category/CategoryManage" ShowOnForm="true" ShowOnMenu="true" Description=""></mainMenu>
+		<mainMenu id="Category" title="添加栏目节点" operateCode="None" rightUrl="/Admin/Category/CategoryEdit" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="BatchCategory" title="批量添加节点" operateCode="None" rightUrl="/Admin/Category/BatchCategory" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="Single" title="添加单页节点" operateCode="None" rightUrl="/Admin/Category/Single" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="OutLink" title="添加外部链接" operateCode="None" rightUrl="/Admin/Category/OutLink" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryOrder" title="节点排序" operateCode="None" rightUrl="/Admin/Category/CategoryOrder" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryUnite" title="合并节点" operateCode="None" rightUrl="/Admin/Category/CategoryUnite" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryMove" title="移动节点" operateCode="None" rightUrl="/Admin/Category/CategoryMove" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryBatchSet" title="批量设置" operateCode="None" rightUrl="/Admin/Category/CategoryBatchSet" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="ContentManage" title="内容管理" operateCode="ContentManage" icon="&#xe616;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ContentManage" title="信息管理" operateCode="InfoManage" leftUrl="Contents/NodeTree.aspx" rightUrl="Contents/ContentManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="CategoryInfoManage" title="内容管理" operateCode="CategoryInfoManage" leftUrl="Contents/NodeTree.aspx?ShowType=ContentManage" rightUrl="Contents/ContentManage.aspx" ShowOnForm="true" Description="" />
-			<subMenu id="MyInformation" title="我添加的信息" operateCode="CategoryInfoManage" leftUrl="Contents/NodeTree.aspx?ShowType=ContentManage&amp;MyInformation=true" rightUrl="Contents/ContentManage.aspx?MyInformation=true" ShowOnForm="false" Description="" />
-			<subMenu id="CategoryInfoImport" title="批量导入" operateCode="ContentImport" leftUrl="Contents/NodeTree.aspx" rightUrl="Contents/ContentImport.aspx" ShowOnForm="false" ShowOnMenu="false" Description="" />
-			<subMenu id="CategoryRecycleInfoManage" title="回收站管理" operateCode="CategoryRecycleInfoManage" leftUrl="Contents/NodeTree.aspx?ShowType=ContentRecycle" rightUrl="Contents/ContentRecycle.aspx" ShowOnForm="true" Description="" />
-		</mainMenu>
-		<mainMenu id="CommentManage" title="评论管理" operateCode="CommentManage" leftUrl="Contents/CommentGuide.aspx" rightUrl="Contents/CommentManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="ModifyComment" title="修改评论" operateCode="CommentManage" leftUrl="Contents/CommentGuide.aspx" rightUrl="Contents/CommentModify.aspx" ShowOnMenu="false" ShowOnForm="false" Description="" />
-			<subMenu id="ModifyCommentReply" title="修改回复评论" operateCode="CommentManage" leftUrl="Contents/CommentGuide.aspx" rightUrl="Contents/CommentReplyModify.aspx" ShowOnMenu="false" ShowOnForm="false" Description="" />
-		</mainMenu>
-		<mainMenu id="ConvertManage" title="内容转换" operateCode="" leftUrl="" rightUrl="" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="InsideLinkManage" title="站内链接管理" operateCode="InsideLinkManage" leftUrl="Accessories/InsideLinkGuide.aspx" rightUrl="Accessories/InsideLinkManage.aspx" ShowOnForm="true" Description="" />
-			<subMenu id="WordFilterManage" title="字符过滤管理" operateCode="WordFilterManage" leftUrl="Accessories/WordFilterGuide.aspx" rightUrl="Accessories/WordFilterManage.aspx" ShowOnForm="true" Description="" />
-		</mainMenu>
-		<mainMenu id="AccessoriesManage" title="其他管理" operateCode="AccessoriesManage" leftUrl="" rightUrl="" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="KeyWordManage" title="关键字管理" operateCode="KeyWordManage" leftUrl="Accessories/KeyWordGuide.aspx" rightUrl="Accessories/KeyWordManage.aspx" ShowOnForm="true" Description="" />
-		</mainMenu>
-		<mainMenu id="IntegralProductManage" title="积分商品兑换管理" operateCode="" leftUrl="Contents/NodeTree.aspx" rightUrl="Contents/IntegralProductLogManage.aspx" ShowOnForm="false"  ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryInfoManage" title="信息管理" operateCode="CategoryInfoManage" rightUrl="/Admin/Contents/ContentManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="MyInformation" title="我添加的信息" operateCode="MyInformation" rightUrl="/Admin/Contents/MyInformation" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryInfoImport" title="批量导入" operateCode="ContentImport" rightUrl="/Admin/Contents/ContentImport" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="InsideLinkManage" title="站内链接管理" operateCode="InsideLinkManage" rightUrl="/Admin/Contents/InsideLinkManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="WordFilterManage" title="字符过滤管理" operateCode="WordFilterManage" rightUrl="/Admin/Contents/WordFilterManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="KeyWordManage" title="关键字管理" operateCode="KeyWordManage" rightUrl="/Admin/Contents/KeyWordManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategoryRecycleInfoManage" title="信息回收站" operateCode="CategoryRecycleInfoManage" rightUrl="/Admin/Contents/ContentRecycle" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	</channelMenu>
+	<channelMenu id="Comment" title="评论管理" operateCode="CommentManage" icon="&#xe622;" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="CommentManage" title="所有评论" operateCode="CommentManage" rightUrl="/Admin/Comment/CommentManage" ShowOnMenu="true" ShowOnForm="true" Description="" />
+		<mainMenu id="ModifyComment" title="修改评论" operateCode="CommentManage" rightUrl="/Admin/Comment/CommentModify" ShowOnMenu="true" ShowOnForm="true" Description="" />
+		<mainMenu id="ModifyCommentReply" title="修改回复评论" operateCode="CommentManage" rightUrl="/Admin/Comment/CommentReplyModify" ShowOnMenu="true"  ShowOnForm="true" Description="" />
 	</channelMenu>
 	<channelMenu id="Product" title="商品管理" operateCode="Products" icon="&#xe620;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ProductManage" title="商品列表" operateCode="ProductManage" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="AddProduct" title="添加商品" operateCode="NodeContentInput" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/Product.aspx?Action=add" ShowOnMenu="true" ShowOnForm="true" Description="" />
-		<mainMenu id="StockManage" title="库存管理" operateCode="StockManage" leftUrl="Shop/StockGuide.aspx" rightUrl="Shop/StockManage.aspx" ShowOnMenu="true" ShowOnForm="true" Description="">
-			<subMenu id="StockIn" title="添加入库单" operateCode="StockManage" leftUrl="Shop/StockGuide.aspx" rightUrl="Shop/stock.aspx?Action=InStock" ShowOnForm="false" ShowOnMenu="true" Description="" />
-			<subMenu id="StockOut" title="添加出库单" operateCode="StockManage" leftUrl="Shop/StockGuide.aspx" rightUrl="Shop/stock.aspx?Action=Shipment" ShowOnForm="false" ShowOnMenu="true" Description="" />
-			<subMenu id="StockNeed" title="需补货清单" operateCode="StockManage" leftUrl="Shop/StockGuide.aspx" rightUrl="Shop/FillProductsList.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-			<subMenu id="StockBookWarn" title="预订库存报警" operateCode="StockManage" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductManage.aspx?StockWarn=BookWarn" ShowOnForm="false" ShowOnMenu="true" Description="" />
-			<subMenu id="StockFactWarn" title="实际库存报警" operateCode="StockManage" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductManage.aspx?StockWarn=FactWarn" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		</mainMenu>
-		<mainMenu id="ProductBatchManage" title="商品批量操作" operateCode="ProductBatchManage" leftUrl="" rightUrl="" ShowOnMenu="true" ShowOnForm="true" Description="">
-			<subMenu id="ProductBatchModify" title="商品批量编辑" operateCode="ProductBatchModify" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductBatchModify.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="ProductImport" title="商品批量导入" operateCode="ProductImport" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductImport.aspx" ShowOnForm="false"  ShowOnMenu="true" Description="" />
-		</mainMenu>
-		<mainMenu id="OutOfStockLogManage" title="缺货登记管理" operateCode="OutOfStockLogManage" leftUrl="Shop/OutOfStockLogGuide.aspx" rightUrl="Shop/OutOfStockLogManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ProductRecycle" title="回收站管理" operateCode="ProductRecycle" leftUrl="Shop/ShopNodeTree.aspx" rightUrl="Shop/ProductRecycle.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductManage" title="商品列表" operateCode="ProductManage" rightUrl="/Admin/Shop/ProductManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductBatchModify" title="商品批量编辑" operateCode="ProductBatchModify" rightUrl="/Admin/Shop/ProductBatchModify" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductImport" title="商品批量导入" operateCode="ProductImport" rightUrl="/Admin/Shop/ProductImport" ShowOnForm="true"  ShowOnMenu="true" Description="" />
+		<mainMenu id="OutOfStockLogManage" title="缺货登记管理" operateCode="OutOfStockLogManage" rightUrl="/Admin/Shop/OutOfStockLogManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="StockManage" title="库存管理" operateCode="StockManage" rightUrl="/Admin/Shop/StockManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="StockNeed" title="需补货清单" operateCode="StockManage" rightUrl="/Admin/Shop/FillProductsList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="StockBookWarn" title="预订库存报警" operateCode="StockManage" rightUrl="/Admin/Shop/ProductManage?StockWarn=BookWarn" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="StockFactWarn" title="实际库存报警" operateCode="StockManage" rightUrl="/Admin/Shop/ProductManage?StockWarn=FactWarn" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="BrandManage" title="品牌管理" operateCode="BrandManage" rightUrl="/Admin/Shop/BrandManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductRecycle" title="商品回收站" operateCode="ProductRecycle" rightUrl="/Admin/Shop/ProductRecycle" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="Sale" title="订单管理" operateCode="OrderSuperManage" icon="&#xe627;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ShoppingCartManage" title="购物车" operateCode="ShoppingCartManage" leftUrl="Shop/ShoppingCartGuide.aspx" rightUrl="Shop/ShoppingCartManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="OrderManage" title="订单处理" operateCode="OrderManage" leftUrl="Shop/OrderGuide.aspx" rightUrl="Shop/OrderList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="OrderManage" title="订单处理" operateCode="OrderManage" rightUrl="/Admin/Shop/OrderList" ShowOnForm="true" ShowOnMenu="true" Description="">
 			<Purview id="OrderView" title="处理所有订单" operateCode="OrderView" Description="" ShowOnForm="true"  ShowOnMenu="true" />
 			<Purview id="OrderViewPart" title="处理部分订单（无论哪种方式进入订单列表页，只显示前20个订单，下面不显示订单统计，没有翻页。高级搜索和导出也是只查询符合结果的前20个订单）" operateCode="OrderViewPart" Description="" ShowOnForm="true" ShowOnMenu="false" />
 			<Purview id="OrderViewMy" title="处理自己跟进的订单" operateCode="OrderViewMy" Description="" ShowOnForm="true" ShowOnMenu="false" />
@@ -79,111 +67,101 @@
 			<Purview id="BtnMessage" title="站内短信" operateCode="InteriorMessage" Description="" ShowOnForm="true" ShowOnMenu="false" />
 			<Purview id="BtnMobileMessage" title="手机短信" operateCode="MobileMessage" Description="" ShowOnForm="true" ShowOnMenu="false" />
 		</mainMenu>
-		<mainMenu id="OrderAdd" title="添加订单" operateCode="OrderAdd" leftUrl="Shop/OrderGuide.aspx" rightUrl="Shop/OrderAdd.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="OnsignmentList" title="发货处理" operateCode="OnsignmentList" leftUrl="Shop/ConsignmentGuide.aspx" rightUrl="Shop/ConsignmentList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="NoConfirmBankrollItemList" title="汇款确认" operateCode="BankrollItemList" leftUrl="User/BankrollItemListGuide.aspx" rightUrl="User/BankrollItemList.aspx?Action=NoConfirm" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="DetailLog" title="明细记录" operateCode="DetailLog" leftUrl="Shop/SaleListGuide.aspx" rightUrl="Shop/SaleList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<subMenu id="ShopBankrollItemList" title="资金明细管理" operateCode="BankrollItemList" leftUrl="User/BankrollItemListGuide.aspx" rightUrl="User/BankrollItemList.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-			<subMenu id="SaleList" title="产品销售明细" operateCode="SaleList" leftUrl="Shop/SaleListGuide.aspx" rightUrl="Shop/SaleList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="ShopPaymentLogManage" title="在线支付明细" operateCode="PaymentLogManage" leftUrl="User/PaymentLogGuide.aspx" rightUrl="User/PaymentLogManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="InvoiceItemList" title="开发票明细" operateCode="InvoiceItemList" leftUrl="Shop/InvoiceItemListGuide.aspx" rightUrl="Shop/InvoiceItemList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="DeliverItemList" title="发退货明细" operateCode="DeliverItemList" leftUrl="Shop/DeliverItemListGuide.aspx" rightUrl="Shop/DeliverItemList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="TransferLogManage" title="订单过户明细" operateCode="TransferLogManage" leftUrl="Shop/TransferLogGuide.aspx" rightUrl="Shop/TransferLogManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-			<subMenu id="OrderFeedbackManage" title="订单反馈明细" operateCode="OrderFeedbackManage" leftUrl="Shop/OrderFeedbackGuide.aspx" rightUrl="Shop/OrderFeedbackManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		</mainMenu>
+		<mainMenu id="OnsignmentList" title="发货处理" operateCode="OnsignmentList" rightUrl="/Admin/Shop/ConsignmentList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="SaleList" title="产品销售明细" operateCode="SaleList" rightUrl="/Admin/Shop/SaleList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ShopBankrollItemList" title="资金明细管理" operateCode="BankrollItemList" rightUrl="/Admin/Finance/BankrollItemList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ShopPaymentLogManage" title="在线支付明细" operateCode="PaymentLogManage" rightUrl="/Admin/Finance/PaymentLogManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="InvoiceItemList" title="开发票明细" operateCode="InvoiceItemList" rightUrl="/Admin/Shop/InvoiceItemList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="DeliverItemList" title="发退货明细" operateCode="DeliverItemList" rightUrl="/Admin/Shop/DeliverItemList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="TransferLogManage" title="订单过户明细" operateCode="TransferLogManage" rightUrl="/Admin/Shop/TransferLogManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="OrderFeedbackManage" title="订单反馈明细" operateCode="OrderFeedbackManage" rightUrl="/Admin/Shop/OrderFeedbackManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ShoppingCartManage" title="购物车" operateCode="ShoppingCartManage" rightUrl="/Admin/Shop/ShoppingCartManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="PromotionManage" title="营销管理" operateCode="PromotionSuperManage" icon="&#xe6bb;" leftUrl="Shop/PresentGuide.aspx" rightUrl="Shop/PresentManager.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="Present" title="添加促销礼品" operateCode="PromotionAdd" leftUrl="Shop/PresentGuide.aspx" rightUrl="Shop/Present.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PresentManage" title="促销礼品管理" operateCode="PromotionManage" leftUrl="Shop/PresentGuide.aspx" rightUrl="Shop/PresentManager.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PromotionProject" title="添加促销方案" operateCode="PromotionProjectAdd" leftUrl="Shop/PresentProjectGuide.aspx" rightUrl="Shop/PresentProject.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PromotionProjectManage" title="促销方案管理" operateCode="PromotionProject" leftUrl="Shop/PresentProjectGuide.aspx" rightUrl="Shop/PresentProjectManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="Coupon" title="添加优惠券规则" operateCode="Coupon" leftUrl="Shop/CouponGuide.aspx" rightUrl="Shop/Coupon.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CouponManage" title="优惠券规则管理" operateCode="Coupon" leftUrl="Shop/CouponGuide.aspx" rightUrl="Shop/CouponManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CouponList" title="优惠券管理" operateCode="Coupon" leftUrl="Shop/CouponGuide.aspx" rightUrl="Shop/CouponList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	<channelMenu id="PromotionManage" title="促销管理" operateCode="PromotionSuperManage" icon="&#xe6bb;" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="PresentManage" title="促销礼品管理" operateCode="PromotionManage" rightUrl="/Admin/PromotionManage/PresentManager" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="PromotionProjectManage" title="促销方案管理" operateCode="PromotionProject" rightUrl="/Admin/PromotionManage/PresentProjectManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CouponManage" title="优惠券规则管理" operateCode="Coupon" rightUrl="/Admin/PromotionManage/CouponManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CouponList" title="优惠券管理" operateCode="Coupon" rightUrl="/Admin/PromotionManage/CouponList" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="SaleCount" title="销售统计" operateCode="SellCount" icon="&#xe61a;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="Total" title="总体销售统计" operateCode="None" leftUrl="Shop/TotalSaleGuide.aspx" rightUrl="Shop/TotalSale.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="Saleroom" title="销售额统计" operateCode="None" leftUrl="Shop/SaleroomGuide.aspx" rightUrl="Shop/Saleroom.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="SalesVolumn" title="商品销售量排名" operateCode="None" leftUrl="Shop/SaleCountGuide.aspx" rightUrl="Shop/SaleCount.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="ProductSaleroom" title="商品销售额排名" operateCode="None" leftUrl="Shop/SaleCountGuide.aspx" rightUrl="Shop/SaleCount.aspx?OrderType=2" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CompareHitsOrderNumber" title="商品访问购买率" operateCode="None" leftUrl="Shop/CompareHitsOrderNumberGuide.aspx" rightUrl="Shop/CompareHitsOrderNumber.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CategorySaleroom" title="商品类别销售排名" operateCode="None" leftUrl="Shop/CategorySaleroomGuide.aspx" rightUrl="Shop/CategorySaleroom.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="MemberOrders" title="会员订单量排名" operateCode="None" leftUrl="Shop/MemberOrdersGuide.aspx" rightUrl="Shop/MemberOrders.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="MemberExpenditure" title="会员购物额排名" operateCode="None" leftUrl="Shop/MemberExpenditureGuide.aspx" rightUrl="Shop/MemberExpenditure.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="MemberOrderliness" title="会员购物规律分析" operateCode="None" leftUrl="Shop/MemberOrderlinessGuide.aspx" rightUrl="Shop/MemberOrderliness.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-	</channelMenu>
-	<channelMenu id="TrademarkManage" title="品牌管理" operateCode="TrademarkManage" icon="&#xe62e;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="BrandManage" title="所有品牌" operateCode="BrandManage" rightUrl="/Admin/Shop/BrandManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="Total" title="总体销售统计" operateCode="None" rightUrl="/Admin/SellCount/TotalSale" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="Saleroom" title="销售额统计" operateCode="None" rightUrl="/Admin/SellCount/Saleroom" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="SalesVolumn" title="商品销售量排名" operateCode="None" rightUrl="/Admin/SellCount/SalesVolumn" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductSaleroom" title="商品销售额排名" operateCode="None" rightUrl="/Admin/SellCount/ProductSaleroom" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CompareHitsOrderNumber" title="商品访问购买率" operateCode="None" rightUrl="/Admin/SellCount/CompareHitsOrderNumber" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CategorySaleroom" title="商品类别销售排名" operateCode="None" rightUrl="/Admin/SellCount/CategorySaleroom" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="MemberOrders" title="会员订单量排名" operateCode="None" rightUrl="/Admin/SellCount/MemberOrders" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="MemberExpenditure" title="会员购物额排名" operateCode="None" rightUrl="/Admin/SellCount/MemberExpenditure" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="MemberOrderliness" title="会员购物规律分析" operateCode="None" rightUrl="/Admin/SellCount/MemberOrderliness" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="DeliverType" title="配送方式管理" operateCode="DeliverType" icon="&#xe669;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="DeliverTypeManager" title="送货方式管理" operateCode="DeliverTypeManage" rightUrl="Shop/DeliverTypeManage.aspx" ShowOnForm="true" Description="" />
-		<mainMenu id="AddressManage" title="收货地址管理" operateCode="AddressManage" rightUrl="Shop/AddressManage.aspx" ShowOnForm="true" Description="" />
-		<mainMenu id="CourierManage" title="快递公司管理" operateCode="CourierManage" rightUrl="Shop/CourierManage.aspx" ShowOnForm="true" Description="" />
+		<mainMenu id="DeliverTypeManager" title="送货方式管理" operateCode="DeliverTypeManage" rightUrl="/Admin/Deliver/DeliverTypeManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="AddressManage" title="收货地址管理" operateCode="AddressManage" rightUrl="/Admin/Deliver/AddressManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CourierManage" title="快递公司管理" operateCode="CourierManage" rightUrl="/Admin/Deliver/CourierManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="PaymentType" title="支付方式管理" operateCode="PaymentType" icon="&#xe732;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="PaymentTypeManage" title="付款方式管理" operateCode="PaymentTypeManage" rightUrl="Shop/PaymentTypeManage.aspx" ShowOnForm="true" Description="" />
-		<mainMenu id="BankAccountManage" title="银行账户管理" operateCode="BankAccountManage" rightUrl="Accessories/BankManage.aspx" ShowOnForm="true" Description="" />
-		<mainMenu id="PayPlatformManage" title="在线支付平台管理" operateCode="PayPlatformManage" rightUrl="Accessories/PayPlatformManage.aspx" ShowOnForm="true" Description="" />
+		<mainMenu id="PaymentTypeManage" title="付款方式管理" operateCode="PaymentTypeManage" rightUrl="/Admin/Payment/PaymentTypeManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="BankAccountManage" title="银行账户管理" operateCode="BankAccountManage" rightUrl="/Admin/Payment/BankManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="PayPlatformManage" title="在线支付平台管理" operateCode="PayPlatformManage" rightUrl="/Admin/Payment/PayPlatformManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="Crm" title="客户关系管理" operateCode="Crm" icon="&#xe62c;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ClientManage" title="客户管理" operateCode="ClientManage" leftUrl="Crm/ClientGuide.aspx" rightUrl="Crm/ClientManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="ClientView" title="查看所有客户信息" operateCode="ClientView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientViewOwn" title="查看自己的客户信息" operateCode="ClientViewOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientViewCommon" title="查看公共客户信息" operateCode="ClientViewCommon" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientAdd" title="添加客户" operateCode="ClientAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientModifyOwn" title="修改属于自己的客户信息" operateCode="ClientModifyOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientModifyAll" title="修改所有客户信息" operateCode="ClientModifyAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientModifyCommon" title="修改公共客户信息" operateCode="ClientModifyCommon" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientDelete" title="删除客户" operateCode="ClientDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientMoneyManage" title="客户资金管理" operateCode="ClientMoneyManage" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientSetPublic" title="设置公共客户" operateCode="ClientSetPublic" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientSetPublic" title="批量设为我的客户" operateCode="ClientAssociate" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientBatchSetAssociate" title="批量关联客户" operateCode="ClientBatchSetAssociate" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientMerge" title="合并客户" operateCode="ClientMerge" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="ClientManage" title="客户管理" operateCode="ClientManage" rightUrl="/Admin/Crm/ClientManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="ClientView" title="查看所有客户信息" operateCode="ClientView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientViewOwn" title="查看自己的客户信息" operateCode="ClientViewOwn" ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientViewCommon" title="查看公共客户信息" operateCode="ClientViewCommon" ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientAdd" title="添加客户" operateCode="ClientAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientModifyOwn" title="修改属于自己的客户信息" operateCode="ClientModifyOwn"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientModifyAll" title="修改所有客户信息" operateCode="ClientModifyAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientModifyCommon" title="修改公共客户信息" operateCode="ClientModifyCommon"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientDelete" title="删除客户" operateCode="ClientDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientMoneyManage" title="客户资金管理" operateCode="ClientMoneyManage"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientSetPublic" title="设置公共客户" operateCode="ClientSetPublic"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientSetPublic" title="批量设为我的客户" operateCode="ClientAssociate"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientBatchSetAssociate" title="批量关联客户" operateCode="ClientBatchSetAssociate"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientMerge" title="合并客户" operateCode="ClientMerge"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="ContacterManage" title="联系人管理" operateCode="ContacterManage" leftUrl="Crm/ContacterGuide.aspx" rightUrl="Crm/ContacterManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="ContacterView" title="查看联系人信息" operateCode="ContacterView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ContacterAdd" title="添加联系人" operateCode="ContacterAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ContacterModifyOwn" title="修改属于自己的联系人信息" operateCode="ContacterModifyOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ContacterModifyAll" title="修改所有联系人信息" operateCode="ContacterModifyAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ContacterDelete" title="删除联系人" operateCode="ContacterDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="ContacterManage" title="联系人管理" operateCode="ContacterManage" rightUrl="/Admin/Crm/ContacterManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="ContacterView" title="查看联系人信息" operateCode="ContacterView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ContacterAdd" title="添加联系人" operateCode="ContacterAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ContacterModifyOwn" title="修改属于自己的联系人信息" operateCode="ContacterModifyOwn"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ContacterModifyAll" title="修改所有联系人信息" operateCode="ContacterModifyAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ContacterDelete" title="删除联系人" operateCode="ContacterDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="ServiceManage" title="服务管理" operateCode="ServiceManage" leftUrl="Crm/ServiceGuide.aspx" rightUrl="Crm/ServiceManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="ServiceView" title="查看服务记录" operateCode="ServiceView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ServiceAdd" title="添加服务记录" operateCode="ServiceAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ServiceModifyOwn" title="修改自己添加的服务记录" operateCode="ServiceModifyOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ServiceModifyAll" title="修改所有服务记录" operateCode="ServiceModifyAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ServiceDelete" title="删除服务记录" operateCode="ServiceDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="ServiceManage" title="服务管理" operateCode="ServiceManage" rightUrl="/Admin/Crm/ServiceManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="ServiceView" title="查看服务记录" operateCode="ServiceView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ServiceAdd" title="添加服务记录" operateCode="ServiceAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ServiceModifyOwn" title="修改自己添加的服务记录" operateCode="ServiceModifyOwn"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ServiceModifyAll" title="修改所有服务记录" operateCode="ServiceModifyAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ServiceDelete" title="删除服务记录" operateCode="ServiceDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="ComplainManage" title="投诉管理" operateCode="ComplainManage" leftUrl="Crm/ComplainGuide.aspx" rightUrl="Crm/ComplainManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="ComplainView" title="查看投诉记录" operateCode="ComplainView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ComplainAdd" title="添加投诉记录" operateCode="ComplainAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ComplainModifyOwn" title="修改属于自己的投诉记录" operateCode="ComplainModifyOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ComplainModifyAll" title="修改所有投诉记录" operateCode="ComplainModifyAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ComplainDelete" title="删除投诉记录" operateCode="ComplainDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="CallView" title="查看回访记录" operateCode="CallView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="CallAdd" title="添加回访记录" operateCode="CallAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="CallModifyOwn" title="修改属于自己的回访记录" operateCode="CallModifyOwn" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="CallModifyAll" title="修改所有回访记录" operateCode="CallModifyAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="ComplainManage" title="投诉管理" operateCode="ComplainManage" rightUrl="/Admin/Crm/ComplainManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="ComplainView" title="查看投诉记录" operateCode="ComplainView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ComplainAdd" title="添加投诉记录" operateCode="ComplainAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ComplainModifyOwn" title="修改属于自己的投诉记录" operateCode="ComplainModifyOwn"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ComplainModifyAll" title="修改所有投诉记录" operateCode="ComplainModifyAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ComplainDelete" title="删除投诉记录" operateCode="ComplainDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="CallView" title="查看回访记录" operateCode="CallView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="CallAdd" title="添加回访记录" operateCode="CallAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="CallModifyOwn" title="修改属于自己的回访记录" operateCode="CallModifyOwn"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="CallModifyAll" title="修改所有回访记录" operateCode="CallModifyAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="ClientAnnalManage" title="联系记录管理" operateCode="ClientAnnalManage" leftUrl="Crm/ClientAnnalGuide.aspx" rightUrl="Crm/ClientAnnalManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="ClientAnnalView" title="查看联系记录" operateCode="ClientAnnalView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientAnnalAdd" title="添加联系记录" operateCode="ClientAnnalAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientAnnalUpdate" title="修改我的联系记录" operateCode="ClientAnnalUpdate" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientAnnalUpdateAll" title="修改所有联系记录" operateCode="ClientAnnalUpdateAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="ClientAnnalDelete" title="删除联系记录" operateCode="ClientAnnalDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="ClientAnnalManage" title="联系记录管理" operateCode="ClientAnnalManage" rightUrl="/Admin/Crm/ClientAnnalManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="ClientAnnalView" title="查看联系记录" operateCode="ClientAnnalView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientAnnalAdd" title="添加联系记录" operateCode="ClientAnnalAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientAnnalUpdate" title="修改我的联系记录" operateCode="ClientAnnalUpdate"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientAnnalUpdateAll" title="修改所有联系记录" operateCode="ClientAnnalUpdateAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="ClientAnnalDelete" title="删除联系记录" operateCode="ClientAnnalDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="RemindManage" title="预约提醒管理" operateCode="RemindItemManage" leftUrl="Crm/RemindItemGuide.aspx" rightUrl="Crm/RemindItemManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
-			<Purview id="RemindItemView" title="查看预约提醒记录" operateCode="RemindItemView" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="RemindItemAdd" title="添加预约提醒记录" operateCode="RemindItemAdd" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="RemindItemUpdate" title="修改我的预约提醒" operateCode="RemindItemUpdate" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="RemindItemUpdateAll" title="修改所有预约提醒" operateCode="RemindItemUpdateAll" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
-			<Purview id="RemindItemDelete" title="删除预约提醒记录" operateCode="RemindItemDelete" leftUrl="" rightUrl="" ShowOnMenu="false" ShowOnForm="true" Description="" />
+		<mainMenu id="RemindManage" title="预约提醒管理" operateCode="RemindItemManage" rightUrl="/Admin/Crm/RemindItemManage" ShowOnForm="true" ShowOnMenu="true" Description="">
+			<Purview id="RemindItemView" title="查看预约提醒记录" operateCode="RemindItemView"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="RemindItemAdd" title="添加预约提醒记录" operateCode="RemindItemAdd"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="RemindItemUpdate" title="修改我的预约提醒" operateCode="RemindItemUpdate"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="RemindItemUpdateAll" title="修改所有预约提醒" operateCode="RemindItemUpdateAll"  ShowOnMenu="false" ShowOnForm="true" Description="" />
+			<Purview id="RemindItemDelete" title="删除预约提醒记录" operateCode="RemindItemDelete"  ShowOnMenu="false" ShowOnForm="true" Description="" />
 		</mainMenu>
-		<mainMenu id="ChoicesetCrmManage" title="数据字典管理" operateCode="ChoicesetCrmManage" leftUrl="Crm/ChoicesetCrmGuide.aspx" rightUrl="Crm/ChoicesetCrm.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="UserSuperManage" title="会员管理" operateCode="UserSuperManage" icon="&#xe6cc;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu title="会员管理" id="UserManage" operateCode="UserManage" leftUrl="User/UserGuide.aspx" rightUrl="User/UserManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu title="会员管理" id="UserManage" operateCode="UserManage" rightUrl="/Admin/User/UserManage" ShowOnForm="true" ShowOnMenu="true" Description="">
 			<Purview id="UserAdd" title="添加会员" operateCode="UserAdd" Description="" ShowOnForm="true" />
 			<Purview id="UserView" title="查看会员信息" operateCode="UserView" Description="" ShowOnForm="true" />
 			<Purview id="UserModify" title="修改会员信息" operateCode="UserModify" Description="" ShowOnForm="true" />
@@ -201,37 +179,33 @@
 			<Purview id="UserValidDateLogManage" title="会员有效期明细管理" operateCode="UserValidDateLogManage" Description="" ShowOnForm="true" />
 			<Purview id="ChangeUser" title="进入会员中心" operateCode="ChangeUser" Description="" ShowOnForm="true" />
 		</mainMenu>
-		<mainMenu title="添加会员" id="AddUser" operateCode="UserAdd" leftUrl="User/UserGuide.aspx" rightUrl="User/User.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="UserGroupManage" title="会员组管理" operateCode="UserGroupManage" leftUrl="User/UserGroupGuide.aspx" rightUrl="User/UserGroupManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="UserGroupAdd" title="添加会员组" operateCode="UserGroupManage" leftUrl="User/UserGroupGuide.aspx" rightUrl="User/UserGroup.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CompanyManage" title="商户管理" operateCode="CompanyManage" leftUrl="User/CompanyGuide.aspx" rightUrl="User/CompanyManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="UserGroupManage" title="会员组管理" operateCode="UserGroupManage" rightUrl="/Admin/User/UserGroupManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CompanyManage" title="商户管理" operateCode="CompanyManage" rightUrl="/Admin/User/CompanyManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="FinanceManage" title="财务管理" operateCode="FinanceManage" icon="&#xe63a;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="BankrollItemList" title="会员资金明细" operateCode="BankrollItemList" leftUrl="User/BankrollItemListGuide.aspx" rightUrl="User/BankrollItemList.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ExpLog" title="会员积分明细" operateCode="ExpLog" leftUrl="User/ExpLogGuide.aspx" rightUrl="User/ExpLog.aspx?SearchType=-1" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PointLog" title="会员点券明细" operateCode="PointLog" leftUrl="User/PointLogGuide.aspx" rightUrl="User/PointLog.aspx?SearchType=-1" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ValidLog" title="会员有效期明细" operateCode="ValidLog" leftUrl="User/ValidLogGuide.aspx" rightUrl="User/ValidLog.aspx?SearchType=-1" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PaymentLogManage" title="在线支付明细" operateCode="PaymentLogManage" leftUrl="User/PaymentLogGuide.aspx" rightUrl="User/PaymentLogManage.aspx" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="SortingManage" title="分检管理" operateCode="SortingManage" leftUrl="User/SortingManageGuide.aspx" rightUrl="User/SortingManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="MentionManage" title="提现管理" operateCode="MentionManage" leftUrl="User/MentionManageGuide.aspx" rightUrl="User/MentionManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="BankrollItemList" title="会员资金明细" operateCode="BankrollItemList" rightUrl="/Admin/Finance/BankrollItemList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ExpLog" title="会员积分明细" operateCode="ExpLog" rightUrl="/Admin/Finance/ExpLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="PointLog" title="会员点券明细" operateCode="PointLog" rightUrl="/Admin/Finance/PointLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ValidLog" title="会员有效期明细" operateCode="ValidLog" rightUrl="/Admin/Finance/ValidLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="PaymentLogManage" title="在线支付明细" operateCode="PaymentLogManage" rightUrl="/Admin/Finance/PaymentLogManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="AdministratorSuperManage" title="管理员管理" operateCode="AdministratorSuperManage" icon="&#xe62d;" ShowOnForm="false" ShowOnMenu="true" Description="">
 		<mainMenu id="AdministratorManage" title="管理员列表" operateCode="AdministratorManage" rightUrl="/Admin/Administrator/Index" ShowOnForm="false" ShowOnMenu="true" Description="" />
 		<mainMenu id="AdminRoleManage" title="角色管理" operateCode="AdminRoleManage" rightUrl="/Admin/Administrator/RoleManage" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="CollectionManage" title="采集管理" operateCode="CollectionManage" icon="&#xe641;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="CollectionMain" title="开始采集" operateCode="CollectionManage" leftUrl="Collection/Guide.aspx" rightUrl="Collection/CollectionMain.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CollectionItemManage" title="采集项目管理" operateCode="CollectionManage" leftUrl="Collection/Guide.aspx" rightUrl="Collection/ItemManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CollectionHistoryManage" title="采集历史记录" operateCode="CollectionManage" leftUrl="Collection/Guide.aspx" rightUrl="Collection/HistoryManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CollectionFilterManage" title="采集过滤管理" operateCode="CollectionManage" leftUrl="Collection/CollectionFilterGuide.aspx" rightUrl="Collection/CollectionFilterManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CollectionExclosionManage" title="采集排除规则管理" operateCode="CollectionManage" leftUrl="Collection/ExclosionGuide.aspx" rightUrl="Collection/ExclosionManage.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CollectionProc" title="查看采集进度" operateCode="CollectionManage" leftUrl="Collection/Guide.aspx" rightUrl="Collection/CollectionProc.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
+	<channelMenu id="CollectionManage" title="采集管理" operateCode="CollectionManage" icon="&#xe641;" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="CollectionMain" title="开始采集" operateCode="CollectionManage" rightUrl="/Admin/Collection/CollectionMain" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CollectionItemManage" title="采集项目管理" operateCode="CollectionManage" rightUrl="/Admin/Collection/ItemManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CollectionHistoryManage" title="采集历史记录" operateCode="CollectionManage" rightUrl="/Admin/Collection/HistoryManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CollectionFilterManage" title="采集过滤管理" operateCode="CollectionManage" rightUrl="/Admin/Collection/CollectionFilterManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CollectionExclosionManage" title="采集排除规则管理" operateCode="CollectionManage" rightUrl="/Admin/Collection/ExclosionManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CollectionProc" title="查看采集进度" operateCode="CollectionManage" rightUrl="/Admin/Collection/CollectionProc" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="CreateHtmlManage" title="静态页管理" operateCode="CreateHtmlManage" icon="&#xe6f2;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="CreateHtmlContent" title="生成内容页" operateCode="CreateHtmlManage" leftUrl="Contents/CreateHtmlGuide.aspx" rightUrl="Contents/CreateHtmlContent.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CreateHtmlSingle" title="生成单页节点" operateCode="CreateHtmlManage" leftUrl="Contents/CreateHtmlGuide.aspx" rightUrl="Contents/CreateHtmlSingle.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CreateHtmlNodes" title="生成栏目列表页" operateCode="CreateHtmlManage" leftUrl="Contents/CreateHtmlGuide.aspx" rightUrl="Contents/CreateHtmlNodes.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
-		<mainMenu id="CreateHtmlProgress" title="查看生成进度" operateCode="CreateHtmlManage" leftUrl="Contents/CreateHtmlGuide.aspx" rightUrl="Contents/CreateHtmlProgress.aspx" ShowOnForm="false" ShowOnMenu="true" Description="" />
+	<channelMenu id="CreateHtmlManage" title="静态页管理" operateCode="CreateHtmlManage" icon="&#xe6f2;" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="CreateHtmlNodes" title="生成栏目列表页" operateCode="CreateHtmlManage" rightUrl="/Admin/HtmlManage/CreateHtmlNodes" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CreateHtmlContent" title="生成内容页" operateCode="CreateHtmlManage" rightUrl="/Admin/HtmlManage/CreateHtmlContent" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CreateHtmlSingle" title="生成单页节点" operateCode="CreateHtmlManage" rightUrl="/Admin/HtmlManage/CreateHtmlSingle" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="CreateHtmlProgress" title="查看生成进度" operateCode="CreateHtmlManage" rightUrl="/Admin/HtmlManage/CreateHtmlProgress" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="Plus" title="附件管理" operateCode="Plus" icon="&#xe63c;" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="MessageManage" title="站内信管理" operateCode="MessageManage" rightUrl="/Admin/Plus/MessageManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
@@ -240,17 +214,17 @@
 		<mainMenu id="RegionManage" title="行政区划管理" operateCode="RegionManage" rightUrl="/Admin/Plus/RegionManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="ModelManage" title="模型管理" operateCode="ModelManage" icon="&#xe72d;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="ContentModel" title="内容模型管理" operateCode="ContentModel" rightUrl="/Admin/CommonModel/ContentModel" ShowOnForm="false" Description="" />
-		<mainMenu id="ProductModelManage" title="商品模型管理" operateCode="ProductModelManage" rightUrl="/Admin/CommonModel/ProductModel" ShowOnForm="false" Description="" />
-		<mainMenu id="UserOptionModelManage" title="会员扩展字段" operateCode="UserOptionModelManage" rightUrl="/Admin/CommonModel/UserOptionModel" ShowOnForm="false" Description="" />
-		<mainMenu id="CompanyOption" title="商户扩展字段" operateCode="CompanyOptionModelManage" rightUrl="/Admin/CommonModel/CompanyOptionModel" ShowOnForm="false" Description="" />
-		<mainMenu id="OrderOptionModelManage" title="订单扩展字段" operateCode="OrderOptionModelManage" rightUrl="/Admin/CommonModel/OrderOptionModel" ShowOnForm="false" Description="" />
+		<mainMenu id="ContentModel" title="内容模型管理" operateCode="ContentModel" rightUrl="/Admin/CommonModel/ContentModel" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductModelManage" title="商品模型管理" operateCode="ProductModelManage" rightUrl="/Admin/CommonModel/ProductModel" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="UserOptionModelManage" title="会员扩展字段" operateCode="UserOptionModelManage" rightUrl="/Admin/CommonModel/UserOptionModel" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="CompanyOption" title="商户扩展字段" operateCode="CompanyOptionModelManage" rightUrl="/Admin/CommonModel/CompanyOptionModel" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="OrderOptionModelManage" title="订单扩展字段" operateCode="OrderOptionModelManage" rightUrl="/Admin/CommonModel/OrderOptionModel" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="TemplateLabelManage" title="模板标签管理" operateCode="TemplateLabelManage" icon="&#xe64b;" ShowOnForm="false" ShowOnMenu="true" Description="">
-		<mainMenu id="LabelManage" title="标签管理" operateCode="LabelManage" rightUrl="/Admin/Template/LabelManage" ShowOnForm="false" Description="" />
-		<mainMenu id="StyleManage" title="风格管理" operateCode="StyleManage" rightUrl="/Admin/Template/StyleManage" ShowOnForm="false" Description="" />
-		<mainMenu id="TemplateManage" title="模板管理" operateCode="TemplateManage" rightUrl="/Admin/Template/TemplateManage" ShowOnForm="false" Description="" />
-		<mainMenu id="FrontPageTemplateConfig" title="动态页模板配置" operateCode="DynamicPageConfig" rightUrl="/Admin/Template/FrontPageTemplateConfig" ShowOnForm="false" Description="" />
+		<mainMenu id="LabelManage" title="标签管理" operateCode="LabelManage" rightUrl="/Admin/Template/LabelManage" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="StyleManage" title="风格管理" operateCode="StyleManage" rightUrl="/Admin/Template/StyleManage" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="TemplateManage" title="模板管理" operateCode="TemplateManage" rightUrl="/Admin/Template/TemplateManage" ShowOnForm="false" ShowOnMenu="true" Description="" />
+		<mainMenu id="FrontPageTemplateConfig" title="动态页模板配置" operateCode="DynamicPageConfig" rightUrl="/Admin/Template/FrontPageTemplateConfig" ShowOnForm="false" ShowOnMenu="true" Description="" />
 	</channelMenu>
 	<channelMenu id="SiteManage" title="系统管理" operateCode="SiteManage" icon="&#xe62e;" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="SiteInfo" title="网站信息配置" operateCode="SiteInfo" rightUrl="/Admin/SiteConfig/Index" ShowOnForm="true" ShowOnMenu="true" Description="" />

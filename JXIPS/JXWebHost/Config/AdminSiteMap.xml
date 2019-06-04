@@ -1,5 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <siteMap>
+	<siteMapNode title="栏目管理" url="/Admin/Category">
+		<siteMapNode title="所有栏目" url="/Admin/Category/CategoryManage"/>
+		<siteMapNode title="添加栏目节点" url="/Admin/Category/CategoryEdit"/>
+		<siteMapNode title="批量添加节点" url="/Admin/Category/BatchCategory"/>
+		<siteMapNode title="添加单页节点" url="/Admin/Category/Single"/>
+		<siteMapNode title="添加外部链接" url="/Admin/Category/OutLink"/>
+		<siteMapNode title="节点排序" url="/Admin/Category/CategoryOrder"/>
+		<siteMapNode title="合并节点" url="/Admin/Category/CategoryUnite"/>
+		<siteMapNode title="移动节点" url="/Admin/Category/CategoryMove"/>
+		<siteMapNode title="批量设置" url="/Admin/Category/CategoryBatchSet"/>
+	</siteMapNode>
+	<siteMapNode title="内容管理" url="/Admin/Contents">
+		<siteMapNode title="信息管理" url="/Admin/Contents/ContentManage"/>
+		<siteMapNode title="我添加的信息" url="/Admin/Contents/MyInformation"/>
+		<siteMapNode title="批量导入" url="/Admin/Contents/ContentImport"/>
+		<siteMapNode title="站内链接管理" url="/Admin/Contents/InsideLinkManage"/>
+		<siteMapNode title="字符过滤管理" url="/Admin/Contents/WordFilterManage"/>
+		<siteMapNode title="关键字管理" url="/Admin/Contents/KeyWordManage"/>
+		<siteMapNode title="信息回收站" url="/Admin/Contents/ContentRecycle"/>
+	</siteMapNode>
+	<siteMapNode title="评论管理" url="/Admin/Comment">
+		<siteMapNode title="所有评论" url="/Admin/Comment/CommentManage"/>
+		<siteMapNode title="修改评论" url="/Admin/Comment/CommentModify"/>
+		<siteMapNode title="修改回复评论" url="/Admin/Comment/CommentReplyModify"/>
+	</siteMapNode>
+	<siteMapNode title="商城管理" url="/Admin/Shop">
+		<siteMapNode title="品牌管理" url="/Admin/Shop/BrandManage"/>
+		<siteMapNode title="订单处理" url="/Admin/Shop/OrderList"/>
+		<siteMapNode title="发货处理" url="/Admin/Shop/ConsignmentList"/>
+		<siteMapNode title="产品销售明细" url="/Admin/Shop/SaleList"/>
+		<siteMapNode title="开发票明细" url="/Admin/Shop/InvoiceItemList"/>
+		<siteMapNode title="发退货明细" url="/Admin/Shop/DeliverItemList"/>
+		<siteMapNode title="订单过户明细" url="/Admin/Shop/TransferLogManage"/>
+		<siteMapNode title="订单反馈明细" url="/Admin/Shop/OrderFeedbackManage"/>
+		<siteMapNode title="购物车" url="/Admin/Shop/ShoppingCartManage"/>
+		<siteMapNode title="商品列表" url="/Admin/Shop/ProductManage"/>
+		<siteMapNode title="商品批量编辑" url="/Admin/Shop/ProductBatchModify"/>
+		<siteMapNode title="商品批量导入" url="/Admin/Shop/ProductImport"/>
+		<siteMapNode title="缺货登记管理" url="/Admin/Shop/OutOfStockLogManage"/>
+		<siteMapNode title="库存管理" url="/Admin/Shop/StockManage"/>
+		<siteMapNode title="需补货清单" url="/Admin/Shop/FillProductsList"/>
+		<siteMapNode title="商品回收站" url="/Admin/Shop/ProductRecycle"/>
+	</siteMapNode>
+	<siteMapNode title="促销管理" url="/Admin/PromotionManage">
+		<siteMapNode title="促销礼品管理" url="/Admin/PromotionManage/PresentManager"/>
+		<siteMapNode title="促销方案管理" url="/Admin/PromotionManage/PresentProjectManage"/>
+		<siteMapNode title="优惠券规则管理" url="/Admin/PromotionManage/CouponManage"/>
+		<siteMapNode title="优惠券管理" url="/Admin/PromotionManage/CouponList"/>
+	</siteMapNode>
+	<siteMapNode title="销售统计" url="/Admin/SellCount">
+		<siteMapNode title="总体销售统计" url="/Admin/SellCount/TotalSale"/>
+		<siteMapNode title="销售额统计" url="/Admin/SellCount/Saleroom"/>
+		<siteMapNode title="商品销售量排名" url="/Admin/SellCount/SalesVolumn"/>
+		<siteMapNode title="商品销售额排名" url="/Admin/SellCount/ProductSaleroom"/>
+		<siteMapNode title="商品访问购买率" url="/Admin/SellCount/CompareHitsOrderNumber"/>
+		<siteMapNode title="商品类别销售排名" url="/Admin/SellCount/CategorySaleroom"/>
+		<siteMapNode title="会员订单量排名" url="/Admin/SellCount/MemberOrders"/>
+		<siteMapNode title="会员购物额排名" url="/Admin/SellCount/MemberExpenditure"/>
+		<siteMapNode title="会员购物规律分析" url="/Admin/SellCount/MemberOrderliness"/>
+	</siteMapNode>
+	<siteMapNode title="配送方式管理" url="/Admin/Deliver">
+		<siteMapNode title="送货方式管理" url="/Admin/Deliver/DeliverTypeManage"/>
+		<siteMapNode title="收货地址管理" url="/Admin/Deliver/AddressManage"/>
+		<siteMapNode title="快递公司管理" url="/Admin/Deliver/CourierManage"/>
+	</siteMapNode>
+	<siteMapNode title="支付方式管理" url="/Admin/Payment">
+		<siteMapNode title="付款方式管理" url="/Admin/Payment/PaymentTypeManage"/>
+		<siteMapNode title="银行账户管理" url="/Admin/Payment/BankManage"/>
+		<siteMapNode title="在线支付平台管理" url="/Admin/Payment/PayPlatformManage"/>
+	</siteMapNode>
+	<siteMapNode title="客户关系管理" url="/Admin/Crm">
+		<siteMapNode title="客户管理" url="/Admin/Crm/ClientManage"/>
+		<siteMapNode title="联系人管理" url="/Admin/Crm/ContacterManage"/>
+		<siteMapNode title="服务管理" url="/Admin/Crm/ServiceManage"/>
+		<siteMapNode title="投诉管理" url="/Admin/Crm/ComplainManage"/>
+		<siteMapNode title="联系记录管理" url="/Admin/Crm/ClientAnnalManage"/>
+		<siteMapNode title="预约提醒管理" url="/Admin/Crm/RemindItemManage"/>
+	</siteMapNode>
+	<siteMapNode title="会员管理" url="/Admin/User">
+		<siteMapNode title="会员管理" url="/Admin/User/UserManage"/>
+		<siteMapNode title="会员组管理" url="/Admin/User/UserGroupManage"/>
+		<siteMapNode title="商户管理" url="/Admin/User/CompanyManage"/>
+	</siteMapNode>
+	<siteMapNode title="财务管理" url="/Admin/Finance">
+		<siteMapNode title="会员资金明细" url="/Admin/Finance/BankrollItemList"/>
+		<siteMapNode title="会员积分明细" url="/Admin/Finance/ExpLog"/>
+		<siteMapNode title="会员点券明细" url="/Admin/Finance/PointLog"/>
+		<siteMapNode title="会员有效期明细" url="/Admin/Finance/ValidLog"/>
+		<siteMapNode title="在线支付明细" url="/Admin/Finance/PaymentLogManage"/>
+	</siteMapNode>
 	<siteMapNode title="管理员管理" url="/Admin/Administrator">
 		<siteMapNode title="管理员列表" url="/Admin/Administrator/Index">
 			<siteMapNode title="管理员编辑" url="/Admin/Administrator/AdminEdit" />
@@ -11,6 +101,20 @@
 			<siteMapNode title="节点权限设置" url="/Admin/Administrator/NodePermissions" />
 			<siteMapNode title="字段权限设置" url="/Admin/Administrator/RoleFieldPermissions" />
 		</siteMapNode>
+	</siteMapNode>
+	<siteMapNode title="采集管理" url="/Admin/Collection">
+		<siteMapNode title="开始采集" url="/Admin/Collection/CollectionMain"/>
+		<siteMapNode title="采集项目管理" url="/Admin/Collection/ItemManage"/>
+		<siteMapNode title="采集历史记录" url="/Admin/Collection/HistoryManage"/>
+		<siteMapNode title="采集过滤管理" url="/Admin/Collection/CollectionFilterManage"/>
+		<siteMapNode title="采集排除规则管理" url="/Admin/Collection/ExclosionManage"/>
+		<siteMapNode title="查看采集进度" url="/Admin/Collection/CollectionProc"/>
+	</siteMapNode>
+	<siteMapNode title="静态页管理" url="/Admin/HtmlManage">
+		<siteMapNode title="生成栏目列表页" url="/Admin/HtmlManage/CreateHtmlNodes"/>
+		<siteMapNode title="生成内容页" url="/Admin/HtmlManage/CreateHtmlContent"/>
+		<siteMapNode title="生成单页节点" url="/Admin/HtmlManage/CreateHtmlSingle"/>
+		<siteMapNode title="查看生成进度" url="/Admin/HtmlManage/CreateHtmlProgress"/>
 	</siteMapNode>
 	<siteMapNode title="附件管理" url="/Admin/Plus">
 		<siteMapNode title="站内信管理" url="/Admin/Plus/MessageManage"/>
