@@ -11,7 +11,7 @@ namespace JX.Infrastructure.Log
 		/// <summary>
 		/// 常规
 		/// </summary>
-		[Description("常规")]
+		[Description("常规类型")]
 		None,
 		/// <summary>
 		/// 登录成功
@@ -26,17 +26,17 @@ namespace JX.Infrastructure.Log
 		/// <summary>
 		/// 注销
 		/// </summary>
-		[Description("注销")]
+		[Description("退出登录")]
 		LogOff,
 		/// <summary>
 		/// 越权
 		/// </summary>
-		[Description("越权")]
+		[Description("越权操作")]
 		ExceedAuthority,
 		/// <summary>
 		/// 异常
 		/// </summary>
-		[Description("异常")]
+		[Description("异常记录")]
 		Exception,
 		/// <summary>
 		/// 管理错误
@@ -106,22 +106,27 @@ namespace JX.Infrastructure.Log
 		/// <summary>
 		/// 最低
 		/// </summary>
+		[Description("最低")]
 		Lowest,
 		/// <summary>
 		/// 低
 		/// </summary>
+		[Description("低")]
 		Low,
 		/// <summary>
 		/// 正常
 		/// </summary>
+		[Description("正常")]
 		Normal,
 		/// <summary>
 		/// 高
 		/// </summary>
+		[Description("高")]
 		High,
 		/// <summary>
 		/// 最高
 		/// </summary>
+		[Description("最高")]
 		Highest
 	}
 

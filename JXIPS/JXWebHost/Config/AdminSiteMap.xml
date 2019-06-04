@@ -12,7 +12,7 @@
 			<siteMapNode title="字段权限设置" url="/Admin/Administrator/RoleFieldPermissions" />
 		</siteMapNode>
 	</siteMapNode>
-	<siteMapNode title="网站管理" url="/Admin/SiteConfig">
+	<siteMapNode title="系统管理" url="/Admin/SiteConfig">
 		<siteMapNode title="网站信息配置" url="/Admin/SiteConfig/Index"/>
 		<siteMapNode title="常规参数配置" url="/Admin/SiteConfig/SiteOption"/>
 		<siteMapNode title="用户参数配置" url="/Admin/SiteConfig/UserConfig"/>
@@ -22,6 +22,8 @@
 		<siteMapNode title="IP访问配置" url="/Admin/SiteConfig/IPLockConfig"/>
 		<siteMapNode title="商城参数配置" url="/Admin/SiteConfig/ShopConfig"/>
 		<siteMapNode title="商城模板配置" url="/Admin/SiteConfig/ShopTemplateConfig"/>
-		<siteMapNode title="系统日志" url="/Admin/SiteConfig/LogManager"/>
+		<siteMapNode title="系统日志" url="/Admin/SiteConfig/LogManager">
+			<siteMapNode title="查看日志" url="/Admin/SiteConfig/ViewLog" />
+		</siteMapNode>
 	</siteMapNode>
 </siteMap>

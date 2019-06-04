@@ -1,0 +1,67 @@
+﻿@model LogEntity
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志序号：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.LogID
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志类型：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@EnumHelper.GetDescription((LogCategory)Model.Category)
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志优先级别：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@EnumHelper.GetDescription((LogPriority)Model.Priority)
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">访问地址：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.ScriptName
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志记录时间：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.Timestamp.Value.ToString("yyyy-MM-dd HH:mm:ss")
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">用户名：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.UserName
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">用户IP：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.UserIP
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">用户提交的信息：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.PostString
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志标题：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.Title
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">日志内容：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.Message
+	</div>
+</div>
+<div class="row cl">
+	<label class="form-label col-xs-4 col-sm-3">异常源、堆栈跟踪等异常信息：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.Source
+	</div>
+</div>
