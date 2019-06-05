@@ -269,6 +269,21 @@ namespace JX.Core
 		Task<bool> DeleteAsync(Expression<Func<T, bool>> predicate, bool IsCommit = true);
 
 		/// <summary>
+		/// 删除一条或多条记录
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		bool Delete(string strWhere, Dictionary<string, object> dict = null);
+		/// <summary>
+		/// 删除一条或多条记录（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		Task<bool> DeleteAsync(string strWhere, Dictionary<string, object> dict = null);
+
+		/// <summary>
 		/// 根据SQL删除一条或多条记录
 		/// </summary>
 		/// <param name="sql"></param>

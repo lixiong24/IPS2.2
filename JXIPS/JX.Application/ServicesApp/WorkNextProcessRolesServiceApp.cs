@@ -342,6 +342,27 @@ namespace JX.Application
 		}
 
 		/// <summary>
+		/// 删除一条或多条记录
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual bool Delete(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return _repository.Delete(strWhere,dict);
+		}
+		/// <summary>
+		/// 删除一条或多条记录（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<bool> DeleteAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			return await _repository.DeleteAsync(strWhere,dict);
+		}
+
+		/// <summary>
 		/// 根据SQL删除一条或多条记录
 		/// </summary>
 		/// <param name="sql"></param>
@@ -1018,7 +1039,74 @@ namespace JX.Application
 		}
 		#endregion
 		
-		#region 直接执行SQL语句
+		#region 执行SQL，检验是否存在数据
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="para"></param>
+		/// <returns></returns>
+		public virtual bool IsExistBySql(string sql, params IDataParameter[] para)
+		{
+			return _repository.IsExistBySql(sql, para);
+		}
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="para"></param>
+		/// <returns></returns>
+		public virtual async Task<bool> IsExistBySqlAsync(string sql, params IDataParameter[] para)
+		{
+			return await _repository.IsExistBySqlAsync(sql, para);
+		}
+
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql">带参数的SQL语句</param>
+		/// <param name="paraName">参数名数组</param>
+		/// <param name="paraValue">参数值数组</param>
+		/// <returns>有返回true,没有返回false</returns>
+		public virtual bool IsExistBySql(string sql, string[] paraName, object[] paraValue)
+		{
+			return _repository.IsExistBySql(sql, paraName,paraValue);
+		}
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual async Task<bool> IsExistBySqlAsync(string sql, string[] paraName, object[] paraValue)
+		{
+			return await _repository.IsExistBySqlAsync(sql, paraName,paraValue);
+		}
+
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql">带参数的SQL语句</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual bool IsExistBySql(string sql, Dictionary<string, object> dict)
+		{
+			return _repository.IsExistBySql(sql, dict);
+		}
+		/// <summary>
+		/// 执行SQL，检验是否存在数据
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual async Task<bool> IsExistBySqlAsync(string sql, Dictionary<string, object> dict)
+		{
+			return await _repository.IsExistBySqlAsync(sql, dict);
+		}
+		#endregion		
+		
+		#region 执行SQL，返回受影响的行数
 		/// <summary>
 		/// 执行SQL语句，返回受影响的行数
 		/// </summary>
@@ -1085,7 +1173,7 @@ namespace JX.Application
 		}
 		#endregion
 		
-		#region 执行SQL，返回结果
+		#region 执行SQL，返回结果，返回值必须在实体类中
 		/// <summary>
 		/// 执行SQL，返回结果。
 		/// 例：var s = testDal.GetBySQL《string》("select name from tablename",m=>m.Name);
@@ -1097,7 +1185,7 @@ namespace JX.Application
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, params DbParameter[] para)
+		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, params IDataParameter[] para)
 		{
 			return _repository.GetBySQL<TResult>(sql, scalar,para);
 		}
@@ -1112,11 +1200,279 @@ namespace JX.Application
 		/// <param name="scalar"></param>
 		/// <param name="para"></param>
 		/// <returns></returns>
-		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, params DbParameter[] para)
+		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, params IDataParameter[] para)
 		{
 			return await _repository.GetBySQLAsync<TResult>(sql, scalar,para);
 		}
+
+		/// <summary>
+		/// 执行SQL，返回结果，返回值必须在实体类中。
+		/// 例：var s = testDal.GetBySQL《StoreM》("select * from tablename where name=@name",m=>m,new string[]{"name"},new string[]{"1"});
+		/// var s = testDal.GetBySQL《dynamic》("select name,Code from tablename where name=@name",m=>new { m.Name,m.Code },new string[]{"name"},new string[]{"1"});
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="scalar"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, string[] paraName, object[] paraValue)
+		{
+			return _repository.GetBySQL<TResult>(sql, scalar,paraName,paraValue);
+		}
+		/// <summary>
+		/// 执行SQL，返回结果，返回值必须在实体类中。
+		/// 例：var s = testDal.GetBySQL《StoreM》("select * from tablename where name=@name",m=>m,new string[]{"name"},new string[]{"1"});
+		/// var s = testDal.GetBySQL《dynamic》("select name,Code from tablename where name=@name",m=>new { m.Name,m.Code },new string[]{"name"},new string[]{"1"});
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="scalar"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, string[] paraName, object[] paraValue)
+		{
+			return await _repository.GetBySQLAsync<TResult>(sql, scalar,paraName,paraValue);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回结果，返回值必须在实体类中。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="scalar"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual TResult GetBySQL<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, Dictionary<string, object> dict)
+		{
+			return _repository.GetBySQL<TResult>(sql, scalar,dict);
+		}
+		/// <summary>
+		/// 执行SQL，返回结果，返回值必须在实体类中。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="scalar"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual async Task<TResult> GetBySQLAsync<TResult>(string sql, Expression<Func<WorkNextProcessRolesEntity, TResult>> scalar, Dictionary<string, object> dict)
+		{
+			return await _repository.GetBySQLAsync<TResult>(sql, scalar,dict);
+		}
 		#endregion
 		
+		#region 执行SQL，返回查询结果。主要用于返回实体类或者值类型
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQuery<TResult>(string sql, params IDataParameter[] parameters) where TResult : new()
+		{
+			return _repository.SqlQuery<TResult>(sql,parameters);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, params IDataParameter[] parameters) where TResult : new()
+		{
+			return await _repository.SqlQueryAsync<TResult>(sql,parameters);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQuery<TResult>(string sql, string[] paraName, object[] paraValue) where TResult : new()
+		{
+			return _repository.SqlQuery<TResult>(sql,paraName,paraValue);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, string[] paraName, object[] paraValue) where TResult : new()
+		{
+			return await _repository.SqlQueryAsync<TResult>(sql,paraName,paraValue);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQuery<TResult>(string sql, Dictionary<string, object> dict) where TResult : new()
+		{
+			return _repository.SqlQuery<TResult>(sql,dict);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回实体类或者值类型，返回参数需要带有空白构造函数。
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryAsync<TResult>(string sql, Dictionary<string, object> dict) where TResult : new()
+		{
+			return await _repository.SqlQueryAsync<TResult>(sql,dict);
+		}
+		#endregion
+		
+		#region 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQueryOne<TResult>(string sql, params IDataParameter[] parameters)
+		{
+			return _repository.SqlQueryOne<TResult>(sql,parameters);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, params IDataParameter[] parameters)
+		{
+			return await _repository.SqlQueryOneAsync<TResult>(sql,parameters);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQueryOne<TResult>(string sql, string[] paraName, object[] paraValue)
+		{
+			return _repository.SqlQueryOne<TResult>(sql,paraName,paraValue);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, string[] paraName, object[] paraValue)
+		{
+			return await _repository.SqlQueryOneAsync<TResult>(sql,paraName,paraValue);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual IList<TResult> SqlQueryOne<TResult>(string sql, Dictionary<string, object> dict)
+		{
+			return _repository.SqlQueryOne<TResult>(sql,dict);
+		}
+		/// <summary>
+		/// 执行SQL，返回查询结果。主要用于返回IList《string》
+		/// </summary>
+		/// <typeparam name="TResult"></typeparam>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual async Task<IList<TResult>> SqlQueryOneAsync<TResult>(string sql, Dictionary<string, object> dict)
+		{
+			return await _repository.SqlQueryOneAsync<TResult>(sql,dict);
+		}
+		#endregion
+		
+		#region 执行SQL，返回DataTable
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual DataTable GetDataTableBySql(string sql, params IDataParameter[] parameters)
+		{
+			return _repository.GetDataTableBySql(sql,parameters);
+		}
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public virtual async Task<DataTable> GetDataTableBySqlAsync(string sql, params IDataParameter[] parameters)
+		{
+			return await _repository.GetDataTableBySqlAsync(sql,parameters);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual DataTable GetDataTableBySql(string sql, string[] paraName, object[] paraValue)
+		{
+			return _repository.GetDataTableBySql(sql,paraName,paraValue);
+		}
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="paraName"></param>
+		/// <param name="paraValue"></param>
+		/// <returns></returns>
+		public virtual async Task<DataTable> GetDataTableBySqlAsync(string sql, string[] paraName, object[] paraValue)
+		{
+			return await _repository.GetDataTableBySqlAsync(sql,paraName,paraValue);
+		}
+
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual DataTable GetDataTableBySql(string sql, Dictionary<string, object> dict)
+		{
+			return _repository.GetDataTableBySql(sql,dict);
+		}
+		/// <summary>
+		/// 执行SQL，返回DataTable
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="dict"></param>
+		/// <returns></returns>
+		public virtual async Task<DataTable> GetDataTableBySqlAsync(string sql, Dictionary<string, object> dict)
+		{
+			return await _repository.GetDataTableBySqlAsync(sql,dict);
+		}
+		#endregion
 	}
 }

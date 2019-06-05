@@ -675,6 +675,29 @@ namespace JX.EF
 		}
 
 		/// <summary>
+		/// 删除一条或多条记录
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual bool Delete(string strWhere, Dictionary<string, object> dict = null)
+		{
+			string strSQL = "delete from "+ GetTableName() + " where 1=1 "+ strWhere;
+			return ExeSQL(strSQL, dict) > 0;
+		}
+		/// <summary>
+		/// 删除一条或多条记录（异步方式）
+		/// </summary>
+		/// <param name="strWhere">参数化删除条件，为空代表全部删除(例如: and Name = @Name )</param>
+		/// <param name="dict">参数的名/值集合</param>
+		/// <returns></returns>
+		public virtual async Task<bool> DeleteAsync(string strWhere, Dictionary<string, object> dict = null)
+		{
+			string strSQL = "delete from " + GetTableName() + " where 1=1 " + strWhere;
+			return await ExeSQLAsync(strSQL, dict) > 0;
+		}
+
+		/// <summary>
 		/// 根据SQL删除一条或多条记录
 		/// </summary>
 		/// <param name="sql"></param>

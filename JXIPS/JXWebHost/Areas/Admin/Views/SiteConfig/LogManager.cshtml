@@ -88,28 +88,6 @@
 		$(function () {
 			loadTables(0, 10);
 		});
-		function SetAdminStatus(adminID) {
-			$.ajax({
-				type: "POST",
-				url: "/Admin/Administrator/SetAdminStatus",
-				data: { "id": adminID },
-				headers: {
-					"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
-				},
-				error: function (data, status, e) {
-					layer.alert('操作失败!');
-				},
-				success: function (data) {
-					if (data.result == "ok") {
-						layer.alert('操作成功!');
-						loadTables(0, 10);
-					}
-					else {
-						layer.alert(data.result);
-					}
-				}
-			})
-		}
 		function loadTables(PageNum, PageSize) {
 			$("#tableBody").html("");
 			var SearchName = $("#dropSearchName").val();
