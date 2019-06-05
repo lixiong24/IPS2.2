@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using JX.Application;
 using JX.Core.Entity;
 using JX.Infrastructure;
 using JX.Infrastructure.Common;
 using JX.Infrastructure.Framework.Authorize;
+using JXWebHost.Areas.Admin.Models.PlusViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +19,12 @@ namespace JXWebHost.Areas.Admin.Controllers
 	public class PlusController : Controller
     {
 		private IUserMessageServiceApp _UserMessageServiceApp;
-		public PlusController(IUserMessageServiceApp UserMessageServiceApp)
+		private IUsersServiceApp _UsersServiceApp;
+
+		public PlusController(IUserMessageServiceApp UserMessageServiceApp, IUsersServiceApp UsersServiceApp)
 		{
 			_UserMessageServiceApp = UserMessageServiceApp;
+			_UsersServiceApp = UsersServiceApp;
 		}
 
 		#region 站内信管理
@@ -129,6 +134,66 @@ namespace JXWebHost.Areas.Admin.Controllers
 					Result = "删除失败！" + ex.Message
 				});
 			}
+		}
+
+		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
+		public ActionResult MessageSend()
+		{
+			var viewModel = new MessageViewModel();
+			viewModel.MessageID = 0;
+			return View(viewModel);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
+		public async Task<ActionResult> MessageSend(MessageViewModel viewModel, IFormCollection collection)
+		{
+			#region 添加
+			StringBuilder sbIncept = new StringBuilder();
+			switch(viewModel.InceptType)
+			{
+				case 0://所有会员
+					var listAll = await _UsersServiceApp.QueryDynamicAsync<UsersEntity>(p => p.UserID > 0, p => p.UserName);
+					listAll.ForEach(item => {
+						StringHelper.AppendString(sbIncept,item);
+					});
+					break;
+				case 1://指定会员
+					if (string.IsNullOrEmpty(viewModel.Incept))
+					{
+						ModelState.AddModelError(string.Empty, "收件人不能为空");
+						return View(viewModel);
+					}
+					StringHelper.AppendString(sbIncept, viewModel.Incept);
+					break;
+				case 2://指定会员组
+					var InceptGroup = collection["dropUserGroup"];
+					if (string.IsNullOrEmpty(InceptGroup))
+					{
+						ModelState.AddModelError(string.Empty, "收件人会员组不能为空");
+						return View(viewModel);
+					}
+					var listGroup = await _UsersServiceApp.SqlQueryOneAsync<string>("select UserName from Users where GroupID in ("+ InceptGroup + ")");
+					List<string> list = (List<string>)listGroup;
+					list.ForEach(item => {
+						StringHelper.AppendString(sbIncept, item);
+					});
+					break;
+			}
+			var entity = new UserMessageEntity();
+			entity.Title = viewModel.Title;
+			entity.Content = viewModel.Content;
+			entity.Sender = viewModel.Sender;
+			entity.Incept = sbIncept.ToString();
+			entity.SendTime = DateTime.Now;
+			string msg = await _AdminService.AddAdminFull(adminDTO);
+			if (msg != "ok")
+			{
+				ModelState.AddModelError(string.Empty, msg);
+				return View(adminViewModel);
+			}
+			#endregion
+			return View(adminViewModel);
 		}
 		#endregion
 
