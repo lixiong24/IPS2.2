@@ -1,0 +1,197 @@
+﻿@model IList<UserMessageEntity>
+@{
+}
+
+<div class="text-c">
+	<span class="select-box inline">
+		<select id="dropSearchName" class="select">
+			<option value="Title">标题</option>
+			<option value="[Content]">内容</option>
+			<option value="Incept">收件人</option>
+			<option value="Sender">发件人</option>
+		</select>
+	</span>
+	<input type="text" class="input-text" style="width:250px" id="txtSearchKeyword" onkeypress="javascript:return DefaultButton(event, 'btnSearch')">
+	<button id="btnSearch" type="button" class="btn btn-success" onclick="loadTables(0,10);"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<span class="l">
+		<a href="javascript:;" onclick="DeleteMulti('/Admin/Plus/DelMessageMulti',loadTables)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		<a href="javascript:;" onclick="layer_show('发送站内信','/Admin/Plus/MessageSend','800','600')" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe600;</i> 发送站内信</a>
+	</span>
+	<span class="r">共有数据：<strong id="ctlRecordTotal">0</strong> 条</span>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<div class="tabBar cl">
+		<span onclick="GoToTab(this,-1);" class="current">全部</span>
+		<span onclick="GoToTab(this,0);">未读消息</span>
+		<span onclick="GoToTab(this,1);">已读消息</span>
+	</div>
+	<input type="hidden" id="hidTab" value="-1" />
+</div>
+<table class="table table-border table-bordered table-bg table-hover">
+	<thead>
+		<tr class="text-c">
+			<th width="25"><input type="checkbox" name="" value=""></th>
+			<th width="150">标题</th>
+			<th width="70">收件人</th>
+			<th width="70">收件人状态</th>
+			<th width="70">发件人</th>
+			<th width="70">发件人状态</th>
+			<th width="100">发送日期</th>
+			<th width="50">操作</th>
+		</tr>
+	</thead>
+	<tbody id="tableBody"></tbody>
+</table>
+<div style="text-align:right;">
+	<ul id="grid_paging_part"></ul>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<span class="l">
+		<strong>批量删除</strong>
+		<span class="select-box inline">
+			<select id="dropBatchDelType" class="select" onchange="SelectDelType()">
+				<option value="0">发件人</option>
+				<option value="1">指定日期范围内</option>
+			</select>
+		</span>
+		<span class="select-box inline">
+			<input type="text" class="input-text" id="txtSender" placeholder="多个发件人用“,”分隔" />
+			<select id="dropDelDate" class="select" style="display:none;">
+				<option value="1">一天前</option>
+				<option value="3">三天前</option>
+				<option value="7">一星期前</option>
+				<option value="30">一个月前</option>
+				<option value="60">两个月前</option>
+				<option value="180">半年前</option>
+				<option value="0">所有</option>
+			</select>
+		</span>
+		<strong>的站内信</strong>
+		<a href="javascript:;" onclick="DelMessageBatch()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe6e2;</i> 执行选定的操作</a>
+	</span>
+</div>
+@Html.AntiForgeryToken()
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+			loadTables(0, 10);
+		});
+		function loadTables(PageNum, PageSize) {
+			$("#tableBody").html("");
+			var SearchName = $("#dropSearchName").val();
+			var SearchKeyword = $("#txtSearchKeyword").val();
+			var TabStatus = $("#hidTab").val();
+			var parm = "PageNum=" + PageNum + "&PageSize=" + PageSize
+				+ "&SearchName=" + encodeURIComponent(SearchName)
+				+ "&SearchKeyword=" + encodeURIComponent(SearchKeyword)
+				+ "&TabStatus=" + encodeURIComponent(TabStatus);
+			$.ajax({
+				type: "GET",
+				url: "/Admin/Plus/GetMessageList?" + parm + "&_t=" + new Date().getTime(),
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function (data) {
+					$.each(data.rowList, function (i, item) {
+						var tr = "<tr class=\"text-c\">";
+						tr += "<td><input type='checkbox' value='" + item.messageID + "' class='checkboxs'></td>";
+						tr += "<td>" + item.title + "</td>";
+						tr += "<td><a href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('查看会员','/Admin/User/UserShow?UserName=" + item.incept + "')\" class=\"ml-5\">" + item.incept +"</a></td>";
+						tr += "<td>" + (item.isDelInbox == 2) ? "已清" : (item.isDelInbox == 1) ? "已删" : (item.isRead == 1) ? "已读" : "未读" + "</td>";
+						tr += "<td><a href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('查看会员','/Admin/User/UserShow?UserName=" + item.sender + "')\" class=\"ml-5\">" + item.sender + "</a></td>";
+						tr += "<td>" + (item.isDelSendbox == 2) ? "已清" : (item.isDelSendbox == 1) ? "已删" : (item.isSend == 1) ? "已发" : "未发" + "</td>";
+						tr += "<td>" + (item.sendTime == null ? "" : (formatDateTime(item.sendTime) == "9999-12-31 23:59:59") ? "" : formatDateTime(item.sendTime)) + "</td>";
+						tr += "<td class=\"td-manage\">";
+						tr += "<a title=\"详细\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('查看站内信','/Admin/Plus/ViewMessage/" + item.messageID + "','800','600')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe665;</i></a>";
+						tr += "</td>";
+						tr += "</tr>";
+						$("#tableBody").append(tr);
+					})
+					$("#ctlRecordTotal").html(data.recordTotal);
+					var elment = $("#grid_paging_part"); //分页插件的容器id
+					if (data.recordTotal > 0) {
+						var options = { //分页插件配置项
+							bootstrapMajorVersion: 3,
+							currentPage: data.pageNum + 1, //当前页
+							numberOfPages: data.recordTotal, //总数
+							totalPages: data.pageCount, //总页数
+							itemTexts: function (type, page, current) {
+								switch (type) {
+									case "first":
+										return "首页";
+									case "prev":
+										return "上一页";
+									case "next":
+										return "下一页";
+									case "last":
+										return "末页";
+									case "page":
+										return page;
+								}
+							},
+							onPageChanged: function (event, oldPage, newPage) { //页面切换事件
+								loadTables(newPage - 1, PageSize);
+							}
+						}
+						elment.bootstrapPaginator(options); //分页插件初始化
+					}
+				},
+				error: function (data, status, e) {
+					alert('得到数据失败!');
+				}
+			})
+		}
+		function DelMessageBatch() {
+			//询问框
+			layer.confirm("您确认删除选定的记录吗？", {
+				btn: ["确定", "取消"]
+			}, function () {
+				var DelType = $("#dropBatchDelType").val();
+				var DelValue = "";
+				if (DelType == "0") {
+					DelValue = $("#txtSender").val();
+				}
+				else {
+					DelValue = $("#dropDelDate").val();
+				}
+				if (DelValue.length <= 0) {
+					layer.alert('请指定要删除的发件人或日期');
+					return;
+				}
+				var url = "/Admin/Plus/DelMessageBatch";
+				var sendData = { "DelType": DelType, "DelValue": DelValue };
+				$.ajax({
+					type: "Post",
+					url: url,
+					data: sendData,
+					headers: {
+						"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+					},
+					error: function (data, status, e) {
+						layer.alert('操作失败!');
+					},
+					success: function (data) {
+						if (data.result == "ok") {
+							layer.alert('操作成功!');
+							loadTables(0, 10);
+						}
+						else {
+							layer.alert(data.result);
+						}
+					}
+				});
+			});
+		}
+		function SelectDelType() {
+			var DelType = $("#dropBatchDelType").val();
+			if (DelType == "0") {
+				$("#txtSender").show();
+				$("#dropDelDate").hide();
+			}
+			else {
+				$("#txtSender").hide();
+				$("#dropDelDate").show();
+			}
+		}
+	</script>
+}
