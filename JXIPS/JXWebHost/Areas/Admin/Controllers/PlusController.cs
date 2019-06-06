@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using JX.Application;
@@ -11,6 +12,7 @@ using JX.Infrastructure.Framework.Authorize;
 using JXWebHost.Areas.Admin.Models.PlusViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JXWebHost.Areas.Admin.Controllers
 {
@@ -61,6 +63,43 @@ namespace JXWebHost.Areas.Admin.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
+		public IActionResult DelMessage(int id)
+		{
+			if (id <= 0)
+			{
+				return Json(new
+				{
+					Result = "删除失败！没有指定要删除的记录ID！"
+				});
+			}
+			try
+			{
+				if (_UserMessageServiceApp.Delete(p=>p.MessageID==id))
+				{
+					return Json(new
+					{
+						Result = "ok"
+					});
+				}
+				else
+				{
+					return Json(new
+					{
+						Result = "删除失败！"
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				return Json(new
+				{
+					Result = "删除失败！" + ex.Message
+				});
+			}
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
 		public IActionResult DelMessageMulti(string ids)
 		{
 			if (string.IsNullOrEmpty(ids))
@@ -79,7 +118,8 @@ namespace JXWebHost.Areas.Admin.Controllers
 			}
 			try
 			{
-				_UserMessageServiceApp.Delete(" and MessageID in ("+ ids + ")");
+				var arrIDs = StringHelper.GetArrayBySplit<int>(ids).ToArray();
+				_UserMessageServiceApp.Delete(p => arrIDs.Contains(p.MessageID));
 				return Json(new
 				{
 					Result = "ok"
@@ -108,24 +148,38 @@ namespace JXWebHost.Areas.Admin.Controllers
 			}
 			try
 			{
-				string strWhere = " and Sender in (" + DelValue + ")";
-				if (DelType == 1)
+				bool bFlag = false;
+				if (DelType == 0)
+				{
+					var arrDelValue = StringHelper.GetArrayBySplit<string>(DelValue).ToArray();
+					bFlag = _UserMessageServiceApp.Delete(p=>arrDelValue.Contains(p.Sender));
+				}
+				else if (DelType == 1)
 				{
 					switch (DelValue)
 					{
 						case "0":
-							strWhere = "";
+							bFlag = _UserMessageServiceApp.Delete(p=>true);
 							break;
 						default:
-							strWhere = " and datediff(day,SendTime,getdate()) >="+ DelValue;
+							bFlag = _UserMessageServiceApp.Delete(p => EF.Functions.DateDiffDay(p.SendTime, DateTime.Now) >= DataConverter.CLng(DelValue));
 							break;
 					}
 				}
-				_UserMessageServiceApp.Delete(strWhere);
-				return Json(new
+				if (bFlag)
 				{
-					Result = "ok"
-				});
+					return Json(new
+					{
+						Result = "ok"
+					});
+				}
+				else
+				{
+					return Json(new
+					{
+						Result = "删除失败！"
+					});
+				}
 			}
 			catch (Exception ex)
 			{
@@ -137,10 +191,46 @@ namespace JXWebHost.Areas.Admin.Controllers
 		}
 
 		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
-		public ActionResult MessageSend()
+		public ActionResult MessageSend(int id=0,string atype="")
 		{
 			var viewModel = new MessageViewModel();
-			viewModel.MessageID = 0;
+			viewModel.MessageID = id;
+			if (string.IsNullOrEmpty(atype))
+			{
+				viewModel.Sender = User.FindFirst(ClaimTypes.Name).Value;
+			}
+			else
+			{
+				StringBuilder builder = new StringBuilder();
+				var entity = _UserMessageServiceApp.Get(p => p.MessageID == id);
+				viewModel.MessageID = entity.MessageID;
+				viewModel.Sender = User.FindFirst(ClaimTypes.Name).Value;
+				switch (atype)
+				{
+					case "Reply":
+						viewModel.Title = "Re: " + entity.Title;
+						builder.Append("======在 ");
+						builder.Append(entity.SendTime.Value.ToLongTimeString());
+						builder.Append(" 您来信中写道：======\r\n");
+						builder.Append(entity.Content);
+						builder.Append("\r\n================================================\r\n");
+						viewModel.Content = builder.ToString();
+						viewModel.Incept = entity.Sender;
+						viewModel.InceptType = 1;
+						break;
+					case "Forward":
+						viewModel.Title = "Fw: " + entity.Title;
+						builder.Append("============== 下面是转发信息 ==============\r\n");
+						builder.Append("原发件人：" + entity.Sender + "\r\n");
+						builder.Append("原发件内容：\r\n");
+						builder.Append(entity.Content);
+						builder.Append("\r\n================================================\r\n");
+						viewModel.Content = builder.ToString();
+						viewModel.InceptType = 1;
+						viewModel.Incept = "";
+						break;
+				}
+			}
 			return View(viewModel);
 		}
 		[HttpPost]
@@ -148,7 +238,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
 		public async Task<ActionResult> MessageSend(MessageViewModel viewModel, IFormCollection collection)
 		{
-			#region 添加
+			#region 添加并发送
 			StringBuilder sbIncept = new StringBuilder();
 			switch(viewModel.InceptType)
 			{
@@ -164,10 +254,17 @@ namespace JXWebHost.Areas.Admin.Controllers
 						ModelState.AddModelError(string.Empty, "收件人不能为空");
 						return View(viewModel);
 					}
-					StringHelper.AppendString(sbIncept, viewModel.Incept);
+					string[] strArray = viewModel.Incept.Split(new char[] { ',' });
+					for (int j = 0; j < strArray.Length; j++)
+					{
+						if (_UsersServiceApp.IsExist(p=>p.UserName== strArray[j]))
+						{
+							StringHelper.AppendString(sbIncept, strArray[j]);
+						}
+					}
 					break;
 				case 2://指定会员组
-					var InceptGroup = collection["dropUserGroup"];
+					var InceptGroup = collection["InceptGroup"];
 					if (string.IsNullOrEmpty(InceptGroup))
 					{
 						ModelState.AddModelError(string.Empty, "收件人会员组不能为空");
@@ -180,20 +277,35 @@ namespace JXWebHost.Areas.Admin.Controllers
 					});
 					break;
 			}
-			var entity = new UserMessageEntity();
-			entity.Title = viewModel.Title;
-			entity.Content = viewModel.Content;
-			entity.Sender = viewModel.Sender;
-			entity.Incept = sbIncept.ToString();
-			entity.SendTime = DateTime.Now;
-			string msg = await _AdminService.AddAdminFull(adminDTO);
-			if (msg != "ok")
+			if (string.IsNullOrEmpty(sbIncept.ToString()))
 			{
-				ModelState.AddModelError(string.Empty, msg);
-				return View(adminViewModel);
+				ModelState.AddModelError(string.Empty, "收件人不存在");
+				return View(viewModel);
+			}
+			foreach (string strItem in sbIncept.ToString().Split(new char[] { ',' }))
+			{
+				var entity = new UserMessageEntity();
+				entity.Title = viewModel.Title;
+				entity.Content = viewModel.Content;
+				entity.Sender = viewModel.Sender;
+				entity.Incept = strItem;
+				entity.SendTime = DateTime.Now;
+				entity.IsSend = 1;
+				entity.IsRead = 0;
+				entity.IsDelInbox = 0;
+				entity.IsDelSendbox = 0;
+				await _UserMessageServiceApp.AddAsync(entity);
 			}
 			#endregion
-			return View(adminViewModel);
+			viewModel.result = "ok";
+			return View(viewModel);
+		}
+
+		[AdminAuthorize(Roles = "SuperAdmin,MessageManage")]
+		public ActionResult ViewMessage(int id = 0)
+		{
+			var entity = _UserMessageServiceApp.Get(p => p.MessageID == id);
+			return View(entity);
 		}
 		#endregion
 

@@ -93,13 +93,15 @@
 				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 				success: function (data) {
 					$.each(data.rowList, function (i, item) {
+						var Inbox = (item.isDelInbox == "2") ? "已清" : (item.isDelInbox == "1") ? "已删" : (item.isRead == "1") ? "已读" : "未读";
+						var Sendbox = (item.isDelSendbox == "2") ? "已清" : (item.isDelSendbox == "1") ? "已删" : (item.isSend == "1") ? "已发" : "未发";
 						var tr = "<tr class=\"text-c\">";
 						tr += "<td><input type='checkbox' value='" + item.messageID + "' class='checkboxs'></td>";
 						tr += "<td>" + item.title + "</td>";
 						tr += "<td><a href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('查看会员','/Admin/User/UserShow?UserName=" + item.incept + "')\" class=\"ml-5\">" + item.incept +"</a></td>";
-						tr += "<td>" + (item.isDelInbox == 2) ? "已清" : (item.isDelInbox == 1) ? "已删" : (item.isRead == 1) ? "已读" : "未读" + "</td>";
+						tr += "<td>" + Inbox + "</td>";
 						tr += "<td><a href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_showFull('查看会员','/Admin/User/UserShow?UserName=" + item.sender + "')\" class=\"ml-5\">" + item.sender + "</a></td>";
-						tr += "<td>" + (item.isDelSendbox == 2) ? "已清" : (item.isDelSendbox == 1) ? "已删" : (item.isSend == 1) ? "已发" : "未发" + "</td>";
+						tr += "<td>" + Sendbox + "</td>";
 						tr += "<td>" + (item.sendTime == null ? "" : (formatDateTime(item.sendTime) == "9999-12-31 23:59:59") ? "" : formatDateTime(item.sendTime)) + "</td>";
 						tr += "<td class=\"td-manage\">";
 						tr += "<a title=\"详细\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('查看站内信','/Admin/Plus/ViewMessage/" + item.messageID + "','800','600')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe665;</i></a>";

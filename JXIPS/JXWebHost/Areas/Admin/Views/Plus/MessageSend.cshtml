@@ -3,17 +3,35 @@
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3">收件人：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<span class="select-box inline">
-				<select id="dropInceptType" class="select" onchange="SelectInceptType()" asp-for="InceptType">
-					<option value="0">所有会员</option>
-					<option value="1">指定会员</option>
-					<option value="2">指定会员组</option>
-				</select>
-			</span>
-			<span class="select-box inline">
-				<input asp-for="Incept" type="text" id="txtIncept" class="input-text" placeholder="多个收件人用“,”分隔" style="display:none;" />
-				<select asp-for="InceptGroup" id="dropUserGroup" class="form-control" style="padding:0px;width:100%;display:none;"></select>
-			</span>
+			@{
+				if (Model.MessageID <= 0)
+				{
+					<span class="select-box inline">
+						<select id="dropInceptType" class="select" onchange="SelectInceptType()" asp-for="InceptType">
+							<option value="0">所有会员</option>
+							<option value="1">指定会员</option>
+							<option value="2">指定会员组</option>
+						</select>
+					</span>
+					<span class="select-box inline" id="conIncept" style="display:none;">
+						<input asp-for="Incept" type="text" id="txtIncept" class="input-text" placeholder="多个收件人用“,”分隔" />
+					</span>
+					<span class="select-box inline" id="conInceptGroup" style="display:none;min-width:120px;">
+						<select asp-for="InceptGroup" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
+					</span>
+				}
+				else
+				{
+					<span class="select-box inline">
+						<select id="dropInceptType" class="select" asp-for="InceptType">
+							<option value="1">指定会员</option>
+						</select>
+					</span>
+					<span class="select-box inline" id="conIncept">
+						<input asp-for="Incept" type="text" id="txtIncept" class="input-text" placeholder="多个收件人用“,”分隔" />
+					</span>
+				}
+			}
 		</div>
 	</div>
 	<div class="row cl">
@@ -50,20 +68,28 @@
 		function SelectInceptType() {
 			var InceptType = $("#dropInceptType").val();
 			if (InceptType == "0") {
-				$("#txtIncept").hide();
-				$("#dropUserGroup").hide();
+				$("#conIncept").hide();
+				$("#conInceptGroup").hide();
 			}
 			else if (InceptType == "1") {
-				$("#txtIncept").show();
-				$("#dropUserGroup").hide();
+				$("#conIncept").show();
+				$("#conInceptGroup").hide();
 			}
 			else if (InceptType == "2") {
-				$("#txtIncept").hide();
-				$("#dropUserGroup").show();
+				$("#conIncept").hide();
+				$("#conInceptGroup").show();
 			}
 		}
 		$(function () {
-			loadUserGroupsAjax("dropUserGroup", "", true);
+			var result = "@Model.result";
+			if (result == "ok") {
+				HuiRefresh();
+			}
+			else
+			{
+				loadUserGroupsAjax("InceptGroup", "@Model.InceptGroup", true);
+				SelectInceptType();
+			}
 		});
 	</script>
 }

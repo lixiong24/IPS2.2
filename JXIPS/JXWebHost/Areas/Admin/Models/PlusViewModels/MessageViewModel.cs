@@ -26,5 +26,10 @@ namespace JXWebHost.Areas.Admin.Models.PlusViewModels
 		public string InceptGroup { get; set; } = string.Empty;
 
 		public int InceptType { get; set; } = 0;
+
+		/// <summary>
+		/// 返回给客户端的标识，用于客户端判断是否提交成功。
+		/// </summary>
+		public string result { get; set; } = string.Empty;
 	}
 }

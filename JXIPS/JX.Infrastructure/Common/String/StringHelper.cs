@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -260,6 +261,25 @@ namespace JX.Infrastructure.Common
 		public static string ReplaceEnterNewline(string input, string newValue="<br/>")
 		{
 			return input.Replace("\r\n", newValue).Replace("\n\r", newValue).Replace("\n", newValue).Replace("\r", newValue);
+		}
+
+		/// <summary>
+		/// 通过分隔字符串得到对应的数组
+		/// </summary>
+		/// <param name="source">源字符串</param>
+		/// <param name="separator">分隔符</param>
+		/// <returns></returns>
+		public static List<T> GetArrayBySplit<T>(string source,string separator=",")
+		{
+			List<T> list = new List<T>();
+			if (source.Length <= 0) return list;
+
+			var converter = TypeDescriptor.GetConverter(typeof(T));
+			foreach (string item in source.Split(new char[] { Convert.ToChar(separator, CultureInfo.CurrentCulture) },StringSplitOptions.RemoveEmptyEntries))
+			{
+				list.Add((T)converter.ConvertFromString(item));
+			}
+			return list;
 		}
 		#endregion
 
