@@ -38,7 +38,7 @@
 		<button class="btn btn-danger radius" type="button" onclick="DeleteSingle(@Model.MessageID,'/Admin/Plus/DelMessage',HuiRefresh)">删除</button>
 		<a asp-action="MessageSend" asp-route-id="@Model.MessageID" asp-route-atype="Reply" class="btn btn-primary radius">回复</a>
 		<a asp-action="MessageSend" asp-route-id="@Model.MessageID" asp-route-atype="Forward" class="btn btn-secondary radius">转发</a>
-		<button class="btn btn-success radius" type="button" onclick="layer_close()">取消</button>
+		<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
 	</div>
 </div>
 @Html.AntiForgeryToken()
