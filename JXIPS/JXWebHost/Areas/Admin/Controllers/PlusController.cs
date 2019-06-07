@@ -197,6 +197,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 			viewModel.MessageID = id;
 			if (string.IsNullOrEmpty(atype))
 			{
+				ViewBag.Incept = "";
 				viewModel.Sender = User.FindFirst(ClaimTypes.Name).Value;
 			}
 			else
@@ -230,6 +231,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 						viewModel.Incept = "";
 						break;
 				}
+				ViewBag.Incept = viewModel.Incept;
 			}
 			return View(viewModel);
 		}
@@ -249,12 +251,13 @@ namespace JXWebHost.Areas.Admin.Controllers
 					});
 					break;
 				case 1://指定会员
-					if (string.IsNullOrEmpty(viewModel.Incept))
+					string Incept = collection["ctlSelectUser"];
+					if (string.IsNullOrEmpty(Incept))
 					{
 						ModelState.AddModelError(string.Empty, "收件人不能为空");
 						return View(viewModel);
 					}
-					string[] strArray = viewModel.Incept.Split(new char[] { ',' });
+					string[] strArray = Incept.Split(new char[] { ',' });
 					for (int j = 0; j < strArray.Length; j++)
 					{
 						if (_UsersServiceApp.IsExist(p=>p.UserName== strArray[j]))
@@ -305,6 +308,15 @@ namespace JXWebHost.Areas.Admin.Controllers
 		public ActionResult ViewMessage(int id = 0)
 		{
 			var entity = _UserMessageServiceApp.Get(p => p.MessageID == id);
+			if(entity != null)
+			{
+				var currentAdmin = User.FindFirst(ClaimTypes.Name).Value;
+				if(entity.Incept == currentAdmin)
+				{
+					entity.IsRead = 1;
+					_UserMessageServiceApp.Update(entity);
+				}
+			}
 			return View(entity);
 		}
 		#endregion

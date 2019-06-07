@@ -117,7 +117,10 @@
 		<siteMapNode title="查看生成进度" url="/Admin/HtmlManage/CreateHtmlProgress"/>
 	</siteMapNode>
 	<siteMapNode title="附件管理" url="/Admin/Plus">
-		<siteMapNode title="站内信管理" url="/Admin/Plus/MessageManage"/>
+		<siteMapNode title="站内信管理" url="/Admin/Plus/MessageManage">
+			<siteMapNode title="查看站内信" url="/Admin/Plus/ViewMessage"/>
+			<siteMapNode title="发送站内信" url="/Admin/Plus/MessageSend"/>
+		</siteMapNode>
 		<siteMapNode title="邮件发送" url="/Admin/Plus/MailListSend"/>
 		<siteMapNode title="数据字典管理" url="/Admin/Plus/ChoicesetManage"/>
 		<siteMapNode title="行政区划管理" url="/Admin/Plus/RegionManage"/>

@@ -1,30 +1,30 @@
 ﻿@model JX.Core.Entity.UserMessageEntity
 
-<div class="row cl">
+<div class="row cl pd-10">
 	<label class="form-label col-xs-4 col-sm-3">发件人：</label>
 	<div class="formControls col-xs-8 col-sm-9">
 		@Model.Sender
 	</div>
 </div>
-<div class="row cl">
+<div class="row cl pd-10">
 	<label class="form-label col-xs-4 col-sm-3">收件人：</label>
 	<div class="formControls col-xs-8 col-sm-9">
 		@Model.Incept
 	</div>
 </div>
-<div class="row cl">
+<div class="row cl pd-10">
 	<label class="form-label col-xs-4 col-sm-3">发送时间：</label>
 	<div class="formControls col-xs-8 col-sm-9">
 		@Model.SendTime
 	</div>
 </div>
-<div class="row cl">
+<div class="row cl pd-10">
 	<label class="form-label col-xs-4 col-sm-3">标题：</label>
 	<div class="formControls col-xs-8 col-sm-9">
 		@Model.Title
 	</div>
 </div>
-<div class="row cl">
+<div class="row cl pd-10">
 	<label class="form-label col-xs-4 col-sm-3">内容：</label>
 	<div class="formControls col-xs-8 col-sm-9">
 		@{
@@ -34,13 +34,11 @@
 	</div>
 </div>
 <div class="row cl pd-10">
-	
-</div>
-<div class="row cl">
 	<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
 		<button class="btn btn-danger radius" type="button" onclick="DeleteSingle(@Model.MessageID,'/Admin/Plus/DelMessage',HuiRefresh)">删除</button>
 		<a asp-action="MessageSend" asp-route-id="@Model.MessageID" asp-route-atype="Reply" class="btn btn-primary radius">回复</a>
 		<a asp-action="MessageSend" asp-route-id="@Model.MessageID" asp-route-atype="Forward" class="btn btn-secondary radius">转发</a>
+		<button class="btn btn-success radius" type="button" onclick="layer_close()">取消</button>
 	</div>
 </div>
 @Html.AntiForgeryToken()

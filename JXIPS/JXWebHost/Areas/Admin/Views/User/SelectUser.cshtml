@@ -1,0 +1,159 @@
+﻿@model IList<UserGroupsEntity>
+
+<div class="panel panel-primary">
+	<div class="panel-header">已经选定的用户</div>
+	<div class="panel-body">
+		<input type="text" class="input-text" style="width:250px" id="txtUserNameList" readonly="readonly" />
+		<button id="btnOK" type="button" class="btn btn-success" onclick="layer_close()">确定选中</button>
+		<button id="btnDel" type="button" class="btn btn-danger" onclick="Del(1)">删除最后</button>
+		<button id="btnDelAll" type="button" class="btn btn-danger" onclick="Del(0)">删除全部</button>
+	</div>
+</div>
+<div class="panel panel-secondary mt-20">
+	<div class="panel-header">
+		<span class="select-box inline">
+			<select id="dropGroups" class="select">
+				<option value="0">所属会员组</option>
+				@foreach (var item in Model)
+				{
+					<option value="@item.GroupID">@item.GroupName</option>
+				}
+			</select>
+		</span>
+		<span class="select-box inline">
+			<select id="dropSearchName" class="select">
+				<option value="UserName">会员名</option>
+			</select>
+		</span>
+		<input type="text" class="input-text" style="width:150px;" id="txtSearchKeyword" onkeypress="javascript:return DefaultButton(event, 'btnSearch')" placeholder="要搜索的会员名">
+		<button id="btnSearch" type="button" class="btn btn-success" onclick="loadTables(0,50);"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		<span class="r">共有数据：<strong id="ctlRecordTotal">0</strong> 条</span>
+	</div>
+	<div class="panel-body">
+		<div class="nav navbar-nav"><ul id="tableBody" class="cl"></ul></div>
+		<div style="text-align:right;">
+			<ul id="grid_paging_part"></ul>
+		</div>
+		<p class="mt-10"><input class="btn btn-block btn-primary radius" type="button" value="增加以上所有用户" onclick="AddPageAllUser()"></p>
+		<input type="hidden" id="hidPageAllUser" value="" />
+	</div>
+</div>
+@section scripts {
+	<script type="text/javascript">
+		var OpenerText = "";
+		$(function () {
+			OpenerText = getUrlParam("OpenerText");
+			document.getElementById('txtUserNameList').value = parent.document.getElementById(OpenerText).value;
+			loadTables(0, 50);
+		});
+		function loadTables(PageNum, PageSize) {
+			$("#tableBody").html("");
+			var groupID = $("#dropGroups").val();
+			var SearchName = $("#dropSearchName").val();
+			var SearchKeyword = $("#txtSearchKeyword").val();
+			var parm = "PageNum=" + PageNum + "&PageSize=" + PageSize
+				+ "&groupID=" + encodeURIComponent(groupID)
+				+ "&SearchName=" + encodeURIComponent(SearchName)
+				+ "&SearchKeyword=" + encodeURIComponent(SearchKeyword);
+			$.ajax({
+				type: "GET",
+				url: "/Admin/User/GetUserList?" + parm + "&_t=" + new Date().getTime(),
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function (data) {
+					var PageAllUser = "";
+					$.each(data.rowList, function (i, item) {
+						var tr = "<li style='width:25%;'>";
+						tr += "<a title='" + item.userName + "' href=\"javascript:;\" style=\"text-decoration:none;color:black;\" onclick=\"AddItem('" + item.userName + "')\">" + item.userName + "</a>";
+						tr += "</li>";
+						$("#tableBody").append(tr);
+						PageAllUser = PageAllUser + item.userName + ",";
+					})
+					$("#ctlRecordTotal").html(data.recordTotal);
+					if (PageAllUser.length > 0) {
+						PageAllUser = PageAllUser.substring(0, PageAllUser.length-1);
+					}
+					$("#hidPageAllUser").val(PageAllUser);
+					var elment = $("#grid_paging_part"); //分页插件的容器id
+					if (data.recordTotal > 0) {
+						var options = { //分页插件配置项
+							bootstrapMajorVersion: 3,
+							currentPage: data.pageNum + 1, //当前页
+							numberOfPages: data.recordTotal, //总数
+							totalPages: data.pageCount, //总页数
+							itemTexts: function (type, page, current) {
+								switch (type) {
+									case "first":
+										return "首页";
+									case "prev":
+										return "上一页";
+									case "next":
+										return "下一页";
+									case "last":
+										return "末页";
+									case "page":
+										return page;
+								}
+							},
+							onPageChanged: function (event, oldPage, newPage) { //页面切换事件
+								loadTables(newPage - 1, PageSize);
+							}
+						}
+						elment.bootstrapPaginator(options); //分页插件初始化
+					}
+				},
+				error: function (data, status, e) {
+					alert('得到数据失败!');
+				}
+			})
+		}
+		function AddItem(obj) {
+			if (obj == "") { return false; }
+			if (parent.document.getElementById(OpenerText).value == "") {
+				parent.document.getElementById(OpenerText).value = obj;
+				document.getElementById('txtUserNameList').value = parent.document.getElementById(OpenerText).value;
+				return false;
+			}
+			var singleUserName = obj.split(",");
+			var ignoreUserName = "";
+			for (i = 0; i < singleUserName.length; i++) {
+				if (checkUserName(parent.document.getElementById(OpenerText).value, singleUserName[i])) {
+					ignoreUserName = ignoreUserName + singleUserName[i] + " ";
+				}
+				else {
+					parent.document.getElementById(OpenerText).value = parent.document.getElementById(OpenerText).value + "," + singleUserName[i];
+					document.getElementById('txtUserNameList').value = parent.document.getElementById(OpenerText).value;
+				}
+			}
+		}
+		function AddPageAllUser() {
+			var UserNameList = $("#hidPageAllUser").val();
+			AddItem(UserNameList);
+		}
+		function checkUserName(UserNamelist, thisUserName) {
+			if (UserNamelist == thisUserName) {
+				return true;
+			}
+			else {
+				var s = UserNamelist.split(",");
+				for (j = 0; j < s.length; j++) {
+					if (s[j] == thisUserName)
+						return true;
+				}
+				return false;
+			}
+		}
+		function Del(num) {
+			if (num == 0 || parent.document.getElementById(OpenerText).value == ""
+				|| parent.document.getElementById(OpenerText).value == ",") {
+				parent.document.getElementById(OpenerText).value = "";
+				document.getElementById('txtUserNameList').value = "";
+				return false;
+			}
+
+			var strDel = parent.document.getElementById(OpenerText).value;
+			var s = strDel.split(",");
+			parent.document.getElementById(OpenerText).value = strDel.substring(0, strDel.length - s[s.length - 1].length - 1);
+			document.getElementById('txtUserNameList').value = parent.document.getElementById(OpenerText).value;
+		}
+	</script>
+}
