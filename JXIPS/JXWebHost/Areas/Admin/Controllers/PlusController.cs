@@ -13,6 +13,7 @@ using JXWebHost.Areas.Admin.Models.PlusViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 namespace JXWebHost.Areas.Admin.Controllers
 {
@@ -325,7 +326,103 @@ namespace JXWebHost.Areas.Admin.Controllers
 		[AdminAuthorize(Roles = "SuperAdmin,MailListSend")]
 		public ActionResult MailListSend()
 		{
-			return View();
+			var viewModel = new MailViewModel();
+			ViewBag.Content = "";
+			return View(viewModel);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,MailListSend")]
+		public async Task<ActionResult> MailListSend(MailViewModel viewModel, IFormCollection collection)
+		{
+			string content = collection["ctlContent"];
+			ViewBag.Content = content;
+			if (string.IsNullOrEmpty(content))
+			{
+				ModelState.AddModelError(string.Empty, "邮件内容不能为空");
+				return View(viewModel);
+			}
+			content = content.Replace("src=\"", "src=\"" + Utility.GetApplicationName());
+
+			StringBuilder sbIncept = new StringBuilder();
+			switch (viewModel.InceptType)
+			{
+				case 0://所有会员
+					var listAll = await _UsersServiceApp.QueryDynamicAsync<UsersEntity>(p => p.UserID > 0, p => p.Email);
+					listAll.ForEach(item => {
+						StringHelper.AppendString(sbIncept, item);
+					});
+					break;
+				case 1://指定会员
+					string Incept = collection["ctlSelectUser"];
+					if (string.IsNullOrEmpty(Incept))
+					{
+						ModelState.AddModelError(string.Empty, "收件人不能为空");
+						return View(viewModel);
+					}
+					var arrIncept = StringHelper.GetArrayBySplit<string>(Incept).ToArray();
+					var listIncept = await _UsersServiceApp.QueryDynamicAsync<UsersEntity>(p => arrIncept.Contains(p.UserName), p => p.Email);
+					listIncept.ForEach(item => {
+						StringHelper.AppendString(sbIncept, item);
+					});
+					break;
+				case 2://指定会员组
+					var InceptGroup = collection["InceptGroup"];
+					if (string.IsNullOrEmpty(InceptGroup))
+					{
+						ModelState.AddModelError(string.Empty, "收件人会员组不能为空");
+						return View(viewModel);
+					}
+					var arrInceptGroup = StringHelper.GetArrayBySplit<int>(InceptGroup).ToArray();
+					var listInceptGroup = await _UsersServiceApp.QueryDynamicAsync<UsersEntity>(p => arrInceptGroup.Contains(p.GroupID), p => p.Email);
+					listInceptGroup.ForEach(item => {
+						StringHelper.AppendString(sbIncept, item);
+					});
+					break;
+				case 3:// 指定email
+					if (string.IsNullOrEmpty(viewModel.InceptEmail))
+					{
+						ModelState.AddModelError(string.Empty, "指定收件人邮箱不能为空");
+						return View(viewModel);
+					}
+					StringHelper.AppendString(sbIncept, viewModel.InceptEmail.TrimEnd(','));
+					break;
+			}
+			if (string.IsNullOrEmpty(sbIncept.ToString()))
+			{
+				ModelState.AddModelError(string.Empty, "收件人邮箱不存在");
+				return View(viewModel);
+			}
+			
+			
+			int SuccessCount = 0;
+			int failCount = 0;
+			StringBuilder sbFail = new StringBuilder();
+			foreach (string strItem in sbIncept.ToString().Split(new char[] { ',' }))
+			{
+				MailSender sender2 = new MailSender();
+				sender2.Subject = viewModel.Title;
+				sender2.MailBody = content;
+				sender2.IsBodyHtml = true;
+				sender2.FromName = viewModel.Sender;
+				sender2.MailToAddressList.Add(new MailboxAddress(strItem));
+				if (sender2.Send() == MailState.Ok)
+				{
+					SuccessCount = SuccessCount + 1;
+				}
+				else
+				{
+					failCount = failCount + 1;
+					StringHelper.AppendString(sbFail, strItem);
+				}
+			}
+			var msg = "<li>发送完成！成功：<font color='blue'>" + SuccessCount.ToString() + "</fong>个，失败：<font color='red'>" + failCount.ToString()+ "</fong>个</li>";
+			if(failCount > 0)
+			{
+				msg += "<li>失败email：" + sbFail.ToString() + "</li>";
+			}
+			Utility.WriteMessage(msg);
+			return View(viewModel);
 		}
 		#endregion
 

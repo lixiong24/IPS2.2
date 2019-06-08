@@ -80,6 +80,7 @@
 	</siteMapNode>
 	<siteMapNode title="会员管理" url="/Admin/User">
 		<siteMapNode title="会员管理" url="/Admin/User/UserManage"/>
+		<siteMapNode title="选择会员" url="/Admin/User/SelectUser"/>
 		<siteMapNode title="会员组管理" url="/Admin/User/UserGroupManage"/>
 		<siteMapNode title="商户管理" url="/Admin/User/CompanyManage"/>
 	</siteMapNode>

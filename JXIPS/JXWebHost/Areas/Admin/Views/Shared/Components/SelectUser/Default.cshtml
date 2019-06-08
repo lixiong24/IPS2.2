@@ -1,6 +1,7 @@
 ﻿@model SelectUserViewModel
 
 <span class="select-box inline">
-	<input asp-for="Value" type="text" id="@{@Model.Prefix}SelectUser" name="@{@Model.Prefix}SelectUser" class="input-text" placeholder="多个会员用“,”分隔" />
+	<input asp-for="Value" type="text" id="@{@Model.Prefix}SelectUser" name="@{@Model.Prefix}SelectUser" data-val="@{@Model.IsRequired.ToString().ToLower()}" data-val-required="@{@Model.RequiredText}" class="input-text" placeholder="多个会员用“,”分隔" />
 </span>
+<span style="color:red;" class="field-validation-valid" data-valmsg-for="@{@Model.Prefix}SelectUser" data-valmsg-replace="@{@Model.IsRequired.ToString().ToLower()}"></span>
 <button class="btn btn-primary radius" type="button" onclick="layer_show('选择会员','/Admin/User/SelectUser?OpenerText=@{@Model.Prefix}SelectUser','700')">会员列表</button>

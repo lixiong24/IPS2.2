@@ -1,0 +1,87 @@
+﻿@model MailViewModel
+<form class="form form-horizontal" asp-controller="Plus" asp-action="MailListSend" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">收件人：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box inline">
+				<select id="dropInceptType" class="select" onchange="SelectInceptType()" asp-for="InceptType">
+					<option value="0">所有会员</option>
+					<option value="1">指定会员</option>
+					<option value="2">指定会员组</option>
+					<option value="3">指定邮箱</option>
+				</select>
+			</span>
+			<span id="conIncept" style="display:none;">
+				@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl", IsRequired = true })
+			</span>
+			<span class="select-box inline" id="conInceptGroup" style="display:none;min-width:120px;">
+				<select asp-for="InceptGroup" data-val="true" data-val-required="不能为空" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
+			</span>
+			<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptGroup" data-valmsg-replace="true"></span>
+			<span class="select-box inline" id="conInceptEmail" style="display:none;">
+				<input type="text" class="input-text" asp-for="InceptEmail" data-val="true" data-val-required="不能为空" placeholder="多个Email间请用“,”分隔">
+			</span>
+			<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptEmail" data-valmsg-replace="true"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">发件人名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="Sender">
+			<span asp-validation-for="Sender" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">标题：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="Title">
+			<span asp-validation-for="Title" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">内容：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			@await Component.InvokeAsync("UEditor", new UEditorViewModel { ClientID = "ctlContent",Content=ViewBag.Content })
+			<span asp-validation-for="Content" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button class="btn btn-primary radius" type="submit">发送</button>
+			<button class="btn btn-default radius" type="button" onclick="removeIframe()">取消</button>
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+	@Html.AntiForgeryToken()
+</form>
+@section scripts{
+	<script type="text/javascript">
+		function SelectInceptType() {
+			var InceptType = $("#dropInceptType").val();
+			if (InceptType == "0") {
+				$("#conIncept").hide();
+				$("#conInceptGroup").hide();
+				$("#conInceptEmail").hide();
+			}
+			else if (InceptType == "1") {
+				$("#conIncept").show();
+				$("#conInceptGroup").hide();
+				$("#conInceptEmail").hide();
+			}
+			else if (InceptType == "2") {
+				$("#conIncept").hide();
+				$("#conInceptGroup").show();
+				$("#conInceptEmail").hide();
+			}
+			else if (InceptType == "3") {
+				$("#conIncept").hide();
+				$("#conInceptGroup").hide();
+				$("#conInceptEmail").show();
+			}
+		}
+		$(function () {
+			loadUserGroupsAjax("InceptGroup", "@Model.InceptGroup", true);
+			SelectInceptType();
+		});
+	</script>
+}

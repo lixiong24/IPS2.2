@@ -14,11 +14,12 @@
 						</select>
 					</span>
 					<span id="conIncept" style="display:none;">
-						@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl", Value = ViewBag.Incept })
+						@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl", Value = ViewBag.Incept, IsRequired = true })
 					</span>
-					<span class="select-box inline" id="conInceptGroup" style="display:none;min-width:120px;">
-						<select asp-for="InceptGroup" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
+					<span class="select-box inline" id="conInceptGroup" style="display:none;min-width:200px;">
+						<select asp-for="InceptGroup" data-val="true" data-val-required="不能为空" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
 					</span>
+					<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptGroup" data-valmsg-replace="true"></span>
 				}
 				else
 				{
@@ -28,7 +29,7 @@
 						</select>
 					</span>
 					<span id="conIncept">
-						@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl",Value=ViewBag.Incept })
+						@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl", Value = ViewBag.Incept, IsRequired = true })
 					</span>
 				}
 			}

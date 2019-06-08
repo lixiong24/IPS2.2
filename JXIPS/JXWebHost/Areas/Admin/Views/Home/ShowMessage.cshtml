@@ -1,7 +1,7 @@
 ﻿@{
 }
 <div style="text-align:center; margin-top:10px;font-size:18px;">
-	<p>@ViewData["Message"]</p>
+	<p>@Html.Raw(ViewData["Message"])</p>
 	<a href="@ViewData["ReturnUrl"]">@ViewData["ReturnUrlText"]</a>
 	<input type="hidden" name="hidReturnUrl" id="hidReturnUrl" value="@ViewData["ReturnUrl"]" />
 </div>

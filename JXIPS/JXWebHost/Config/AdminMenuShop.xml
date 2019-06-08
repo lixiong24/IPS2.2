@@ -209,7 +209,7 @@
 	</channelMenu>
 	<channelMenu id="Plus" title="附件管理" operateCode="Plus" icon="&#xe63c;" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="MessageManage" title="站内信管理" operateCode="MessageManage" rightUrl="/Admin/Plus/MessageManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="MailListSend" title="邮件发送" operateCode="MailListSend" rightUrl="/Admin/Plus//MailListSend" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="MailListSend" title="邮件发送" operateCode="MailListSend" rightUrl="/Admin/Plus/MailListSend" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ChoicesetManage" title="数据字典管理" operateCode="ChoicesetManage" rightUrl="/Admin/Plus/ChoicesetManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="RegionManage" title="行政区划管理" operateCode="RegionManage" rightUrl="/Admin/Plus/RegionManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>

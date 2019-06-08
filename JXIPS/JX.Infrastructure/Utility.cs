@@ -578,6 +578,35 @@ namespace JX.Infrastructure
 
 		#region 得到程序路径
 		/// <summary>
+		/// 得到当前应用程序名（例：http://www.baidu.com）
+		/// </summary>
+		/// <returns></returns>
+		public static string GetApplicationName()
+		{
+			var request = MyHttpContext.Current.Request;
+			return new StringBuilder()
+				.Append(request.Scheme)
+				.Append("://")
+				.Append(request.Host)
+				.ToString();
+		}
+		/// <summary>
+		/// 得到当前的完整URL
+		/// </summary>
+		/// <returns></returns>
+		public static string GetAbsoluteUri()
+		{
+			var request = MyHttpContext.Current.Request;
+			return new StringBuilder()
+				.Append(request.Scheme)
+				.Append("://")
+				.Append(request.Host)
+				.Append(request.PathBase)
+				.Append(request.Path)
+				.Append(request.QueryString)
+				.ToString();
+		}
+		/// <summary>
 		/// 获取应用程序根路径，从config/SiteConfig.json文件中得到： / 或 /shop/
 		/// </summary>
 		/// <returns></returns>
