@@ -82,7 +82,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 					break;
 			}
 			int RecordTotal;
-			var adminList = _AdminService.GetListFull(PageNum, PageSize, filter, out RecordTotal);
+			var adminList = _AdminService.GetListFull(PageNum * PageSize, PageSize, filter, out RecordTotal);
 			PagerModel<AdminEntity> pagerModel = new PagerModel<AdminEntity>(PageNum, PageSize, RecordTotal, adminList);
 			return Json(pagerModel);
 		}
@@ -302,7 +302,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 			int PageSize = Utility.Query("PageSize", 10);
 			string filter = " 1=1 ";
 			int RecordTotal;
-			var result = _RolesService.GetList(PageNum, PageSize,"RoleID","","desc", filter,"", out RecordTotal);
+			var result = _RolesService.GetList(PageNum * PageSize, PageSize,"RoleID","","desc", filter,"", out RecordTotal);
 			if(PageNum==0)
 			{
 				result.Insert(0, new RolesEntity() { RoleID = 0, RoleName = "超级管理员", Description = "拥有一切权限" });

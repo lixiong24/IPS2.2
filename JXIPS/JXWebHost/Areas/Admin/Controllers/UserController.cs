@@ -49,7 +49,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 
 			string strColumn = "";
 			int RecordTotal;
-			var result = _UsersService.GetList(PageNum, PageSize, "UserID", strColumn, "desc", filter, "", out RecordTotal);
+			var result = _UsersService.GetList(PageNum * PageSize, PageSize, "UserID", strColumn, "desc", filter, "", out RecordTotal);
 			PagerModel<UsersEntity> pagerModel = new PagerModel<UsersEntity>(PageNum, PageSize, RecordTotal, result);
 			return Json(pagerModel);
 		}

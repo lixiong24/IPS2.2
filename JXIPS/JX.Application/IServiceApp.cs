@@ -583,7 +583,7 @@ namespace JX.Application
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -602,7 +602,7 @@ namespace JX.Application
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -623,7 +623,7 @@ namespace JX.Application
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -640,7 +640,7 @@ namespace JX.Application
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -660,7 +660,7 @@ namespace JX.Application
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns>自定义实体集合</returns>
@@ -677,7 +677,7 @@ namespace JX.Application
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns>自定义实体集合</returns>

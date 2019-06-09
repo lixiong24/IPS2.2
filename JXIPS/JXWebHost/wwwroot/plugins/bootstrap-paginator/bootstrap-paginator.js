@@ -335,7 +335,8 @@
                 p = this.buildPageItem("page", pages[i]);
 
                 if (p) {
-                    listContainer.append(p);
+					
+					listContainer.append(p);
                 }
             }
 

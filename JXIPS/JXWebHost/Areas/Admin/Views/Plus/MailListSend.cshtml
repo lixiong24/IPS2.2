@@ -1,5 +1,5 @@
 ﻿@model MailViewModel
-<form class="form form-horizontal" asp-controller="Plus" asp-action="MailListSend" method="post">
+<form id="myForm" class="form form-horizontal" asp-controller="Plus" asp-action="MailListSend" method="post">
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3">收件人：</label>
 		<div class="formControls col-xs-8 col-sm-9">
@@ -14,14 +14,18 @@
 			<span id="conIncept" style="display:none;">
 				@await Component.InvokeAsync("SelectUser", new SelectUserViewModel { Prefix = "ctl", IsRequired = true })
 			</span>
-			<span class="select-box inline" id="conInceptGroup" style="display:none;min-width:120px;">
-				<select asp-for="InceptGroup" data-val="true" data-val-required="不能为空" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
+			<span id="conInceptGroup" style="display:none;">
+				<span class="select-box inline" style="min-width:200px;">
+					<select asp-for="InceptGroup" data-val="true" data-val-required="不能为空" id="InceptGroup" class="select" style="padding:0px;width:100%;"></select>
+				</span>
+				<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptGroup" data-valmsg-replace="true"></span>
 			</span>
-			<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptGroup" data-valmsg-replace="true"></span>
-			<span class="select-box inline" id="conInceptEmail" style="display:none;">
-				<input type="text" class="input-text" asp-for="InceptEmail" data-val="true" data-val-required="不能为空" placeholder="多个Email间请用“,”分隔">
+			<span id="conInceptEmail" style="display:none;">
+				<span class="select-box inline">
+					<input type="text" class="input-text" asp-for="InceptEmail" data-val="true" data-val-required="不能为空" placeholder="多个Email间请用“,”分隔">
+				</span>
+				<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptEmail" data-valmsg-replace="true"></span>
 			</span>
-			<span style="color:red;" class="field-validation-valid" data-valmsg-for="InceptEmail" data-valmsg-replace="true"></span>
 		</div>
 	</div>
 	<div class="row cl">
@@ -41,8 +45,7 @@
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3">内容：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			@await Component.InvokeAsync("UEditor", new UEditorViewModel { ClientID = "ctlContent",Content=ViewBag.Content })
-			<span asp-validation-for="Content" style="color:red;"></span>
+			@await Component.InvokeAsync("UEditor", new UEditorViewModel { ClientID = "ctlContent",Content=ViewBag.Content, IsRequired = true })
 		</div>
 	</div>
 	<div class="row cl">

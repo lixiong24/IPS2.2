@@ -8,7 +8,7 @@ function GoToTab(obj, tab, className,savaTabID) {
 		className = "current";
 	}
 	$(obj).addClass(className).siblings().removeClass(className);
-	loadTables(0, 10);
+	loadTables(0, 15);
 }
 
 //删除单条数据(url:为指定的API地址)
@@ -30,7 +30,7 @@ function DeleteSingle(id,url,callback) {
 				if (data.result == "ok") {
 					layer.alert('删除成功!');
 					if (callback != null && typeof callback == "function") {
-						callback(0, 10);
+						callback(0, 15);
 					}
 				}
 				else {
@@ -73,7 +73,7 @@ function DeleteMulti(url, callback) {
 				if (data.result == "ok") {
 					layer.alert('删除成功!');
 					if (callback != null && typeof callback == "function") {
-						callback(0, 10);
+						callback(0, 15);
 					}
 				}
 				else {

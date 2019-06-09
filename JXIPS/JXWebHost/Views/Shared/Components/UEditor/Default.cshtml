@@ -1,19 +1,25 @@
 ﻿@model UEditorViewModel
 
-<script id="@{@Model.ClientID}" name="@{@Model.ClientID}" type="text/plain">
-</script>
+@*<script id="@{@Model.ClientID}" name="@{@Model.ClientID}" type="text/plain" data-val="true" data-val-ueditorReq="不能为空" data-val-ueditorReq-insName="ue@{@Model.ClientID}">
+</script>*@
+<textarea id="@{@Model.ClientID}" name="@{@Model.ClientID}" data-val="@{@Model.IsRequired.ToString().ToLower()}" data-val-required="@{@Model.RequiredText}"></textarea>
+<span style="color:red;" class="field-validation-valid" data-valmsg-for="@{@Model.ClientID}" data-valmsg-replace="@{@Model.IsRequired.ToString().ToLower()}"></span>
 
 <script type="text/javascript">
 	var ue@{@Model.ClientID} = UE.getEditor('@{@Model.ClientID}', {
-			autoHeight: true
-			,disabledTableInTable: false
-		});
-		//对编辑器的操作最好在编辑器ready之后再做
-		ue@{@Model.ClientID}.ready(function () {
-			//设置编辑器的内容
-			var htmlUE = "@Html.Raw(!(string.IsNullOrWhiteSpace(Model.Content))? Model.Content.Replace("\r\n", "").Replace("\"", "\\\""):"")";
-			if (htmlUE != "") {
-				ue@{@Model.ClientID}.setContent(htmlUE);
-			}
-		});
+		autoHeight: true
+		, disabledTableInTable: false
+		@Html.Raw(Model.ToolbarSet)
+	});
+	//对编辑器的操作最好在编辑器ready之后再做
+	ue@{@Model.ClientID}.ready(function () {
+		//设置编辑器的内容
+		var htmlUE = "@Html.Raw(!(string.IsNullOrWhiteSpace(Model.Content))? Model.Content.Replace("\r\n", "").Replace("\"", "\\\""):"")";
+		if (htmlUE != "") {
+			ue@{@Model.ClientID}.setContent(htmlUE);
+		}
+		var ctlUE = $("textarea[name='@{@Model.ClientID}']");
+		ctlUE.show();
+		ctlUE.css("width", "0px").css("height", "0px").css("margin-top", "-150px").css("z-index", "-1");
+	});
 </script>

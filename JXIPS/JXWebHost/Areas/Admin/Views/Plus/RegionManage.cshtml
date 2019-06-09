@@ -1,0 +1,117 @@
+﻿
+<div class="cl pd-5 bg-1 bk-gray">
+	<span class="l">
+		<span class="select-box inline">
+			<select id="dropSearchName" class="select">
+				<option value="Province">省份名称</option>
+				<option value="City">城市名称</option>
+				<option value="Area">区域名称</option>
+				<option value="PostCode">邮政编码</option>
+				<option value="AreaCode">区号</option>
+			</select>
+		</span>
+		<input type="text" class="input-text" style="width:250px" id="txtSearchKeyword" onkeypress="javascript:return DefaultButton(event, 'btnSearch')">
+		<button id="btnSearch" type="button" class="btn btn-success" onclick="loadTables(0,15);"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		<a href="javascript:;" onclick="DeleteMulti('/Admin/Plus/DelRegionMulti',loadTables)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		<a href="javascript:;" onclick="layer_show('添加','/Admin/Plus/RegionEdit')" class="btn btn-secondary radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a>
+	</span>
+	<span class="r">共有数据：<strong id="ctlRecordTotal">0</strong> 条</span>
+</div>
+<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<div class="tabBar cl">
+		<span onclick="GoToTab(this,0);" class="current">全部</span>
+	</div>
+	<input type="hidden" id="hidTab" value="0" />
+</div>
+<table class="table table-border table-bordered table-bg table-hover">
+	<thead>
+		<tr class="text-c">
+			<th width="25"><input type="checkbox" name="" value=""></th>
+			<th width="100">国家</th>
+			<th width="100">省份</th>
+			<th width="100">城市</th>
+			<th width="100">区域</th>
+			<th width="100">邮政编码</th>
+			<th width="100">区号</th>
+			<th width="80">操作</th>
+		</tr>
+	</thead>
+	<tbody id="tableBody"></tbody>
+</table>
+<div style="text-align:right;">
+	<ul id="grid_paging_part"></ul>
+</div>
+@Html.AntiForgeryToken()
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+			loadTables(0, 15);
+		});
+		function loadTables(PageNum, PageSize) {
+			$("#tableBody").html("");
+			var SearchName = $("#dropSearchName").val();
+			var SearchKeyword = $("#txtSearchKeyword").val();
+			var TabStatus = $("#hidTab").val();
+			var parm = "PageNum=" + PageNum + "&PageSize=" + PageSize
+				+ "&SearchName=" + encodeURIComponent(SearchName)
+				+ "&SearchKeyword=" + encodeURIComponent(SearchKeyword)
+				+ "&TabStatus=" + encodeURIComponent(TabStatus);
+			$.ajax({
+				type: "GET",
+				url: "/Admin/Plus/GetRegionList?" + parm + "&_t=" + new Date().getTime(),
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				success: function (data) {
+					$.each(data.rowList, function (i, item) {
+						var tr = "<tr class=\"text-c\">";
+							tr += "<td><input type='checkbox' value='" + item.regionID + "' class='checkboxs'></td>";
+							tr += "<td>" + item.country + "</td>";
+							tr += "<td>" + item.province + "</td>";
+							tr += "<td>" + item.city + "</td>";
+							tr += "<td>" + item.area + "</td>";
+							tr += "<td>" + item.postCode + "</td>";
+							tr += "<td>" + item.areaCode + "</td>";
+						tr += "<td class=\"td-manage\">";
+						tr += "<a title=\"详细\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('查看','/Admin/Plus/RegionView/" + item.regionID + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe665;</i></a>";
+						tr += "<a title=\"编辑\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"layer_show('编辑','/Admin/Plus/RegionEdit/" + item.regionID + "')\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6df;</i></a>";
+						tr += "<a title=\"删除\" href=\"javascript:;\" style=\"text-decoration:none\" onclick=\"DeleteSingle('" + item.regionID + "','/Admin/Plus/DelRegion',loadTables)\" class=\"ml-5\"><i class=\"Hui-iconfont\">&#xe6e2;</i></a>";
+						tr += "</td>";
+						tr += "</tr>";
+						$("#tableBody").append(tr);
+					})
+					$("#ctlRecordTotal").html(data.recordTotal);
+					var elment = $("#grid_paging_part"); //分页插件的容器id
+					if (data.recordTotal > 0) {
+						var options = { //分页插件配置项
+							bootstrapMajorVersion: 3,
+							currentPage: data.pageNum + 1, //当前页
+							numberOfPages: data.recordTotal, //总数
+							totalPages: data.pageCount, //总页数
+							numberOfPages:10,//设置控件显示的页码数
+							itemTexts: function (type, page, current) {
+								switch (type) {
+									case "first":
+										return "首页";
+									case "prev":
+										return "上一页";
+									case "next":
+										return "下一页";
+									case "last":
+										return "末页";
+									case "page":
+										return page;
+								}
+							},
+							onPageChanged: function (event, oldPage, newPage) { //页面切换事件
+								loadTables(newPage - 1, PageSize);
+							}
+						}
+						elment.bootstrapPaginator(options); //分页插件初始化
+					}
+				}
+			})
+		}
+	</script>
+}
+
+
+

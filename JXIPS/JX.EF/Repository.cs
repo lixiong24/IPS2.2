@@ -1377,7 +1377,7 @@ namespace JX.EF
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -1403,9 +1403,9 @@ namespace JX.EF
 
 			if (selector == null)
 			{
-				return query.Cast<TResult>().Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+				return query.Cast<TResult>().Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 			}
-			return query.Select(selector).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+			return query.Select(selector).Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 		}
 		/// <summary>
 		/// 分页查询，可指定返回结果、排序、查询条件的通用分页查询方法，返回实体对象集合
@@ -1415,7 +1415,7 @@ namespace JX.EF
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -1438,9 +1438,9 @@ namespace JX.EF
 
 			if (selector == null)
 			{
-				return query.Cast<TResult>().Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+				return query.Cast<TResult>().Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 			}
-			return query.Select(selector).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+			return query.Select(selector).Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 		}
 
 		/// <summary>
@@ -1452,7 +1452,7 @@ namespace JX.EF
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -1477,9 +1477,9 @@ namespace JX.EF
 
 			if (selector == null)
 			{
-				return query.Cast<dynamic>().Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+				return query.Cast<dynamic>().Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 			}
-			return query.Select(selector).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+			return query.Select(selector).Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 		}
 		/// <summary>
 		/// 分页查询，可指定返回结果、排序、查询条件的通用分页查询方法，返回dynamic对象集合
@@ -1488,7 +1488,7 @@ namespace JX.EF
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns></returns>
@@ -1510,9 +1510,9 @@ namespace JX.EF
 
 			if (selector == null)
 			{
-				return query.Cast<dynamic>().Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+				return query.Cast<dynamic>().Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 			}
-			return query.Select(selector).Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList();
+			return query.Select(selector).Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList();
 		}
 
 		/// <summary>
@@ -1524,7 +1524,7 @@ namespace JX.EF
 		/// <param name="orderby">排序字段</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
 		/// <param name="IsAsc">排序方向，true为正序false为倒序</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns>自定义实体集合</returns>
@@ -1547,9 +1547,9 @@ namespace JX.EF
 			}
 			if (selector == null)
 			{
-				return query.Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList<object>();
+				return query.Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList<object>();
 			}
-			return selector(query).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+			return selector(query).Skip(pageIndex * pageSize).Take(pageSize).ToList();
 		}
 		/// <summary>
 		/// 分页查询，可指定返回结果、排序、查询条件的通用查询方法，返回Object对象集合
@@ -1558,7 +1558,7 @@ namespace JX.EF
 		/// <param name="where">过滤条件，需要用到类型转换的需要提前处理与数据表一致的</param>
 		/// <param name="orderByExpression">多字段排序</param>
 		/// <param name="selector">返回结果（必须是模型中存在的字段）</param>
-		/// <param name="pageIndex">分页索引，从1开始</param>
+		/// <param name="pageIndex">分页索引，从0开始</param>
 		/// <param name="pageSize">每页数量</param>
 		/// <param name="Total">查询总数</param>
 		/// <returns>自定义实体集合</returns>
@@ -1578,9 +1578,9 @@ namespace JX.EF
 			Total = query.AsNoTracking().Count();
 			if (selector == null)
 			{
-				return query.Skip((pageIndex - 1) * pageSize).Take(pageSize).AsNoTracking().ToList<object>();
+				return query.Skip(pageIndex * pageSize).Take(pageSize).AsNoTracking().ToList<object>();
 			}
-			return selector(query).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+			return selector(query).Skip(pageIndex * pageSize).Take(pageSize).ToList();
 		}
 
 		/// <summary>

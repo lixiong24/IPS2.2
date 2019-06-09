@@ -1,0 +1,220 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="ControllerName" Type="String" Category="Context" Default="" Description="The name to include in the comment header" %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="JXWebHost.Areas.Admin.Controllers" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." Optional="True"%>
+<%@ Property Name="DetailTable" Type="SchemaExplorer.TableSchema" Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="StoreProcedure" Type="SchemaExplorer.CommandSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="View" Type="SchemaExplorer.ViewSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Assembly Name="System.Data" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="System.Collections.Specialized" %>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using JX.Application;
+using JX.Core.Entity;
+using JX.Infrastructure;
+using JX.Infrastructure.Common;
+using JX.Infrastructure.Framework.Authorize;
+using JXWebHost.Areas.Admin.Models.PlusViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace <%= NameSpace %>
+{
+	[Area("Admin")]
+	[AdminAuthorize]
+	public class <%= ControllerName %>Controller : Controller
+	{
+		private <%=GetIAppServiceClassName(SourceTable) %> _<%=GetAppServiceClassName(SourceTable) %>;
+		public <%= ControllerName %>Controller(<%=GetIAppServiceClassName(SourceTable) %> <%=GetAppServiceClassName(SourceTable) %>)
+		{
+			_<%=GetAppServiceClassName(SourceTable) %> = <%=GetAppServiceClassName(SourceTable) %>;
+		}
+		
+		#region <%= SourceTable.Name %>管理
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult <%= SourceTable.Name %>Manage()
+		{
+			return View();
+		}
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult Get<%= SourceTable.Name %>List()
+		{
+			int PageNum = Utility.Query("PageNum", 0);
+			int PageSize = Utility.Query("PageSize", 20);
+			string SearchName = Utility.Query("SearchName");
+			string SearchKeyword = Utility.Query("SearchKeyword");
+			int TabStatus = Utility.Query("TabStatus", 0);
+			string filter = " 1=1 ";
+			if (!string.IsNullOrEmpty(SearchKeyword))
+			{
+				filter += " and " + SearchName + " like '%" + DataSecurity.FilterBadChar(SearchKeyword) + "%'";
+			}
+			if (TabStatus > 0)
+			{
+				//filter += " and IsRead = " + TabStatus;
+			}
+			string strColumn = " * ";
+			int RecordTotal;
+			var result = _<%=GetAppServiceClassName(SourceTable) %>.GetList(PageNum * PageSize, PageSize, "<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>", strColumn, "desc", filter, "", out RecordTotal);
+			PagerModel<<%=GetEntityClassName(SourceTable) %>> pagerModel = new PagerModel<<%=GetEntityClassName(SourceTable) %>>(PageNum, PageSize, RecordTotal, result);
+			return Json(pagerModel);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult Del<%= SourceTable.Name %>(int id)
+		{
+			if (id <= 0)
+			{
+				return Json(new
+				{
+					Result = "删除失败！没有指定要删除的记录ID！"
+				});
+			}
+			try
+			{
+				if (_<%=GetAppServiceClassName(SourceTable) %>.Delete(p=>p.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>==id))
+				{
+					return Json(new
+					{
+						Result = "ok"
+					});
+				}
+				else
+				{
+					return Json(new
+					{
+						Result = "删除失败！"
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				return Json(new
+				{
+					Result = "删除失败！" + ex.Message
+				});
+			}
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult Del<%= SourceTable.Name %>Multi(string ids)
+		{
+			if (string.IsNullOrEmpty(ids))
+			{
+				return Json(new
+				{
+					Result = "删除失败！没有指定要删除的记录ID！"
+				});
+			}
+			if (!DataValidator.IsValidId(ids))
+			{
+				return Json(new
+				{
+					Result = "删除失败！指定要删除的记录ID格式不对！"
+				});
+			}
+			try
+			{
+				var arrIDs = StringHelper.GetArrayBySplit<int>(ids).ToArray();
+				_<%=GetAppServiceClassName(SourceTable) %>.Delete(p => arrIDs.Contains(p.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>));
+				return Json(new
+				{
+					Result = "ok"
+				});
+			}
+			catch (Exception ex)
+			{
+				return Json(new
+				{
+					Result = "删除失败！" + ex.Message
+				});
+			}
+		}
+		#endregion
+		
+		#region <%= SourceTable.Name %>编辑
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult <%= SourceTable.Name %>Edit(int id=0)
+		{
+			var model = new <%=GetEntityClassName(SourceTable) %>();
+            model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %> = id;
+            if (id <= 0)
+				return View(model);
+			model = _<%=GetAppServiceClassName(SourceTable) %>.Get(p=>p.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>==id);
+			if (model == null || model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %> <= 0)
+				return View(model);
+			return View(model);
+		}
+		[HttpPost]
+        [ValidateAntiForgeryToken]
+        [AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+        public async Task<ActionResult> <%= SourceTable.Name %>Edit(int id=0, <%=GetEntityClassName(SourceTable) %> model =null, IFormCollection collection=null)
+		{
+			<% for (int i = 0; i < SourceTable.Columns.Count; i++) { %>
+				<% if(!SourceTable.Columns[i].IsPrimaryKeyMember) {%>
+			if (string.IsNullOrEmpty(model.<%= SourceTable.Columns[i].Name %>))
+			{
+				ModelState.AddModelError(string.Empty, "<%= SourceTable.Columns[i].Description %>不能为空");
+				return View(model);
+			}
+				<% } %>
+			<% } %>
+			if (id <= 0)
+			{
+				#region 添加
+				if (!await _<%=GetAppServiceClassName(SourceTable) %>.AddAsync(model))
+				{
+					ModelState.AddModelError(string.Empty, "添加失败");
+					return View(model);
+				}
+				id = model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>;
+				#endregion
+			}
+			else
+			{
+				#region 修改
+				model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %> = id;
+				if (!await _<%=GetAppServiceClassName(SourceTable) %>.UpdateAsync(model))
+				{
+					ModelState.AddModelError(string.Empty, "修改失败");
+					return View(model);
+				}
+				#endregion
+			}
+			Utility.WriteMessage("操作成功","mRefresh");
+			return View(model);
+		}
+		[AdminAuthorize(Roles = "SuperAdmin,<%= SourceTable.Name %>Manage")]
+		public IActionResult <%= SourceTable.Name %>View(int id=0)
+		{
+			var model = new <%=GetEntityClassName(SourceTable) %>();
+            model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %> = id;
+            if(id<=0)
+			{
+				Utility.WriteMessage("指定的ID不存在", "mClose");
+				return View(model);
+			}
+			
+			model = _<%=GetAppServiceClassName(SourceTable) %>.Get(p=>p.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %>==id);
+			if (model == null || model.<%= SourceTable.PrimaryKey.MemberColumns[0].Name %> <= 0)
+			{
+				Utility.WriteMessage("指定的信息不存在", "mClose");
+				return View(model);
+			}
+			return View(model);
+		}
+		#endregion
+	}
+}

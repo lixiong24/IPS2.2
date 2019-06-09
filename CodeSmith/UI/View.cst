@@ -1,0 +1,27 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Src="..\Common.cs" Inherits="CommonFunction.Common" Debug="False" Description="Template description here." %>
+<%@ Property Name="NameSpace" Type="String" Category="Context" Default="JXWebHost.Areas.Admin.Controllers" Description="The namespace to use for this class" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" Category="Context" Optional="false" Description="Database that the documentation should be based on." %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" Category="Context" Description="Table that the object is based on." Optional="True"%>
+<%@ Property Name="DetailTable" Type="SchemaExplorer.TableSchema" Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="StoreProcedure" Type="SchemaExplorer.CommandSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Property Name="View" Type="SchemaExplorer.ViewSchema " Category="Context" Optional="True" Description="Table that the object is based on." %>
+<%@ Assembly Name="System.Data" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="System.Collections.Specialized" %>
+@model <%=GetEntityClassName(SourceTable) %>
+<% for (int i = 0; i < SourceTable.Columns.Count; i++) { %>
+<div class="row cl pd-10">
+	<label class="form-label col-xs-4 col-sm-3"><%= SourceTable.Columns[i].Description %>：</label>
+	<div class="formControls col-xs-8 col-sm-9">
+		@Model.<%= SourceTable.Columns[i].Name %>
+	</div>
+</div>
+<% } %>
+<div class="row cl pd-10">
+	<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+		<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
+	</div>
+</div>

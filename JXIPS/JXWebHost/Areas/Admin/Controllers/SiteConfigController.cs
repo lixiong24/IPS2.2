@@ -413,7 +413,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 			}
 			string strColumn = "LogID,Category,Priority,Title,Timestamp,UserName,UserIP,ScriptName";
 			int RecordTotal;
-			var result = _LogService.GetList(PageNum, PageSize, "LogID", strColumn, "desc", filter, "", out RecordTotal);
+			var result = _LogService.GetList(PageNum * PageSize, PageSize, "LogID", strColumn, "desc", filter, "", out RecordTotal);
 			PagerModel<LogEntity> pagerModel = new PagerModel<LogEntity>(PageNum, PageSize, RecordTotal, result);
 			return Json(pagerModel);
 		}

@@ -124,7 +124,9 @@
 		</siteMapNode>
 		<siteMapNode title="邮件发送" url="/Admin/Plus/MailListSend"/>
 		<siteMapNode title="数据字典管理" url="/Admin/Plus/ChoicesetManage"/>
-		<siteMapNode title="行政区划管理" url="/Admin/Plus/RegionManage"/>
+		<siteMapNode title="行政区划管理" url="/Admin/Plus/RegionManage">
+			<siteMapNode title="行政区划编辑" url="/Admin/Plus/RegionEdit"/>
+		</siteMapNode>
 	</siteMapNode>
 	<siteMapNode title="模型管理" url="/Admin/CommonModel">
 		<siteMapNode title="内容模型管理" url="/Admin/CommonModel/ContentModel"/>

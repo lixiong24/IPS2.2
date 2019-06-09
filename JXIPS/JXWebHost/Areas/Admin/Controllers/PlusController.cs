@@ -23,11 +23,15 @@ namespace JXWebHost.Areas.Admin.Controllers
     {
 		private IUserMessageServiceApp _UserMessageServiceApp;
 		private IUsersServiceApp _UsersServiceApp;
+		private IRegionServiceApp _RegionServiceApp;
 
-		public PlusController(IUserMessageServiceApp UserMessageServiceApp, IUsersServiceApp UsersServiceApp)
+		public PlusController(IUserMessageServiceApp UserMessageServiceApp, 
+			IUsersServiceApp UsersServiceApp, 
+			IRegionServiceApp RegionServiceApp)
 		{
 			_UserMessageServiceApp = UserMessageServiceApp;
 			_UsersServiceApp = UsersServiceApp;
+			_RegionServiceApp = RegionServiceApp;
 		}
 
 		#region 站内信管理
@@ -436,9 +440,194 @@ namespace JXWebHost.Areas.Admin.Controllers
 
 		#region 行政区划管理
 		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
-		public ActionResult RegionManage()
+		public IActionResult RegionManage()
 		{
 			return View();
+		}
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public IActionResult GetRegionList()
+		{
+			int PageNum = Utility.Query("PageNum", 0);
+			int PageSize = Utility.Query("PageSize", 15);
+			string SearchName = Utility.Query("SearchName");
+			string SearchKeyword = Utility.Query("SearchKeyword");
+			int TabStatus = Utility.Query("TabStatus", 0);
+			string filter = " 1=1 ";
+			if (!string.IsNullOrEmpty(SearchKeyword))
+			{
+				filter += " and " + SearchName + " like '%" + DataSecurity.FilterBadChar(SearchKeyword) + "%'";
+			}
+			if (TabStatus > 0)
+			{
+				//filter += " and IsRead = " + TabStatus;
+			}
+			string strColumn = " * ";
+			int RecordTotal;
+			var result = _RegionServiceApp.GetList(PageNum * PageSize, PageSize, "RegionID", strColumn, "desc", filter, "", out RecordTotal);
+			PagerModel<RegionEntity> pagerModel = new PagerModel<RegionEntity>(PageNum, PageSize, RecordTotal, result);
+			return Json(pagerModel);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public IActionResult DelRegion(int id)
+		{
+			if (id <= 0)
+			{
+				return Json(new
+				{
+					Result = "删除失败！没有指定要删除的记录ID！"
+				});
+			}
+			try
+			{
+				if (_RegionServiceApp.Delete(p => p.RegionID == id))
+				{
+					return Json(new
+					{
+						Result = "ok"
+					});
+				}
+				else
+				{
+					return Json(new
+					{
+						Result = "删除失败！"
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				return Json(new
+				{
+					Result = "删除失败！" + ex.Message
+				});
+			}
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public IActionResult DelRegionMulti(string ids)
+		{
+			if (string.IsNullOrEmpty(ids))
+			{
+				return Json(new
+				{
+					Result = "删除失败！没有指定要删除的记录ID！"
+				});
+			}
+			if (!DataValidator.IsValidId(ids))
+			{
+				return Json(new
+				{
+					Result = "删除失败！指定要删除的记录ID格式不对！"
+				});
+			}
+			try
+			{
+				var arrIDs = StringHelper.GetArrayBySplit<int>(ids).ToArray();
+				_RegionServiceApp.Delete(p => arrIDs.Contains(p.RegionID));
+				return Json(new
+				{
+					Result = "ok"
+				});
+			}
+			catch (Exception ex)
+			{
+				return Json(new
+				{
+					Result = "删除失败！" + ex.Message
+				});
+			}
+		}
+		#endregion
+
+		#region 行政区划编辑
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public IActionResult RegionEdit(int id = 0)
+		{
+			var model = new RegionEntity();
+			model.RegionID = id;
+			if (id <= 0)
+				return View(model);
+			model = _RegionServiceApp.Get(p => p.RegionID == id);
+			if (model == null || model.RegionID <= 0)
+				return View(model);
+			return View(model);
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public async Task<ActionResult> RegionEdit(int id = 0, RegionEntity model = null, IFormCollection collection = null)
+		{
+			if (string.IsNullOrEmpty(model.Country))
+			{
+				ModelState.AddModelError(string.Empty, "国家名称不能为空");
+				return View(model);
+			}
+			if (string.IsNullOrEmpty(model.Province))
+			{
+				ModelState.AddModelError(string.Empty, "省份名称不能为空");
+				return View(model);
+			}
+			if (string.IsNullOrEmpty(model.City))
+			{
+				ModelState.AddModelError(string.Empty, "城市名称不能为空");
+				return View(model);
+			}
+			if (string.IsNullOrEmpty(model.PostCode))
+			{
+				ModelState.AddModelError(string.Empty, "邮政编码不能为空");
+				return View(model);
+			}
+			if (string.IsNullOrEmpty(model.AreaCode))
+			{
+				ModelState.AddModelError(string.Empty, "区号不能为空");
+				return View(model);
+			}
+			if (id <= 0)
+			{
+				#region 添加
+				if (!await _RegionServiceApp.AddAsync(model))
+				{
+					ModelState.AddModelError(string.Empty, "添加失败");
+					return View(model);
+				}
+				id = model.RegionID;
+				#endregion
+			}
+			else
+			{
+				#region 修改
+				model.RegionID = id;
+				if (!await _RegionServiceApp.UpdateAsync(model))
+				{
+					ModelState.AddModelError(string.Empty, "修改失败");
+					return View(model);
+				}
+				#endregion
+			}
+			Utility.WriteMessage("操作成功", "mRefresh");
+			return View(model);
+		}
+		[AdminAuthorize(Roles = "SuperAdmin,RegionManage")]
+		public IActionResult RegionView(int id = 0)
+		{
+			var model = new RegionEntity();
+			model.RegionID = id;
+			if (id <= 0)
+			{
+				Utility.WriteMessage("指定的ID不存在", "mClose");
+				return View(model);
+			}
+
+			model = _RegionServiceApp.Get(p => p.RegionID == id);
+			if (model == null || model.RegionID <= 0)
+			{
+				Utility.WriteMessage("指定的信息不存在", "mClose");
+				return View(model);
+			}
+			return View(model);
 		}
 		#endregion
 	}
