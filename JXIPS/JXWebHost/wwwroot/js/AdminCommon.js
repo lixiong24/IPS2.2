@@ -24,11 +24,11 @@ function DeleteSingle(id,url,callback) {
 				"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
 			},
 			error: function (data, status, e) {
-				layer.alert('网络超时，删除失败!');
+				layer.alert('删除失败!');
 			},
 			success: function (data) {
 				if (data.result == "ok") {
-					layer.alert('删除成功!');
+					layer.msg('删除成功!');
 					if (callback != null && typeof callback == "function") {
 						callback(0, 15);
 					}
@@ -71,7 +71,7 @@ function DeleteMulti(url, callback) {
 			},
 			success: function (data) {
 				if (data.result == "ok") {
-					layer.alert('删除成功!');
+					layer.msg('删除成功!');
 					if (callback != null && typeof callback == "function") {
 						callback(0, 15);
 					}

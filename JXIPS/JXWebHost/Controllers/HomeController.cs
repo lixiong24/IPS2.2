@@ -200,6 +200,9 @@ namespace JXWebHost.Controllers
 			var mailConfigSession = ConfigHelper.Get<MailConfig>();
 			Utility.SetSession("sessionName", mailConfigSession);
 
+			ViewData["GroupTypeEnum"] = EnumHelper.GetDescription((GroupTypeEnum)(0));
+			ViewData["GroupTypeEnum1"] = EnumHelper.GetDescription<GroupTypeEnum>(GroupTypeEnum.Agent.ToString());
+
 			LogFactory.SaveFileLog("日志标题get", "日志内容");
 
 

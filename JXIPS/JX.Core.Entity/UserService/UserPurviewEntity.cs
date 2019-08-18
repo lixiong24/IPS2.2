@@ -20,7 +20,7 @@ namespace JX.Core.Entity
 	public class UserPurviewEntity
 	{
 		#region 权限码
-		private string m_CheckCode;
+		private string m_CheckCode = string.Empty;
 		/// <summary>
 		/// 会员组或会员能够访问的，会员中心页面的权限码，以“,”分割。
 		/// </summary>
@@ -36,7 +36,7 @@ namespace JX.Core.Entity
 			}
 		}
 
-		private string m_DataCheckCode;
+		private string m_DataCheckCode = string.Empty;
 		/// <summary>
 		/// 会员组或会员对数据有操作权限的数据权限码，以“,”分割。
 		/// </summary>
@@ -52,7 +52,7 @@ namespace JX.Core.Entity
 			}
 		}
 
-		private string m_DataCheckCode1;
+		private string m_DataCheckCode1 = string.Empty;
 		/// <summary>
 		/// 会员组或会员对数据有操作权限的数据权限码，以“,”分割。
 		/// </summary>
@@ -68,7 +68,7 @@ namespace JX.Core.Entity
 			}
 		}
 
-		private string m_DataCheckCode2;
+		private string m_DataCheckCode2 = string.Empty;
 		/// <summary>
 		/// 会员组或会员对数据有操作权限的数据权限码，以“,”分割。
 		/// </summary>

@@ -453,3 +453,22 @@ function SendMail(mailToAddressID, subjectID, mailBodyID) {
 		}
 	});
 }
+
+//得到枚举类型的说明
+function GetEnumDesc(enumType, enumValue) {
+	var url = '/Common/GetEnumDescription';
+	$.ajax({
+		type: "POST",
+		url: url,
+		data: { "enumType": enumType, "enumValue": enumValue },
+		headers: {
+			"X-CSRF-TOKEN-JXWebHost": $("input[name='AntiforgeryFieldname']").val()
+		},
+		error: function (data, status, e) {
+			return "";
+		},
+		success: function (returnData) {
+			return returnData;
+		}
+	});
+}

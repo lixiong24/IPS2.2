@@ -10,6 +10,7 @@ using MimeKit;
 using System.Text;
 using JX.Application;
 using JX.Core.Entity;
+using JX.Infrastructure.Log;
 
 namespace JXWebHost.Controllers
 {
@@ -246,6 +247,40 @@ namespace JXWebHost.Controllers
 			resultInfo.Status = 1;
 			resultInfo.Data = sb.ToString();
 			return Json(resultInfo);
+		}
+
+		/// <summary>
+		/// 得到枚举类型的说明
+		/// </summary>
+		/// <param name="enumType"></param>
+		/// <param name="enumValue"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public IActionResult GetEnumDescription(string enumType,int enumValue)
+		{
+			string result = string.Empty;
+			switch (enumType)
+			{
+				case "GroupTypeEnum":
+					result = EnumHelper.GetDescription((GroupTypeEnum)enumValue);
+					break;
+				case "UserStatusEnum":
+					result = EnumHelper.GetDescription((UserStatusEnum)enumValue);
+					break;
+				case "NodeType":
+					result = EnumHelper.GetDescription((NodeType)enumValue);
+					break;
+				case "LogCategory":
+					result = EnumHelper.GetDescription((LogCategory)enumValue);
+					break;
+				case "LogPriority":
+					result = EnumHelper.GetDescription((LogPriority)enumValue);
+					break;
+				case "FieldType":
+					result = EnumHelper.GetDescription((JX.Infrastructure.Field.FieldType)enumValue);
+					break;
+			}
+			return Content(result);
 		}
 
 		private IActionResult RedirectToLocal(string returnUrl)

@@ -1,0 +1,39 @@
+﻿@model UserGroupsEntity
+<form class="form form-horizontal" asp-controller="User" asp-action="UserGroupEdit" method="post">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>会员组名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" asp-for="GroupName">
+			<span asp-validation-for="GroupName" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>会员组类型：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box inline">
+				<select id="dropGroupType" class="select" asp-for="GroupType">
+					<option value="0">会员组</option>
+					<option value="1">代理商组</option>
+					<option value="2">加盟商组</option>
+					<option value="3">分销商组</option>
+				</select>
+			</span>
+			<span asp-validation-for="GroupType" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red"></span>会员组说明：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea class="textarea" asp-for="Description" value=""></textarea>
+			<span asp-validation-for="Description" style="color:red;"></span>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交并设置权限</button>
+			<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
+			<input type="hidden" asp-for="GroupID" />
+			<span style="color:red; font-size:18px;">@Html.ValidationSummary(true)</span>
+		</div>
+	</div>
+</form>
