@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu>
-	<channelMenu id="ShopManage" title="商品管理" operateCode="ShopManage" icon="&#xe62d;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="ProductAdd" title="添加商品" operateCode="ProductAdd" rightUrl="/User/ProductAdd" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ProductManage" title="商品管理" operateCode="ProductManage" rightUrl="/User/ProductManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="ProductFavorite" title="我收藏的商品" operateCode="ProductFavorite" rightUrl="/User/ProductFavorite" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="BuyProductList" title="我最近购买过的商品" operateCode="BuyProductList" rightUrl="/User/BuyProductList" ShowOnForm="true" ShowOnMenu="true" Description="" />
-	</channelMenu>
-	<channelMenu id="OrderManage" title="订单管理" operateCode="OrderManage" icon="&#xe641;" ShowOnForm="true" ShowOnMenu="true" Description="">
+	<channelMenu id="OrderManage" title="订单管理" operateCode="OrderManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="OrderList" title="我的订单" operateCode="OrderList" rightUrl="/User/OrderList" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="MergerOrder" title="合并订单" operateCode="MergerOrder" rightUrl="/User/MergerOrder" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="AddressManage" title="收货地址管理" operateCode="AddressManage" rightUrl="/User/AddressManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="FinanceManage" title="财务管理" operateCode="FinanceManage" icon="&#xe6f2;" ShowOnForm="true" ShowOnMenu="true" Description="">
+	<channelMenu id="ShopManage" title="商品管理" operateCode="ShopManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="ProductAdd" title="添加商品" operateCode="ProductAdd" rightUrl="/User/ProductAdd" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductManage" title="我的商品" operateCode="ProductManage" rightUrl="/User/ProductManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="BuyProductList" title="我购买过的商品" operateCode="BuyProductList" rightUrl="/User/BuyProductList" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	</channelMenu>
+	<channelMenu id="ContentManage" title="信息管理" operateCode="ContentManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="InfoAdd" title="发表信息" operateCode="InfoAdd" rightUrl="/User/InfoAdd" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="InfoManage" title="我的信息" operateCode="InfoManage" rightUrl="/User/InfoManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="MyComment" title="我的评论" operateCode="MyComment" rightUrl="/User/MyComment" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="Signin" title="我的签收" operateCode="Signin" rightUrl="/User/Signin" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	</channelMenu>
+	<channelMenu id="FavoriteManage" title="收藏管理" operateCode="FavoriteManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="InfoFavorite" title="收藏的信息" operateCode="InfoFavorite" rightUrl="/User/InfoFavorite" ShowOnForm="true" ShowOnMenu="true" Description="" />
+		<mainMenu id="ProductFavorite" title="收藏的商品" operateCode="ProductFavorite" rightUrl="/User/ProductFavorite" ShowOnForm="true" ShowOnMenu="true" Description="" />
+	</channelMenu>
+	<channelMenu id="FinanceManage" title="财务管理" operateCode="FinanceManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
+		<mainMenu id="PayOnline" title="在线充值" operateCode="PayOnline" rightUrl="/User/PayOnline" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="BankrollAll" title="资金明细" operateCode="BankrollAll" rightUrl="/User/BankrollAll" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="PaymentLog" title="在线支付明细" operateCode="PaymentLog" rightUrl="/User/PaymentLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="PayOnline" title="在线充值" operateCode="PayOnline" rightUrl="/User/PayOnline" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="MentionManage" title="提现管理" operateCode="MentionManage" rightUrl="/User/MentionManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="ExchangeManage" title="明细记录" operateCode="ExchangeManage" icon="&#xe63c;" ShowOnForm="true" ShowOnMenu="true" Description="">
+	<channelMenu id="ExchangeManage" title="明细记录" operateCode="ExchangeManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="ValidLog" title="有效期明细" operateCode="ValidLog" rightUrl="/User/ValidLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ExchangeValidDate" title="兑换有效期" operateCode="ExchangeValidDate" rightUrl="/User/ExchangeValidDate" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="BuyValidDate" title="购买有效期" operateCode="BuyValidDate" rightUrl="/User/BuyValidDate" ShowOnForm="false" ShowOnMenu="false" Description="" />
@@ -27,18 +35,11 @@
 		<mainMenu id="DonatePoint" title="赠送点券" operateCode="DonatePoint" rightUrl="/User/DonatePoint" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="ExpLog" title="积分明细" operateCode="ExpLog" rightUrl="/User/ExpLog" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="ContentManage" title="信息管理" operateCode="ContentManage" icon="&#xe72d;" ShowOnForm="true" ShowOnMenu="true" Description="">
-		<mainMenu id="InfoAdd" title="发表信息" operateCode="InfoAdd" rightUrl="/User/InfoAdd" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="InfoManage" title="我发表的信息" operateCode="InfoManage" rightUrl="/User/InfoManage" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="InfoFavorite" title="我收藏的信息" operateCode="InfoFavorite" rightUrl="/User/InfoFavorite" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="MyComment" title="我发表的评论" operateCode="MyComment" rightUrl="/User/MyComment" ShowOnForm="true" ShowOnMenu="true" Description="" />
-		<mainMenu id="Signin" title="我签收的文章" operateCode="Signin" rightUrl="/User/Signin" ShowOnForm="true" ShowOnMenu="true" Description="" />
-	</channelMenu>
-	<channelMenu id="MessageManage" title="消息管理" operateCode="MessageManage" icon="&#xe64b;" ShowOnForm="true" ShowOnMenu="true" Description="">
+	<channelMenu id="MessageManage" title="消息管理" operateCode="MessageManage" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="MessageReception" title="我的消息" operateCode="MessageReception" rightUrl="/User/MessageReception" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="AddMessage" title="发送消息" operateCode="AddMessage" rightUrl="/User/AddMessage" ShowOnForm="true" ShowOnMenu="true" Description="" />
 	</channelMenu>
-	<channelMenu id="AccountManage" title="帐户管理" operateCode="None" icon="&#xe62e;" ShowOnForm="true" ShowOnMenu="true" Description="">
+	<channelMenu id="AccountManage" title="帐户管理" operateCode="None" icon="fa fa-forward" ShowOnForm="true" ShowOnMenu="true" Description="">
 		<mainMenu id="UserDefault" title="会员首页" operateCode="None" rightUrl="/User/index" ShowOnForm="true" ShowOnMenu="false" Description="" />
 		<mainMenu id="UserModify" title="修改信息" operateCode="UserModify" rightUrl="/User/UserModify" ShowOnForm="true" ShowOnMenu="true" Description="" />
 		<mainMenu id="PasswordModify" title="修改密码" operateCode="PasswordModify" rightUrl="/User/Password" ShowOnForm="true" ShowOnMenu="true" Description="" />

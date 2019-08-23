@@ -49,6 +49,15 @@
 	<script type="text/javascript" src="~/plugins/select2/select2.min.js"></script>
 	<script type="text/javascript" src="~/plugins/select2/i18n/zh-CN.js"></script>
 	<script type="text/javascript" src="~/plugins/colpick/js/colpick.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$('.skin-minimal input').iCheck({
+				checkboxClass: 'icheckbox-blue',
+				radioClass: 'iradio-blue',
+				increaseArea: '20%'
+			});
+		});
+	</script>
 	@RenderSection("scripts", required: false)
 </body>
 </html>

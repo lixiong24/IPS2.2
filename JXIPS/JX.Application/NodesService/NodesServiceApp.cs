@@ -1,9 +1,11 @@
 ﻿using JX.Core;
 using JX.Core.Entity;
+using JX.Infrastructure;
 using JX.Infrastructure.Common;
 using JX.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -305,7 +307,7 @@ namespace JX.Application
 			DbParameter[] parameterArray = new DbParameter[2];
 			parameterArray[0] = parmGroupId;
 			parameterArray[1] = parmOperateCode;
-			string strCommand = "SELECT * FROM NodesEntity WHERE NodeId IN (SELECT DISTINCT NodeId FROM GroupNodePermissions WHERE GroupId = @GroupId AND OperateCode = @OperateCode) AND PurviewType <> 3  ORDER BY NodeId";
+			string strCommand = "SELECT * FROM Nodes WHERE NodeId IN (SELECT DISTINCT NodeId FROM GroupNodePermissions WHERE GroupId = @GroupId AND OperateCode = @OperateCode) AND PurviewType <> 3  ORDER BY NodeId";
 			return LoadListAllBySql(strCommand, parameterArray);
 		}
 		/// <summary>
@@ -315,7 +317,7 @@ namespace JX.Application
 		public IList<NodesEntity> GetContentNodeList()
 		{
 			SqlParameter parmNodeType = new SqlParameter("NodeType", NodeType.Container);
-			string strSql = "SELECT * FROM NodesEntity WHERE Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 1)) ORDER BY RootID, OrderSort ASC";
+			string strSql = "SELECT * FROM Nodes WHERE Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 1)) ORDER BY RootID, OrderSort ASC";
 			return LoadListAllBySql(strSql, parmNodeType);
 		}
 		/// <summary>
@@ -325,7 +327,7 @@ namespace JX.Application
 		public IList<NodesEntity> GetShopNodeList()
 		{
 			SqlParameter parmNodeType = new SqlParameter("NodeType", NodeType.Container);
-			string strSql = "SELECT * FROM NodesEntity WHERE Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 2)) ORDER BY RootID, OrderSort ASC";
+			string strSql = "SELECT * FROM Nodes WHERE Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 2)) ORDER BY RootID, OrderSort ASC";
 			return LoadListAllBySql(strSql, parmNodeType);
 		}
 		/// <summary>
@@ -340,7 +342,7 @@ namespace JX.Application
 			DbParameter[] parameterArray = new DbParameter[2];
 			parameterArray[0] = parmParentID;
 			parameterArray[1] = parmNodeType;
-			string strSql = "SELECT * FROM NodesEntity WHERE ParentID = @ParentID and Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 2)) ORDER BY RootID, OrderSort ASC";
+			string strSql = "SELECT * FROM Nodes WHERE ParentID = @ParentID and Nodetype = @NodeType AND NodeID IN (SELECT NodeID FROM NodesModelTemplate WHERE modelID IN (select ModelID FROM Model WHERE ModelType = 2)) ORDER BY RootID, OrderSort ASC";
 			return LoadListAllBySql(strSql, parameterArray);
 		}
 
@@ -554,5 +556,168 @@ namespace JX.Application
 		}
 		#endregion
 
+		#region 得到、更新根节点ID
+		/// <summary>
+		/// 获取最大根节点ID
+		/// </summary>
+		/// <returns></returns>
+		private int GetMaxRootId()
+		{
+			return _repository.GetMax<int>(p => p.RootID);
+		}
+		/// <summary>
+		/// 更新节点的根节点ID
+		/// </summary>
+		/// <param name="nodeId">节点ID，多个ID用“,”分割</param>
+		/// <param name="rootId"></param>
+		/// <returns></returns>
+		private bool UpdateRootId(string nodeId, int rootId)
+		{
+			string strSql = "UPDATE Nodes SET RootID = @RootId WHERE NodeId IN(" + DataSecurity.ToValidId(nodeId) + ")";
+			return _repository.Update(strSql, new SqlParameter("RootId", rootId));
+		}
+		#endregion
+
+		#region 得到、更新下一节点ID(NextID字段)
+		/// <summary>
+		/// 获取下一节点ID
+		/// </summary>
+		/// <param name="depth">节点深度</param>
+		/// <param name="parentPath">节点ID，多个ID用“,”分割</param>
+		/// <returns></returns>
+		public int GetNextIdByDepth(int depth, string parentPath)
+		{
+			if (DataValidator.IsValidId(parentPath))
+			{
+				Expression<Func<NodesEntity, bool>> predicate = p => p.Depth == depth;
+				var arrNodeID = parentPath.Split(',');
+				predicate = predicate.And(p => arrNodeID.Contains(p.NodeID.ToString()));
+				return _repository.GetScalar<int, int>(p => p.NextID, predicate);
+			}
+			return 0;
+		}
+		/// <summary>
+		/// 更新节点的相邻下一个节点ID
+		/// </summary>
+		/// <param name="nodeId"></param>
+		/// <param name="nextId"></param>
+		/// <returns></returns>
+		private bool UpdateNextId(int nodeId, int nextId)
+		{
+			RemoveCacheByNodeId(nodeId);
+			string strSql = "UPDATE Nodes SET NextID=@NextID WHERE NodeID=@NodeID";
+			IDataParameter[] param = new IDataParameter[2]
+					 {
+						 new SqlParameter ("NextID", nextId),
+						 new SqlParameter ("NodeID", nodeId)
+					 };
+			return _repository.Update(strSql, param);
+		}
+		#endregion
+
+		#region 其他
+		/// <summary>
+		/// 生成节点目录树，用于管理后台
+		/// </summary>
+		/// <param name="depth"></param>
+		/// <param name="parentPath"></param>
+		/// <param name="nextId"></param>
+		/// <param name="child"></param>
+		/// <returns></returns>
+		public string GetTreeLine(int depth, string parentPath, int nextId, int child)
+		{
+			StringBuilder builder = new StringBuilder("");
+			string strParentPath = DataSecurity.FilterBadChar(parentPath);
+			string strBasePath = Utility.GetBasePath();
+			if (depth > 0)
+			{
+				for (int i = 1; i <= depth; i++)
+				{
+					if (i == depth)
+					{
+						if (nextId > 0)
+						{
+							builder.Append("<img src='" + strBasePath + "images/Node/tree_line1.gif' width='17' height='16' valign='abvmiddle' />");
+						}
+						else
+						{
+							builder.Append("<img src='" + strBasePath + "images/Node/tree_line2.gif' width='17' height='16' valign='abvmiddle' />");
+						}
+					}
+					else if (GetNextIdByDepth(i, strParentPath) > 0)
+					{
+						builder.Append("<img src='" + strBasePath + "images/Node/tree_line3.gif' width='17' height='16' valign='abvmiddle' />");
+					}
+					else
+					{
+						builder.Append("<img src='" + strBasePath + "images/Node/tree_line4.gif' width='17' height='16' valign='abvmiddle' />");
+					}
+				}
+			}
+			if (child > 0)
+			{
+				builder.Append("<img src='" + strBasePath + "images/Node/tree_folder4.gif' width='15' height='15' valign='abvmiddle' />");
+			}
+			else
+			{
+				builder.Append("<img src='" + strBasePath + "images/Node/tree_folder3.gif' width='15' height='15' valign='abvmiddle' />");
+			}
+			if (depth == 0)
+			{
+				//builder.Append("<b>");
+			}
+			return builder.ToString();
+		}
+		/// <summary>
+		/// 获取指定节点的子节点数组词典(NodeID与ArrChildID的对照表)
+		/// </summary>
+		/// <param name="parentPath">节点ID，多个ID用“,”分割</param>
+		/// <returns></returns>
+		public Dictionary<int, string> GetParentPathArrChildId(string parentPath)
+		{
+			if (DataValidator.IsValidId(parentPath))
+			{
+				Expression<Func<NodesEntity, bool>> predicate = p => true;
+				var arrNodeID = parentPath.Split(',');
+				predicate = predicate.And(p => arrNodeID.Contains(p.NodeID.ToString()));
+				var result = _repository.QueryDynamic(predicate, p => new { p.NodeID, p.ArrChildID });
+				Dictionary<int, string> dict = new Dictionary<int, string>();
+				foreach (dynamic item in result)
+				{
+					dict.Add(item.NodeID, item.ArrChildID);
+				}
+			}
+			return null;
+		}
+		/// <summary>
+		/// 根据传入的参数，生成类似“（子节点数量） [节点目录名称]”的字符串。
+		/// 生成节点树时附加的节点信息
+		/// </summary>
+		/// <param name="child">子节点数</param>
+		/// <param name="nodeType">节点类型</param>
+		/// <param name="nodeDir">节点目录</param>
+		/// <returns></returns>
+		public string GetNodeDir(int child, NodeType nodeType, string nodeDir)
+		{
+			StringBuilder builder = new StringBuilder();
+			if (child > 0)
+			{
+				builder.Append("（");
+				builder.Append(child);
+				builder.Append("）");
+			}
+			if (NodeType.Link == nodeType)
+			{
+				builder.Append(" <font color=blue>（外）</font>");
+			}
+			else if (!string.IsNullOrEmpty(nodeDir))
+			{
+				builder.Append(" [");
+				builder.Append(nodeDir);
+				builder.Append("]");
+			}
+			return builder.ToString();
+		}
+		#endregion
 	}
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -360,6 +361,14 @@ namespace JXWebHost.Controllers
 			//address.HomePhone = adminEntity.RoleNames;
 			//address.Mobile = _AdminRepository.GetRoleIDs(2);
 			//address.Country = _RoleFieldPermissionsRepository.DeleteFieldPermissionFromRoles(1,1,"a").ToString();
+
+			//Dictionary<int, string> dict = new Dictionary<int, string>();
+			//var result = _AddressRepository.QueryDynamic<RegionEntity>(p=>p.RegionID>0,p=>new { p.RegionID,p.Province});
+			//foreach(dynamic item in result)
+			//{
+			//	dict.Add(item.RegionID, item.Province);
+			//}
+
 			return View(address);
 		}
 

@@ -1,0 +1,173 @@
+﻿@model PublishPermissionsViewModel
+<form class="form form-horizontal" asp-controller="User" asp-action="PublishPermissions" method="post">
+	<div class="HuiTab">
+		<div class="tabBar cl">
+			<span>节点权限</span>
+			<span>其他发布权限</span>
+		</div>
+		<div class="tabCon">
+			<table class="table table-border table-bordered table-bg table-hover">
+				<thead>
+					<tr class="text-c">
+						<th width="10%">ID</th>
+						<th width="30%">节点名</th>
+						<th width="20%">录入</th>
+						<th width="20%">投稿终审通过</th>
+						<th width="20%">修改和删除终审通过的信息</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					@{
+						if (Model != null && Model.NodeList != null)
+						{
+							@foreach (var node in Model.NodeList)
+							{
+								<tr class="text-c">
+									<td>@node.NodeID</td>
+									<td>@node.NodeName</td>
+									<td>
+										@if (Model.GroupNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == ((int)OperateCode.NodeContentInput).ToString()).Count() >= 1)
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentInput).ToString())" name="ModelPurview" checked="checked">
+										}
+										else
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentInput).ToString())" name="ModelPurview">
+										}
+									</td>
+									<td>
+										@if (Model.GroupNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == ((int)OperateCode.NodeNoNeedCheck).ToString()).Count() >= 1)
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeNoNeedCheck).ToString())" name="ModelPurview" checked="checked">
+										}
+										else
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeNoNeedCheck).ToString())" name="ModelPurview">
+										}
+									</td>
+									<td>
+										@if (Model.GroupNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == ((int)OperateCode.NodeManageSelfInfo).ToString()).Count() >= 1)
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeManageSelfInfo).ToString())" name="ModelPurview" checked="checked">
+										}
+										else
+										{
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeManageSelfInfo).ToString())" name="ModelPurview">
+										}
+									</td>
+								</tr>
+							}
+						}
+					}
+				</tbody>
+			</table>
+			注意：如果节点中只包含商品信息，审核权限设置无效，会员中心添加商品无需审核。
+		</div>
+		<div class="tabCon">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">编辑器模式：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<div class="skin-minimal check-box" style="top:-10px;">
+						<input type="checkbox" asp-for="PurviewEntity.SetEditor">发表信息时HTML编辑器为高级模式（默认为简洁模式）
+					</div>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">每天发布数量：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					每天最多发布<input type="text" asp-for="PurviewEntity.MaxPublicInfoOneDay" class="input-text" style="width:15%;">条信息（不想限制请设置为<b>0</b>）。
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">总共发布数量：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					总共最多发布<input type="text" asp-for="PurviewEntity.MaxPublicInfo" class="input-text" style="width:15%;">条信息（不想限制请设置为<b>0</b>）。
+				</div>
+			</div>
+			@{
+				var userConfig = ConfigHelper.Get<UserConfig>();
+				if (userConfig.EnableExp)
+				{
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">积分设置：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							发布信息时获取 积分 为栏目设置的<input type="text" asp-for="PurviewEntity.GetExp" class="input-text" style="width:15%;">倍）。
+						</div>
+					</div>
+				}
+				if (userConfig.EnablePoint)
+				{
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">@userConfig.PointName 设置：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							发布信息时获取 @userConfig.PointName 为栏目设置的<input type="text" asp-for="PurviewEntity.GetPoint" class="input-text" style="width:15%;">倍）。
+						</div>
+					</div>
+				}
+			}
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">防跨站攻击：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<div class="skin-minimal check-box" style="top:-10px;">
+						<input type="checkbox" asp-for="PurviewEntity.IsXssFilter">会员发表信息时是否启用XSS（跨站攻击）<br />
+						（如果启用，可能导致会员添加的图片/Flash/视频等不能正常显示，如果禁用，则有跨站攻击漏洞。<br />
+						如果您信任此用户组的用户，可以禁用此功能，否则建议您启用此功能）
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
+		</div>
+	</div>
+	<br />
+	<table width="99%" class="table table-border table-bordered table-bg table-hover">
+		<tr class="text-c">
+			<td style="width:10%;">录入</td>
+			<td style="width:15%;">投稿终审通过</td>
+			<td style="width:15%;">修改和删除终审通过的信息</td>
+			<td style="width:60%;">备注</td>
+		</tr>
+		<tr class="text-c">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td class="text-l">只有选中录入才允许选择投稿终审通过、修改和删除终审通过的信息</td>
+		</tr>
+		<tr class="text-c">
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td></td>
+			<td></td>
+			<td class="text-l">所有投稿都是待审核状态，投稿终审通过、修改和删除终审通过的信息选项变成可选状态</td>
+		</tr>
+		<tr class="text-c">
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td></td>
+			<td class="text-l">所有投稿的信息都是终审通过，但是不能修改和删除终审通过的信息</td>
+		</tr>
+		<tr class="text-c">
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td></td>
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td class="text-l">录入和修改投稿信息都是待审核状态，可以删除终审通过的信息</td>
+		</tr>
+		<tr class="text-c">
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td><span style="color:Red"><b>√</b></span></td>
+			<td class="text-l">投稿信息时是终审通过，修改信息时也是终审通过；并且用户可以删除终审通过的信息。</td>
+		</tr>
+	</table>
+	<input type="hidden" id="IdType" name="IdType" value="@Model.IdType" readonly="readonly" />
+</form>
+@section scripts{
+	<script type="text/javascript">
+		$(function () {
+			$.Huitab(".HuiTab .tabBar span", ".HuiTab .tabCon", "current", "click", "0");
+		});
+	</script>
+}

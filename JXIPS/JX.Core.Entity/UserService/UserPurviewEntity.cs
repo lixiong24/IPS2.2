@@ -86,6 +86,26 @@ namespace JX.Core.Entity
 		#endregion
 
 		#region 计费方式
+		private int m_ChargeType = 0;
+		/// <summary>
+		/// 计费方式：
+		/// 0：只判断金币：有金币时，即使有效期已经到期，仍可以查看收费内容；金币用完后，即使有效期没有到期，也不能查看收费内容。
+		/// 1：只判断有效期：只要在有效期内，金币用完后仍可以查看收费内容；过期后，即使会员有金币也不能查看收费内容。
+		/// 2：同时判断金币和有效期：金币用完或有效期到期后，就不可查看收费内容。
+		/// 3：同时判断金币和有效期：金币用完并且有效期到期后，才不能查看收费内容。
+		/// </summary>
+		public int ChargeType
+		{
+			get
+			{
+				return this.m_ChargeType;
+			}
+			set
+			{
+				this.m_ChargeType = value;
+			}
+		}
+
 		private bool m_ChargeByPoint;
 		/// <summary>
 		/// 计费方式：只判断金币：有金币时，即使有效期已经到期，仍可以查看收费内容；金币用完后，即使有效期没有到期，也不能查看收费内容。
@@ -147,6 +167,107 @@ namespace JX.Core.Entity
 			set
 			{
 				this.m_ChargeByValidDate = value;
+			}
+		}
+		#endregion
+
+		#region 扣金币方式
+		private int m_ChargePointType = 0;
+		/// <summary>
+		/// 扣金币方式：
+		/// 0：有效期内，查看收费内容不扣金币，也不做记录。
+		/// 1：有效期内，查看收费内容不扣金币，但做记录。
+		/// 2：有效期内，查看收费内容也扣金币。
+		/// </summary>
+		public int ChargePointType
+		{
+			get
+			{
+				return this.m_ChargePointType;
+			}
+			set
+			{
+				this.m_ChargePointType = value;
+			}
+		}
+
+		private bool m_WriteToLog;
+		/// <summary>
+		/// 扣金币方式：有效期内，查看收费内容不扣金币，但做记录。
+		/// </summary>
+		public bool WriteToLog
+		{
+			get
+			{
+				return this.m_WriteToLog;
+			}
+			set
+			{
+				this.m_WriteToLog = value;
+			}
+		}
+
+		private bool m_MinusPoint;
+		/// <summary>
+		/// 扣金币方式：有效期内，查看收费内容是否扣金币。
+		/// </summary>
+		public bool MinusPoint
+		{
+			get
+			{
+				return this.m_MinusPoint;
+			}
+			set
+			{
+				this.m_MinusPoint = value;
+			}
+		}
+
+		private bool m_NotMinusPointNotWriteToLog;
+		/// <summary>
+		/// 扣金币方式：有效期内，查看收费内容不扣金币，也不做记录。
+		/// </summary>
+		public bool NotMinusPointNotWriteToLog
+		{
+			get
+			{
+				return this.m_NotMinusPointNotWriteToLog;
+			}
+			set
+			{
+				this.m_NotMinusPointNotWriteToLog = value;
+			}
+		}
+
+		private int m_TotalViewInfoNumber;
+		/// <summary>
+		/// 扣金币方式：有效期内，总共可以查看的收费信息最大数量（如果为0，则不限制）
+		/// </summary>
+		public int TotalViewInfoNumber
+		{
+			get
+			{
+				return this.m_TotalViewInfoNumber;
+			}
+			set
+			{
+				this.m_TotalViewInfoNumber = value;
+			}
+		}
+
+		private int m_ViewInfoNumberOneDay;
+		/// <summary>
+		/// 扣金币方式：有效期内，每天可以查看收费信息的最大数（如果为0，则不限制） 
+		/// </summary>
+		public int ViewInfoNumberOneDay
+		{
+			get
+			{
+				return this.m_ViewInfoNumberOneDay;
+			}
+			set
+			{
+				this.m_ViewInfoNumberOneDay = value;
 			}
 		}
 		#endregion
@@ -297,88 +418,6 @@ namespace JX.Core.Entity
 			set
 			{
 				this.m_SetEnableSale = value;
-			}
-		}
-		#endregion
-
-		#region 扣金币方式
-		private int m_ViewInfoNumberOneDay;
-		/// <summary>
-		/// 扣金币方式：有效期内，每天可以查看收费信息的最大数（如果为0，则不限制） 
-		/// </summary>
-		public int ViewInfoNumberOneDay
-		{
-			get
-			{
-				return this.m_ViewInfoNumberOneDay;
-			}
-			set
-			{
-				this.m_ViewInfoNumberOneDay = value;
-			}
-		}
-
-		private bool m_WriteToLog;
-		/// <summary>
-		/// 扣金币方式：有效期内，查看收费内容不扣金币，但做记录。
-		/// </summary>
-		public bool WriteToLog
-		{
-			get
-			{
-				return this.m_WriteToLog;
-			}
-			set
-			{
-				this.m_WriteToLog = value;
-			}
-		}
-
-		private bool m_MinusPoint;
-		/// <summary>
-		/// 扣金币方式：有效期内，查看收费内容是否扣金币。
-		/// </summary>
-		public bool MinusPoint
-		{
-			get
-			{
-				return this.m_MinusPoint;
-			}
-			set
-			{
-				this.m_MinusPoint = value;
-			}
-		}
-
-		private bool m_NotMinusPointNotWriteToLog;
-		/// <summary>
-		/// 扣金币方式：有效期内，查看收费内容不扣金币，也不做记录。
-		/// </summary>
-		public bool NotMinusPointNotWriteToLog
-		{
-			get
-			{
-				return this.m_NotMinusPointNotWriteToLog;
-			}
-			set
-			{
-				this.m_NotMinusPointNotWriteToLog = value;
-			}
-		}
-
-		private int m_TotalViewInfoNumber;
-		/// <summary>
-		/// 扣金币方式：有效期内，总共可以查看的收费信息最大数量（如果为0，则不限制）
-		/// </summary>
-		public int TotalViewInfoNumber
-		{
-			get
-			{
-				return this.m_TotalViewInfoNumber;
-			}
-			set
-			{
-				this.m_TotalViewInfoNumber = value;
 			}
 		}
 		#endregion

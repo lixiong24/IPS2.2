@@ -1,5 +1,4 @@
 ﻿using JX.Core.Entity;
-using JX.Infrastructure.Field;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,24 +6,20 @@ using System.Threading.Tasks;
 
 namespace JXWebHost.Areas.Admin.Models.UserViewModels
 {
-	public class UserGroupPermissionsViewModels
+	public class PublishPermissionsViewModel
 	{
 		/// <summary>
 		/// 权限类型：0：会员；1：会员组；
 		/// </summary>
 		public int IdType { set; get; }
 		/// <summary>
-		/// 菜单列表
+		/// 栏目节点列表
 		/// </summary>
-		public IList<MenuEntity> MenuEntityList { get; set; }
+		public IList<NodesEntity> NodeList { set; get; }
 		/// <summary>
-		/// 菜单权限码
+		/// 会员组(会员)-节点权限列表
 		/// </summary>
-		public string GroupPermissionsList { get; set; }
-		/// <summary>
-		/// 会员组－字段权限视图类列表
-		/// </summary>
-		public List<GroupFieldPermissionsViewModels> GroupFieldPermissionsViewModelsList { get; set; }
+		public IList<GroupNodePermissionsEntity> GroupNodePermissionsList { get; set; }
 		/// <summary>
 		/// 权限对象
 		/// </summary>

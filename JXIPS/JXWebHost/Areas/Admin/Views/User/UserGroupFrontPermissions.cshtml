@@ -1,0 +1,76 @@
+﻿@model PublishPermissionsViewModel
+<form class="form form-horizontal" asp-controller="User" asp-action="UserGroupFrontPermissions" method="post">
+	<table class="table table-border table-bordered table-bg table-hover">
+		<thead>
+			<tr class="text-c">
+				<th width="10%">ID</th>
+				<th width="50%">节点名</th>
+				<th width="20%">浏览</th>
+				<th width="20%">查看</th>
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+			@{
+				if (Model != null && Model.NodeList != null)
+				{
+					@foreach (var node in Model.NodeList)
+					{
+						<tr class="text-c">
+							<td>@node.NodeID</td>
+							<td class="text-l">@Html.Raw(node.NodeName)</td>
+							<td>
+								@{
+									switch (node.PurviewType)
+									{
+										case 0://开放栏目
+										case 1://半开放栏目
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentSkim).ToString())" name="ModelPurview" checked="checked" disabled="disabled">
+											break;
+										case 2://认证栏目
+											@if (Model.GroupNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == ((int)OperateCode.NodeContentSkim).ToString()).Count() >= 1)
+											{
+												<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentSkim).ToString())" name="ModelPurview" checked="checked">
+											}
+											else
+											{
+												<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentSkim).ToString())" name="ModelPurview">
+											}
+											break;
+									}
+								}
+							</td>
+							<td>
+								@{
+									switch (node.PurviewType)
+									{
+										case 0://开放栏目
+											<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentPreview).ToString())" name="ModelPurview" checked="checked" disabled="disabled">
+											break;
+										case 1://半开放栏目
+										case 2://认证栏目
+											@if (Model.GroupNodePermissionsList.Where(item => item.NodeID == node.NodeID && item.OperateCode == ((int)OperateCode.NodeContentPreview).ToString()).Count() >= 1)
+											{
+												<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentPreview).ToString())" name="ModelPurview" checked="checked">
+											}
+											else
+											{
+												<input type="checkbox" value="@node.NodeID:@(((int)OperateCode.NodeContentPreview).ToString())" name="ModelPurview">
+											}
+											break;
+									}
+								}
+							</td>
+						</tr>
+					}
+				}
+			}
+		</tbody>
+	</table>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+			<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
+		</div>
+	</div>
+	<input type="hidden" id="IdType" name="IdType" value="@Model.IdType" readonly="readonly" />
+</form>

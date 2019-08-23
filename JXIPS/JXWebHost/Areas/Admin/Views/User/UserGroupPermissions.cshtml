@@ -1,90 +1,269 @@
 ﻿@model UserGroupPermissionsViewModels
+@{
+	var userConfig = ConfigHelper.Get<UserConfig>();
+}
 <form class="form form-horizontal" asp-controller="User" asp-action="UserGroupPermissions" method="post">
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>会员组名：</label>
-		<div class="formControls col-xs-8 col-sm-10">
-			@ViewBag.Name
+
+	<div id="tab-Perm" class="HuiTab">
+		<div class="tabBar cl">
+			<span>菜单权限设置</span>
+			<span>字段权限设置</span>
+			<span>其他权限设置</span>
 		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>权限设置：</label>
-		<div class="formControls col-xs-8 col-sm-10">
-			@{
-				if (Model != null && Model.MenuEntityList != null)
-				{
-					@foreach (var menu in Model.MenuEntityList)
-					{
-						<dl class="permission-list">
-							<dt>
-								<label>
-									@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, menu.OperateCode))
-									{
-										<input type="checkbox" value="@menu.OperateCode" name="ModelPurview" checked="checked">
-									}
-									else
-									{
-										<input type="checkbox" value="@menu.OperateCode" name="ModelPurview">
-									}
-									@menu.Title
-								</label>
-							</dt>
-							<dd>
-								@foreach (var mainMenu in menu.MenuItem)
-								{
-									<dl class="cl permission-list2">
-										<dt style="width:120px;">
-											<label class="">
-												@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, mainMenu.OperateCode))
+		<div class="tabCon">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>名称：</label>
+				<div class="formControls col-xs-8 col-sm-10">
+					@ViewBag.Name
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>权限设置：</label>
+				<div class="formControls col-xs-8 col-sm-10">
+					@{
+						if (Model != null && Model.MenuEntityList != null)
+						{
+							@foreach (var menu in Model.MenuEntityList)
+							{
+								<dl class="permission-list">
+									<dt>
+										<label>
+											@if (menu.OperateCode == "None")
+											{
+												<input type="checkbox" value="@menu.OperateCode" name="ModelPurview" checked="checked" disabled="disabled">
+											}
+											else
+											{
+												@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, menu.OperateCode))
 												{
-													<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview" checked="checked">
+													<input type="checkbox" value="@menu.OperateCode" name="ModelPurview" checked="checked">
 												}
 												else
 												{
-													<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview">
+													<input type="checkbox" value="@menu.OperateCode" name="ModelPurview">
 												}
-												@mainMenu.Title
-											</label>
-										</dt>
-										<dd style="margin-left: 120px;">
-											@if (mainMenu.OperateCode == "NodesManage")
-											{
-												<a href="javascript:;" style="color:red;" onclick="layer_show('栏目权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Node','800','')"><=【详细设置】</a><br />
 											}
-											else if (mainMenu.OperateCode == "InfoManage")
-											{
-												<a href="javascript:;" style="color:red;" onclick="layer_show('内容权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Content','800','')"><=【详细设置】</a><br />
-											}
-											else if (mainMenu.OperateCode == "ProductManage")
-											{
-												<a href="javascript:;" style="color:red;" onclick="layer_show('商品权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Product','800','')"><=【详细设置】</a><br />
-											}
-											else if (mainMenu.OperateCode == "CommentManage")
-											{
-												<a href="javascript:;" style="color:red;" onclick="layer_show('评论权限管理','/Admin/Administrator/NodePermissions/@ViewBag.RoleID?PermissionsType=Comment','800','')"><=【详细设置】</a><br />
-											}
-											@if (mainMenu.MenuItem != null)
-											{
-												@foreach (var subMenu in mainMenu.MenuItem)
-												{
+											@menu.Title
+										</label>
+									</dt>
+									<dd>
+										@foreach (var mainMenu in menu.MenuItem)
+										{
+											<dl class="cl permission-list2">
+												<dt style="width:120px;">
 													<label class="">
-														@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, subMenu.OperateCode))
+														@if (mainMenu.OperateCode == "None")
 														{
-															<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview" checked="checked">
+															<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview" checked="checked" disabled="disabled">
 														}
 														else
 														{
-															<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview">
+															@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, mainMenu.OperateCode))
+															{
+																<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview" checked="checked">
+															}
+															else
+															{
+																<input type="checkbox" value="@mainMenu.OperateCode" name="ModelPurview">
+															}
 														}
-														@subMenu.Title
-													</label><br />
-												}
-											}
-										</dd>
-									</dl>
-								}
-							</dd>
-						</dl>
+														@mainMenu.Title
+													</label>
+												</dt>
+												<dd style="margin-left: 120px;">
+													@if (mainMenu.OperateCode == "InfoAdd")
+													{
+														<a href="javascript:;" style="color:red;" onclick="layer_show('发布信息权限设置','/Admin/User/PublishPermissions/@ViewBag.ID?IdType=1','800','')"><=【详细设置】</a><br />
+													}
+													else if (mainMenu.OperateCode == "ProductAdd")
+													{
+														<a href="javascript:;" style="color:red;" onclick="layer_show('发布信息权限设置','/Admin/User/PublishPermissions/@ViewBag.ID?IdType=1','800','')"><=【详细设置】</a><br />
+													}
+													@if (mainMenu.MenuItem != null)
+													{
+														@foreach (var subMenu in mainMenu.MenuItem)
+														{
+															<label>
+																@if (subMenu.OperateCode == "None")
+																{
+																	<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview" checked="checked" disabled="disabled">
+																}
+																else
+																{
+																	@if (StringHelper.FoundCharInArr(Model.GroupPermissionsList, subMenu.OperateCode))
+																	{
+																		<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview" checked="checked">
+																	}
+																	else
+																	{
+																		<input type="checkbox" value="@subMenu.OperateCode" name="ModelPurview">
+																	}
+																}
+																@subMenu.Title
+															</label><br />
+														}
+													}
+												</dd>
+											</dl>
+										}
+									</dd>
+								</dl>
+							}
+						}
 					}
+				</div>
+			</div>
+		</div>
+		<div class="tabCon">
+			<div class="row cl HuiTab" id="tab-models">
+				<label class="form-label col-xs-4 col-sm-2 tabBar">
+					模型列表：<br /><br />
+					@foreach (var vmGFP in Model.GroupFieldPermissionsViewModelsList)
+					{
+						<span class="f-r">@vmGFP.ModelsEntity.ModelName</span><br /><br />
+					}
+				</label>
+				<div class="formControls col-xs-8 col-sm-10">
+					@{
+						if (Model.GroupFieldPermissionsViewModelsList != null)
+						{
+							<table class="table table-border table-bordered table-bg table-hover">
+								<thead>
+									<tr class="text-c">
+										<th width="20%">字段名称</th>
+										<th width="20%">字段别名</th>
+										<th width="20%">字段类型</th>
+										<th width="20%">字段级别</th>
+										<th width="20%">禁止设置值</th>
+									</tr>
+								</thead>
+								@foreach (var vmGFP in Model.GroupFieldPermissionsViewModelsList)
+								{
+									<tbody class="tabCon">
+										@foreach (var field in vmGFP.FieldInfoList)
+										{
+											<tr class="text-c">
+												<td>@field.FieldName</td>
+												<td>@field.FieldAlias</td>
+												<td>@EnumHelper.GetDescription(field.FieldType)</td>
+												<td>
+													@if (field.FieldLevel == 0)
+													{
+														<span style="color:Green">系统</span>
+													}
+													else
+													{
+														<span>自定义</span>
+													}
+												</td>
+												<td>
+													@if (field.FieldName == "Title" || field.FieldName == "Status" || field.FieldName == "NodeId")
+													{
+														<input type="checkbox" value="@vmGFP.ModelsEntity.ModelID:@field.FieldName" name="ModelFieldPurview" disabled="disabled">
+													}
+													else
+													{
+														@if (vmGFP.GroupFieldPermissionsEntityList.Where(item => item.FieldName == field.FieldName).Count() >= 1)
+														{
+															<input type="checkbox" value="@vmGFP.ModelsEntity.ModelID:@field.FieldName" name="ModelFieldPurview" checked="checked">
+														}
+														else
+														{
+															<input type="checkbox" value="@vmGFP.ModelsEntity.ModelID:@field.FieldName" name="ModelFieldPurview">
+														}
+													}
+												</td>
+											</tr>
+										}
+									</tbody>
+								}
+							</table>
+						}
+					}
+				</div>
+			</div>
+		</div>
+		<div class="tabCon">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">评论权限：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<div class="skin-minimal check-box" style="top:-10px;">
+						<input type="checkbox" asp-for="PurviewEntity.EnableComment">在禁止发表评论的栏目里仍然可发表评论
+					</div><br />
+					<div class="skin-minimal check-box" style="top:-10px;">
+						<input type="checkbox" asp-for="PurviewEntity.CommentNeedCheck">在评论需要审核的栏目里发表评论不需要审核
+					</div>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">上传权限：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<div class="skin-minimal check-box" style="top:-10px;">
+						<input type="checkbox" asp-for="PurviewEntity.EnableUpload">允许在开放上传的模型中上传文件
+					</div><br />
+					最大允许上传<input type="text" asp-for="PurviewEntity.UploadSize" class="input-text" style="width:15%;">KB的文件（当所设置值大于字段的设置时，以字段设置为准。）
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">购物权限：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					购物时可以享受的折扣率：<input type="text" asp-for="PurviewEntity.Discount" class="input-text" style="width:15%;">%<br />
+					允许透支的最大额度：<input type="text" asp-for="PurviewEntity.Overdraft" class="input-text" style="width:15%;">元人民币
+				</div>
+			</div>
+			@{
+				if (userConfig.EnablePoint || userConfig.EnableValidNum)
+				{
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">计费方式：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="select-box radius">
+								<select class="select" asp-for="PurviewEntity.ChargeType">
+									@{
+										if (userConfig.EnablePoint)
+										{
+											<option value="0">只判断 @userConfig.PointName：有 @userConfig.PointName 时，可以查看收费内容；@userConfig.PointName 用完后，不能查看收费内容。</option>
+										}
+										if (userConfig.EnableValidNum)
+										{
+											<option value="1">
+												只判断有效期：只要在有效期内，就可以查看收费内容；过期后，不能查看收费内容。
+											</option>
+										}
+										if (userConfig.EnablePoint && userConfig.EnableValidNum)
+										{
+											<option value="2">
+												同时判断 @userConfig.PointName 和有效期： @userConfig.PointName 用完或有效期到期后，就不可查看收费内容。
+											</option>
+											<option value="3">
+												同时判断 @userConfig.PointName 和有效期： @userConfig.PointName 用完并且有效期到期后，才不能查看收费内容。
+											</option>
+
+										}
+									}
+								</select>
+							</span>
+						</div>
+					</div>
+				}
+			}
+			@{
+				if (userConfig.EnablePoint)
+				{
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-2">扣 @userConfig.PointName 方式：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<span class="select-box radius">
+								<select class="select" asp-for="PurviewEntity.ChargePointType">
+									<option value="0">有效期内，查看收费内容不扣 @userConfig.PointName，也不做记录。</option>
+									<option value="1">有效期内，查看收费内容不扣 @userConfig.PointName，但做记录。</option>
+									<option value="2">有效期内，查看收费内容也扣 @userConfig.PointName，也做记录。</option>
+								</select>
+							</span><br />
+							有效期内，总共可以看<input type="text" asp-for="PurviewEntity.TotalViewInfoNumber" class="input-text" style="width:15%;">条收费信息（如果为0，则不限制）<br />
+							有效期内，每天最多可以看<input type="text" asp-for="PurviewEntity.ViewInfoNumberOneDay" class="input-text" style="width:15%;">条收费信息（如果为0，则不限制）
+						</div>
+					</div>
 				}
 			}
 		</div>
@@ -92,6 +271,8 @@
 	<div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+			<button class="btn btn-default radius" type="button" onclick="layer_close()">取消</button>
+			<input type="hidden" id="IdType" name="IdType" value="@Model.IdType" readonly="readonly" />
 		</div>
 	</div>
 </form>
@@ -117,6 +298,8 @@
 					}
 				}
 			});
+			$.Huitab("#tab-Perm div.tabBar span", "#tab-Perm div.tabCon", "current", "click", "0");
+			$.Huitab("#tab-models label.tabBar span", "#tab-models tbody.tabCon", "current", "click", "0");
 		});
 	</script>
 }

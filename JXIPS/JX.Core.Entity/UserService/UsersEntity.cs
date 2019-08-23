@@ -28,6 +28,7 @@ namespace JX.Core.Entity
 			}
 		}
 
+		private UserPurviewEntity m_UserPurviewEntity;
 		/// <summary>
 		/// 用户权限信息
 		/// </summary>
@@ -36,11 +37,14 @@ namespace JX.Core.Entity
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(UserSetting))
+				if (m_UserPurviewEntity == null)
 				{
-					return UserSetting.ToXmlObject<UserPurviewEntity>();
+					if (!string.IsNullOrEmpty(UserSetting))
+					{
+						m_UserPurviewEntity = UserSetting.ToXmlObject<UserPurviewEntity>();
+					}
 				}
-				return null;
+				return m_UserPurviewEntity;
 			}
 		}
 		

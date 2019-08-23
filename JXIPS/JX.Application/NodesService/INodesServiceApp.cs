@@ -209,5 +209,39 @@ namespace JX.Application
 		/// <param name="nodeId"></param>
 		void RemoveCacheByNodeId(int nodeId);
 		#endregion
+
+		/// <summary>
+		/// 获取下一节点ID
+		/// </summary>
+		/// <param name="depth">节点深度</param>
+		/// <param name="parentPath">节点ID，多个ID用“,”分割</param>
+		/// <returns></returns>
+		int GetNextIdByDepth(int depth, string parentPath);
+
+		#region 其他
+		/// <summary>
+		/// 生成节点目录树，用于管理后台
+		/// </summary>
+		/// <param name="depth"></param>
+		/// <param name="parentPath"></param>
+		/// <param name="nextId"></param>
+		/// <param name="child"></param>
+		/// <returns></returns>
+		string GetTreeLine(int depth, string parentPath, int nextId, int child);
+		/// <summary>
+		/// 获取指定节点的子节点数组词典(NodeID与ArrChildID的对照表)
+		/// </summary>
+		/// <param name="parentPath">节点ID，多个ID用“,”分割</param>
+		/// <returns></returns>
+		Dictionary<int, string> GetParentPathArrChildId(string parentPath);
+		/// <summary>
+		/// 根据传入的参数，生成类似“（子节点数量） [节点目录名称]”的字符串。生成节点树时附加的节点信息
+		/// </summary>
+		/// <param name="child"></param>
+		/// <param name="nodeType"></param>
+		/// <param name="nodeDir"></param>
+		/// <returns></returns>
+		string GetNodeDir(int child, NodeType nodeType, string nodeDir);
+		#endregion
 	}
 }

@@ -2,7 +2,7 @@
 // 项目说明,功能实体类,用CodeSmith自动生成。
 // =================================================================== 
 // 文件名: GroupSpecialCategoryPermissionsEntity.cs
-// 修改时间：2019/4/9 17:45:08
+// 修改时间：2019/8/19 18:28:38
 // 修改人: lixiong
 // =================================================================== 
 using System;
@@ -24,11 +24,11 @@ namespace JX.Core.Entity
 			get {return _groupID;}
 			set {_groupID = value;}
 		}
-		private System.Int32 _operateCode = 0;
+		private System.String _operateCode = string.Empty;
 		/// <summary>
 		/// 权限操作码 (主键)
 		/// </summary>
-		public System.Int32 OperateCode
+		public System.String OperateCode
 		{
 			get {return _operateCode;}
 			set {_operateCode = value;}

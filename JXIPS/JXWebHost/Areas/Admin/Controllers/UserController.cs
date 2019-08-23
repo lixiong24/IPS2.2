@@ -7,6 +7,7 @@ using JX.Application;
 using JX.Core.Entity;
 using JX.Infrastructure;
 using JX.Infrastructure.Common;
+using JX.Infrastructure.Field;
 using JX.Infrastructure.Framework.Authorize;
 using JXWebHost.Areas.Admin.Models.UserViewModels;
 using Microsoft.AspNetCore.Http;
@@ -20,10 +21,17 @@ namespace JXWebHost.Areas.Admin.Controllers
     {
 		private IUsersServiceApp _UsersService;
 		private IUserGroupsServiceApp _UserGroupsService;
-		public UserController(IUsersServiceApp UsersService, IUserGroupsServiceApp UserGroupsService)
+		private INodesServiceApp _NodesService;
+		private IModelsServiceApp _ModelsService;
+		public UserController(IUsersServiceApp UsersService, 
+			IUserGroupsServiceApp UserGroupsService, 
+			INodesServiceApp NodesService,
+			IModelsServiceApp ModelsService)
 		{
 			_UsersService = UsersService;
 			_UserGroupsService = UserGroupsService;
+			_NodesService = NodesService;
+			_ModelsService = ModelsService;
 		}
 
 		public IActionResult Index()
@@ -92,7 +100,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
-		public IActionResult DelUserGroup(int id)
+		public async Task<ActionResult> DelUserGroup(int id)
 		{
 			if (id <= 0)
 			{
@@ -103,7 +111,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 			}
 			try
 			{
-				if (_UserGroupsService.Delete(p=>p.GroupID==id))
+				if (await _UserGroupsService.DeleteFullAsync(id))
 				{
 					return Json(new
 					{
@@ -154,7 +162,7 @@ namespace JXWebHost.Areas.Admin.Controllers
 		{
 			if (id == -2)
 			{
-				ModelState.AddModelError(string.Empty, "匿名用户组不能编辑");
+				ModelState.AddModelError(string.Empty, "匿名会员组不能编辑");
 				return View(model);
 			}
 			if (string.IsNullOrWhiteSpace(model.GroupName))
@@ -169,6 +177,11 @@ namespace JXWebHost.Areas.Admin.Controllers
 			if (id <= 0)
 			{
 				#region 添加
+				if (_UserGroupsService.UserGroupIsExist(model.GroupName))
+				{
+					ModelState.AddModelError(string.Empty, "添加失败！会员组名称已经存在！");
+					return View(model);
+				}
 				if (!await _UserGroupsService.AddAsync(model))
 				{
 					ModelState.AddModelError(string.Empty, "添加失败");
@@ -180,8 +193,19 @@ namespace JXWebHost.Areas.Admin.Controllers
 			else
 			{
 				#region 修改
-				model.GroupID = id;
-				if (!await _UserGroupsService.UpdateAsync(model))
+				var oldModel = _UserGroupsService.Get(p => p.GroupID == id);
+				if(oldModel.GroupName != model.GroupName)
+				{
+					if (_UserGroupsService.UserGroupIsExist(model.GroupName))
+					{
+						ModelState.AddModelError(string.Empty, "该会员组已经存在，请使用另一会员组名！");
+						return View(model);
+					}
+				}
+				oldModel.GroupName = model.GroupName;
+				oldModel.Description = model.Description;
+				oldModel.GroupType = model.GroupType;
+				if (!await _UserGroupsService.UpdateAsync(oldModel))
 				{
 					ModelState.AddModelError(string.Empty, "修改失败");
 					return View(model);
@@ -192,25 +216,60 @@ namespace JXWebHost.Areas.Admin.Controllers
 		}
 		#endregion
 
-		#region 会员组-菜单权限设置
+		#region 会员组-常规权限设置(菜单、字段)
 		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
-		public async Task<ActionResult> UserGroupPermissions(int id = 0, string groupName = "")
+		public async Task<ActionResult> UserGroupPermissions(int id = 0, int IdType = 1)
 		{
+			UserGroupsEntity userGroupsEntity = null;
+			UsersEntity usersEntity = null;
+			UserPurviewEntity userPurviewEntity = null;
 			UserGroupPermissionsViewModels permissionsViewModels = new UserGroupPermissionsViewModels();
-			if (id <= 0 && id != -2)
+			if (IdType == 1)
 			{
-				Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return View(permissionsViewModels);
+				}
+				userGroupsEntity = await _UserGroupsService.GetAsync(p => p.GroupID == id);
+				if (userGroupsEntity == null)
+				{
+					Utility.WriteMessage("指定的会员组不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				ViewBag.Name = userGroupsEntity.GroupName;
+				userPurviewEntity = userGroupsEntity.UserGroupPurview;
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return View(permissionsViewModels);
+				}
+				usersEntity = await _UsersService.GetAsync(p => p.UserID == id);
+				if (usersEntity == null)
+				{
+					Utility.WriteMessage("指定的会员不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				ViewBag.Name = usersEntity.UserName;
+				userPurviewEntity = usersEntity.UserPurview;
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
 				return View(permissionsViewModels);
 			}
-			var model = await _UserGroupsService.GetAsync(p => p.GroupID == id);
-			if (model == null)
+			if (userPurviewEntity == null)
 			{
-				Utility.WriteMessage("指定的会员组不存在", "mClose");
-				return View(permissionsViewModels);
+				userPurviewEntity = new UserPurviewEntity();
 			}
 			ViewBag.ID = id;
-			ViewBag.Name = model.GroupName;
-
+			permissionsViewModels.IdType = IdType;
+			permissionsViewModels.GroupPermissionsList = DataConverter.ToString(userPurviewEntity.AllCheckCode);
+			permissionsViewModels.PurviewEntity = userPurviewEntity;
+			//菜单权限
 			string userMenuPath = Utility.GetUserMenuPath();
 			XmlHelper xmlHelper = XmlHelper.Instance(FileHelper.MapPath(userMenuPath), XmlType.File);
 			XmlDocument xmlDoc = xmlHelper.XmlDoc;
@@ -254,36 +313,387 @@ namespace JXWebHost.Areas.Admin.Controllers
 					menuEntityList.Add(menuEntity);
 				}
 				permissionsViewModels.MenuEntityList = menuEntityList;
-				permissionsViewModels.GroupPermissionsList = "";//DataConverter.ToString(model.UserGroupPurview.AllCheckCode);
-				return View(permissionsViewModels);
 			}
+			//字段权限
+			var groupFieldPermissionsViewModelsList = new List<GroupFieldPermissionsViewModels>();
+			var modelsEntityList = await _ModelsService.LoadListAllAsync(p => p.IsDisabled == false);
+			foreach (ModelsEntity modelsEntity in modelsEntityList)
+			{
+				var fieldInfoList = modelsEntity.Field.ToXmlObject<List<FieldInfo>>();
+				fieldInfoList.Sort(new FieldInfoComparer());
+				var vm = new GroupFieldPermissionsViewModels();
+				vm.ModelsEntity = modelsEntity;
+				vm.FieldInfoList = fieldInfoList;
+				vm.GroupFieldPermissionsEntityList = await _UserGroupsService.GetFieldPermissionsById(id, modelsEntity.ModelID, IdType);
+				groupFieldPermissionsViewModelsList.Add(vm);
+			}
+			permissionsViewModels.GroupFieldPermissionsViewModelsList = groupFieldPermissionsViewModelsList;
 			return View(permissionsViewModels);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
-		public async Task<ActionResult> UserGroupPermissions(int id, IFormCollection collection)
+		public async Task<ActionResult> UserGroupPermissions(int id, int IdType, UserGroupPermissionsViewModels viewModel, IFormCollection collection)
 		{
-			if (id <= 0 && id != -2)
+			UserGroupsEntity userGroupsEntity = null;
+			UsersEntity usersEntity = null;
+			UserPurviewEntity userPurviewEntity = null;
+			if (IdType == 1)
 			{
-				Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return Content("");
+				}
+				userGroupsEntity = await _UserGroupsService.GetAsync(p => p.GroupID == id);
+				if (userGroupsEntity == null)
+				{
+					Utility.WriteMessage("指定的会员组不存在", "mClose");
+					return Content("");
+				}
+				userPurviewEntity = userGroupsEntity.UserGroupPurview;
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return Content("");
+				}
+				usersEntity = await _UsersService.GetAsync(p => p.UserID == id);
+				if (usersEntity == null)
+				{
+					Utility.WriteMessage("指定的会员不存在", "mClose");
+					return Content("");
+				}
+				userPurviewEntity = usersEntity.UserPurview;
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
 				return Content("");
 			}
-			if (id == 0)
+
+			//字段权限
+			var ModelFieldPurview = collection["ModelFieldPurview"];
+			await _UserGroupsService.DeleteFieldPermissionFromGroup(id,IdType);
+			await _UserGroupsService.AddFieldPermissionToUserGroup(id, OperateCode.ContentFieldInput, ModelFieldPurview, IdType);
+
+			if (userPurviewEntity == null)
 			{
-				Utility.WriteMessage("超级管理员不用设置权限", "mClose");
-				return Content("");
+				userPurviewEntity = new UserPurviewEntity();
 			}
+			//菜单权限
 			var ModelPurview = collection["ModelPurview"];
-			//if (await _RolesService.AddPermissionToRoles(id, ModelPurview))
-			//{
-			//	Utility.WriteMessage("设置权限成功", "mRefresh");
-			//}
-			//else
-			//{
-			//	Utility.WriteMessage("设置权限失败", "mClose");
-			//}
+			userPurviewEntity.AllCheckCode = ModelPurview;
+			//其他权限
+			userPurviewEntity.EnableComment = viewModel.PurviewEntity.EnableComment;
+			userPurviewEntity.CommentNeedCheck = viewModel.PurviewEntity.CommentNeedCheck;
+			userPurviewEntity.EnableUpload = viewModel.PurviewEntity.EnableUpload;
+			userPurviewEntity.UploadSize = viewModel.PurviewEntity.UploadSize;
+			userPurviewEntity.Discount = viewModel.PurviewEntity.Discount;
+			userPurviewEntity.Overdraft = viewModel.PurviewEntity.Overdraft;
+			if (ConfigHelper.Get<UserConfig>().EnablePoint || ConfigHelper.Get<UserConfig>().EnableValidNum)
+			{
+				userPurviewEntity.ChargeType = viewModel.PurviewEntity.ChargeType;
+			}
+			if (ConfigHelper.Get<UserConfig>().EnablePoint)
+			{
+				userPurviewEntity.ChargePointType = viewModel.PurviewEntity.ChargePointType;
+				userPurviewEntity.TotalViewInfoNumber = viewModel.PurviewEntity.TotalViewInfoNumber;
+				userPurviewEntity.ViewInfoNumberOneDay = viewModel.PurviewEntity.ViewInfoNumberOneDay;
+			}
+			bool bFlag = false;
+			if (userGroupsEntity != null)
+			{
+				userGroupsEntity.GroupSetting = userPurviewEntity.ToXml();
+				bFlag = await _UserGroupsService.UpdateAsync(userGroupsEntity);
+			}
+			else if (usersEntity != null)
+			{
+				usersEntity.UserSetting = userPurviewEntity.ToXml();
+				bFlag = await _UsersService.UpdateAsync(usersEntity);
+			}
+			if (bFlag)
+			{
+				Utility.WriteMessage("设置权限成功", "mRefresh");
+			}
+			else
+			{
+				Utility.WriteMessage("设置权限失败", "mClose");
+			}
+			return Content("");
+		}
+		#endregion
+
+		#region 会员组-发布权限设置(节点、专题)
+		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
+		public async Task<ActionResult> PublishPermissions(int id = 0,int IdType = 1)
+		{
+			UserGroupsEntity userGroupsEntity = null;
+			UsersEntity usersEntity = null;
+			var permissionsViewModels = new PublishPermissionsViewModel();
+			if (IdType == 1)
+			{
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return View(permissionsViewModels);
+				}
+				userGroupsEntity = await _UserGroupsService.GetAsync(p => p.GroupID == id);
+				if (userGroupsEntity == null)
+				{
+					Utility.WriteMessage("指定的会员组不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				permissionsViewModels.PurviewEntity = userGroupsEntity.UserGroupPurview;
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return View(permissionsViewModels);
+				}
+				usersEntity = await _UsersService.GetAsync(p => p.UserID == id);
+				if (usersEntity == null)
+				{
+					Utility.WriteMessage("指定的会员不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				permissionsViewModels.PurviewEntity = usersEntity.UserPurview;
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
+				return View(permissionsViewModels);
+			}
+			if (permissionsViewModels.PurviewEntity == null)
+			{
+				permissionsViewModels.PurviewEntity = new UserPurviewEntity();
+			}
+			permissionsViewModels.IdType = IdType;
+			permissionsViewModels.NodeList = _NodesService.GetNodeListByContainer();
+			permissionsViewModels.GroupNodePermissionsList = await _UserGroupsService.GetNodePermissionsById(id,-3,OperateCode.None,IdType);
+			return View(permissionsViewModels);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
+		public async Task<ActionResult> PublishPermissions(int id, int IdType, PublishPermissionsViewModel viewModel, IFormCollection collection = null)
+		{
+			UserGroupsEntity userGroupsEntity = null;
+			UsersEntity usersEntity = null;
+			UserPurviewEntity userPurviewEntity = null;
+			if (IdType == 1)
+			{
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return Content("");
+				}
+				userGroupsEntity = await _UserGroupsService.GetAsync(p => p.GroupID == id);
+				if (userGroupsEntity == null)
+				{
+					Utility.WriteMessage("指定的会员组不存在", "mClose");
+					return Content("");
+				}
+				userPurviewEntity = userGroupsEntity.UserGroupPurview;
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return Content("");
+				}
+				usersEntity = await _UsersService.GetAsync(p => p.UserID == id);
+				if (usersEntity == null)
+				{
+					Utility.WriteMessage("指定的会员不存在", "mClose");
+					return Content("");
+				}
+				userPurviewEntity = usersEntity.UserPurview;
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
+				return Content("");
+			}
+			//保存节点权限设置
+			await _UserGroupsService.DeleteNodePermissionFromGroup(id, -3, OperateCode.NodeContentInput, IdType);
+			await _UserGroupsService.DeleteNodePermissionFromGroup(id, -3, OperateCode.NodeNoNeedCheck, IdType);
+			await _UserGroupsService.DeleteNodePermissionFromGroup(id, -3, OperateCode.NodeManageSelfInfo, IdType);
+			var ModelPurview = collection["ModelPurview"];
+			if (!string.IsNullOrEmpty(ModelPurview))
+			{
+				await _UserGroupsService.AddNodePermissionToUserGroup(id, ModelPurview, IdType);
+			}
+			//保存会员组（会员）权限设置
+			if (userPurviewEntity == null)
+			{
+				userPurviewEntity = new UserPurviewEntity();
+			}
+			userPurviewEntity.SetEditor = viewModel.PurviewEntity.SetEditor;
+			userPurviewEntity.MaxPublicInfoOneDay = viewModel.PurviewEntity.MaxPublicInfoOneDay;
+			userPurviewEntity.MaxPublicInfo = viewModel.PurviewEntity.MaxPublicInfo;
+			userPurviewEntity.IsXssFilter = viewModel.PurviewEntity.IsXssFilter;
+			if (ConfigHelper.Get<UserConfig>().EnableExp)
+			{
+				userPurviewEntity.GetExp = viewModel.PurviewEntity.GetExp;
+			}
+			if (ConfigHelper.Get<UserConfig>().EnablePoint)
+			{
+				userPurviewEntity.GetPoint = viewModel.PurviewEntity.GetPoint;
+			}
+			bool bFlag = false;
+			if (userGroupsEntity != null)
+			{
+				userGroupsEntity.GroupSetting = userPurviewEntity.ToXml();
+				bFlag = await _UserGroupsService.UpdateAsync(userGroupsEntity);
+			}
+			else if (usersEntity != null)
+			{
+				usersEntity.UserSetting = userPurviewEntity.ToXml();
+				bFlag = await _UsersService.UpdateAsync(usersEntity);
+			}
+			if (bFlag)
+			{
+				Utility.WriteMessage("设置权限成功", "mRefresh");
+			}
+			else
+			{
+				Utility.WriteMessage("设置权限失败", "mClose");
+			}
+			return Content("");
+		}
+		#endregion
+
+		#region 会员组-前台权限设置(节点)
+		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
+		public async Task<ActionResult> UserGroupFrontPermissions(int id = 0, int IdType = 1)
+		{
+			UserGroupsEntity userGroupsEntity = null;
+			UsersEntity usersEntity = null;
+			var permissionsViewModels = new PublishPermissionsViewModel();
+			if (IdType == 1)
+			{
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return View(permissionsViewModels);
+				}
+				userGroupsEntity = await _UserGroupsService.GetAsync(p => p.GroupID == id);
+				if (userGroupsEntity == null)
+				{
+					Utility.WriteMessage("指定的会员组不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				permissionsViewModels.PurviewEntity = userGroupsEntity.UserGroupPurview;
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return View(permissionsViewModels);
+				}
+				usersEntity = await _UsersService.GetAsync(p => p.UserID == id);
+				if (usersEntity == null)
+				{
+					Utility.WriteMessage("指定的会员不存在", "mClose");
+					return View(permissionsViewModels);
+				}
+				permissionsViewModels.PurviewEntity = usersEntity.UserPurview;
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
+				return View(permissionsViewModels);
+			}
+			if (permissionsViewModels.PurviewEntity == null)
+			{
+				permissionsViewModels.PurviewEntity = new UserPurviewEntity();
+			}
+			var nodeList = new List<NodesEntity>();
+			var nodeListTemp = _NodesService.GetNodeListByContainer();
+			foreach (var item in nodeListTemp)
+			{
+				string BeginTag = _NodesService.GetTreeLine(item.Depth, item.ParentPath, item.NextID, item.Child);
+				string EndTag = _NodesService.GetNodeDir(item.Child, (NodeType)item.NodeType, item.NodeDir);
+				if (item.NodeName == "所有栏目")
+				{
+					BeginTag = BeginTag + "<span style='color:red'>";
+					EndTag = "</span>" + EndTag;
+				}
+				else
+				{
+					//根据父节点的栏目权限和当前节点的栏目权限，确定当前节点的栏目权限
+					int purviewType = 0;
+					if (item.ParentID > 0)
+					{
+						purviewType = _NodesService.GetCacheNodeById(item.ParentID).PurviewType;
+					}
+					if (purviewType < item.PurviewType)
+					{
+						purviewType = item.PurviewType;
+					}
+					item.PurviewType = purviewType;
+				}
+				item.NodeName = BeginTag + item.NodeName + EndTag;
+				nodeList.Add(item);
+			}
+			permissionsViewModels.IdType = IdType;
+			permissionsViewModels.NodeList = nodeList;
+			permissionsViewModels.GroupNodePermissionsList = await _UserGroupsService.GetNodePermissionsById(id, -3, OperateCode.None, IdType);
+			return View(permissionsViewModels);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[AdminAuthorize(Roles = "SuperAdmin,UserGroupManage")]
+		public async Task<ActionResult> UserGroupFrontPermissions(int id, int IdType, IFormCollection collection = null)
+		{
+			if (IdType == 1)
+			{
+				if (id <= 0 && id != -2)
+				{
+					Utility.WriteMessage("权限配置必须指定会员组", "mClose");
+					return Content("");
+				}
+			}
+			else if (IdType == 0)
+			{
+				if (id <= 0)
+				{
+					Utility.WriteMessage("权限配置必须指定会员", "mClose");
+					return Content("");
+				}
+			}
+			else
+			{
+				Utility.WriteMessage("权限类型没有指定", "mClose");
+				return Content("");
+			}
+			//保存节点权限设置
+			bool bFlag = false;
+			await _UserGroupsService.DeleteNodePermissionFromGroup(id, -3, OperateCode.NodeContentSkim, IdType);
+			await _UserGroupsService.DeleteNodePermissionFromGroup(id, -3, OperateCode.NodeContentPreview, IdType);
+			var ModelPurview = collection["ModelPurview"];
+			if (!string.IsNullOrEmpty(ModelPurview))
+			{
+				bFlag = await _UserGroupsService.AddNodePermissionToUserGroup(id, ModelPurview, IdType);
+			}
+			if (bFlag)
+			{
+				Utility.WriteMessage("设置权限成功", "mRefresh");
+			}
+			else
+			{
+				Utility.WriteMessage("设置权限失败", "mClose");
+			}
 			return Content("");
 		}
 		#endregion
